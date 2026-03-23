@@ -16,8 +16,8 @@
     --dark3: #444444;
     --dark4: #555555;
     --text: #FFFFFF;
-    --text2: #bbbbbb;
-    --text3: #888888;
+    --text2: #FFFFFF;
+    --text3: #cccccc;
     --red: #F85149;
     --blue: #388BFD;
     --orange: #F0883E;
@@ -29,7 +29,7 @@
 
   body {
     background: var(--dark);
-    color: var(--text);
+    color: #FFFFFF;
     font-family: 'Barlow', sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
@@ -107,7 +107,7 @@
     display: block;
     font-size: 12px;
     font-weight: 600;
-    color: var(--text2);
+    color: #FFFFFF;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 8px;
@@ -242,7 +242,7 @@
     font-family: 'Barlow', sans-serif;
   }
   .nav-item.active { color: var(--green); }
-  .nav-item span { font-size: 20px; margin-bottom: 2px; }
+  .nav-item svg { margin-bottom: 2px; }
   .nav-item p { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; }
 
   /* ── MAIN CONTENT ── */
@@ -280,9 +280,8 @@
     font-weight: 800;
     color: var(--text);
   }
-  .card-value.green { color: var(--green); }
-  .card-value.yellow { color: var(--yellow); }
-  .card-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+  .card-value.green { color: var(--green) !important; }
+  .card-value.yellow { color: var(--yellow) !important; }
 
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
@@ -341,6 +340,12 @@
   .tag-overtime { background: rgba(255,209,0,0.2); color: var(--yellow); }
   .tag-holiday { background: rgba(248,81,73,0.2); color: var(--red); }
   .tag-differential { background: rgba(240,136,62,0.2); color: var(--orange); }
+  .tag-quality-heavy { background: rgba(0,206,209,0.2); color: #00CED1; }
+  .tag-quality-heavy-long { background: rgba(180,0,0,0.25); color: #cc3333; }
+  .tag-quality-light { background: rgba(66,130,71,0.2); color: #54a55a; }
+  .tag-quality-light-short { background: rgba(255,209,0,0.2); color: #FFD100; }
+  .tag-quality-normal { background: rgba(255,255,255,0.15); color: #ffffff; border: 1px solid rgba(255,255,255,0.3); }
+  .tag-quality-varies { background: rgba(210,180,140,0.2); color: #c8a97e; }
 
   /* CALENDAR */
   .cal-header {
@@ -414,6 +419,8 @@
   .task-text { flex: 1; font-size: 15px; }
   .task-text.done { text-decoration: line-through; color: var(--text2); }
   .task-priority { font-size: 16px; }
+  .delete-btn { background: none; border: none; color: var(--text3); cursor: pointer; padding: 4px; transition: color 0.2s; display:inline-flex; align-items:center; justify-content:center; }
+  .delete-btn:hover { color: var(--red); }
   .note-cat-btn {
     background: var(--dark2);
     border: 1px solid var(--dark4);
@@ -541,7 +548,7 @@
   .divider { border: none; border-top: 1px solid var(--dark3); margin: 20px 0; }
 
   .empty-state { text-align: center; padding: 40px 20px; color: var(--text2); }
-  .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; display:flex; justify-content:center; opacity:0.4; }
   .empty-state p { font-size: 14px; }
 
   .pay-rate-info { font-size: 12px; color: var(--text3); margin-top: 4px; }
@@ -619,7 +626,7 @@
     </div>
     <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px;">This app was created primarily to make it easier for Sanitation Workers to track what they do during the week and know what they should be getting paid based on their salary, truck money, etc. This app automatically calculates <strong style="color:var(--text)">(net and gross)</strong> what you should receive every week.</p>
     <div style="background:rgba(66,130,71,0.1);border:1px solid rgba(66,130,71,0.3);border-radius:12px;padding:14px;margin-bottom:16px;">
-      <p style="font-size:14px;color:var(--text);line-height:1.6;">🔒 <strong>All information provided is 100% private</strong> and cannot be seen by anyone but yourself!</p>
+      <p style="font-size:14px;color:var(--text);line-height:1.6;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><strong>All information provided is 100% private</strong> and cannot be seen by anyone but yourself!</p>
     </div>
     <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:24px;">This app is in its very early stages and will be updated throughout the coming months to perfect it. An <strong style="color:var(--text)">iOS app is expected to release by mid-late 2026</strong> followed by an Android app in 2027.</p>
     <button class="btn btn-primary" onclick="closeWelcome()">Get Started</button>
@@ -819,7 +826,7 @@
     <div class="header-logo">San<span>Track</span></div>
     <div class="header-user">
       <div class="avatar" id="headerAvatar">JD</div>
-      <button class="logout-btn" onclick="logout()" title="Sign out">⏻</button>
+      <button class="logout-btn" onclick="logout()" title="Sign out"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/><line x1="12" y1="2" x2="12" y2="12"/></svg></button>
     </div>
   </div>
 
@@ -827,47 +834,68 @@
 
     <!-- DASHBOARD PAGE -->
     <div id="dashPage" class="page active">
-      <div class="section-title" id="dashGreeting">Good morning 👋</div>
-
-      <div class="grid-2" style="margin-bottom:12px">
-        <div class="card">
-          <div class="card-title">This Week</div>
-          <div class="card-value green" id="weekHours">0h</div>
-          <div class="card-sub" id="weekOT">0h overtime</div>
-        </div>
-        <div class="card">
-          <div class="card-title">This Week Pay</div>
-          <div class="card-value yellow" id="weekPay">$0</div>
-          <div class="card-sub">est. gross</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+        <div class="section-title" id="dashGreeting" style="flex-direction:column;align-items:flex-start;margin-bottom:0;">Good morning</div>
+        <div style="text-align:right;">
+          <div id="dashName" style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:#FFFFFF;letter-spacing:0.5px;line-height:1.1;">—</div>
+          <div id="dashBadge" style="font-size:12px;color:var(--text2);margin-top:2px;">—</div>
         </div>
       </div>
 
-      <div class="grid-3" style="margin-bottom:16px">
-        <div class="card" style="padding:14px">
-          <div class="card-title" style="font-size:11px">Month Hours</div>
-          <div class="card-value" style="font-size:24px" id="monthHours">0h</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+        <div class="card" style="padding:8px 6px;text-align:center;">
+          <div class="card-title" style="font-size:9px;text-align:center;">This Week Pay</div>
+          <div class="card-value yellow" style="font-size:24px;" id="weekPay">$0</div>
+          <div class="card-sub" style="font-size:8px;" id="weekPayNetSub">est. net</div>
         </div>
-        <div class="card" style="padding:14px">
-          <div class="card-title" style="font-size:11px">Month Pay</div>
-          <div class="card-value green" style="font-size:24px" id="monthPay">$0</div>
+        <div class="card" style="padding:8px 6px;text-align:center;">
+          <div class="card-title" style="font-size:9px;text-align:center;">Month Pay</div>
+          <div class="card-value green" style="font-size:24px;" id="monthPay">$0</div>
+          <div class="card-sub" style="font-size:8px;" id="monthPayNet">est. net</div>
         </div>
-        <div class="card" style="padding:14px">
-          <div class="card-title" style="font-size:11px">Shifts</div>
-          <div class="card-value" style="font-size:24px" id="monthShifts">0</div>
+        <div class="card" style="padding:8px 6px;text-align:center;">
+          <div class="card-title" style="font-size:9px;text-align:center;margin-bottom:2px;">Comp Hours</div>
+          <div class="card-value" style="font-size:52px;text-align:center;line-height:1;" id="monthHours">0</div>
+        </div>
+        <div class="card" style="padding:8px 6px;text-align:center;">
+          <div class="card-title" style="font-size:9px;text-align:center;">Next Chart</div>
+          <div class="card-value" style="font-size:24px;text-align:center;color:#388BFD;" id="weekHours">04/01</div>
+          <div class="card-sub" id="weekOT" style="font-size:8px"></div>
         </div>
       </div>
 
-      <div class="section-title">Recent Shifts</div>
-      <div id="recentShifts">
-        <div class="empty-state"><div class="icon">📋</div><p>No shifts logged yet. Tap + to add your first shift.</p></div>
+      <div id="recentShifts" style="margin-top:8px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:5px;">This Week's Shifts</div>
+        <div id="weeklyList"></div>
       </div>
+
+      <button class="note-cat-btn" onclick="showAchievements()" style="width:100%;margin-top:8px;margin-bottom:16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        <div>Achievements</div>
+      </button>
     </div>
 
     <!-- SHIFTS PAGE -->
     <div id="shiftsPage" class="page">
       <div class="section-title">My Shifts <span class="badge" id="shiftCount">0</span></div>
+
+      <!-- Calendar inside shifts -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="prevMonth()">‹</button>
+          <div class="cal-month" id="calMonth">March 2026</div>
+          <button class="cal-nav" onclick="nextMonth()">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div id="calDayDetail" style="display:none;margin-bottom:16px;">
+        <div class="section-title" id="calDayTitle"></div>
+        <div id="calDayShifts"></div>
+      </div>
+
+      <div class="section-title">All Shifts</div>
       <div id="shiftsList">
-        <div class="empty-state"><div class="icon">🕐</div><p>No shifts yet. Tap + to log a shift.</p></div>
+        <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>No shifts yet. Tap + to log a shift.</p></div>
       </div>
     </div>
 
@@ -882,6 +910,7 @@
           <option value="month">This Month</option>
           <option value="year">This Year</option>
           <option value="all">All Time</option>
+          <optgroup id="weeklyOptionsGroup" label="─── Weekly ───"></optgroup>
         </select>
       </div>
 
@@ -889,14 +918,49 @@
         <div class="card-title">Breakdown</div>
         <div class="pay-row"><span class="label">Regular Hours</span><span class="amount" id="payRegHours">0h</span></div>
         <div class="pay-row"><span class="label">Regular Pay</span><span class="amount" id="payRegPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Overtime Hours</span><span class="amount yellow" id="payOTHours">0h</span></div>
-        <div class="pay-row"><span class="label">Overtime Pay (1.5x)</span><span class="amount yellow" id="payOTPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Chart Day Pay (2x)</span><span class="amount" style="color:#388BFD" id="payChartPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Overtime Hours</span><span class="amount" style="color:#a855f7" id="payOTHours">0h</span></div>
+        <div class="pay-row"><span class="label">Overtime Pay (1.5x)</span><span class="amount" style="color:#a855f7" id="payOTPay">$0.00</span></div>
         <div class="pay-row"><span class="label">Holiday Pay (2x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Night Differential</span><span class="amount" style="color:var(--orange)" id="payDiffPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Uniform Allowance</span><span class="amount" id="payUniform">$0.00</span></div>
+        <div class="pay-row"><span class="label">Night Differential (base + 10%)</span><span class="amount" style="color:var(--orange)" id="payDiffPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Sunday Pay (1.5x / 2x snow)</span><span class="amount" style="color:var(--red)" id="paySundayPay">$0.00</span></div>
         <div class="pay-total">
-          <span class="label">Estimated Gross</span>
+          <span class="label">Gross Pay</span>
           <span class="amount" id="payTotal">$0.00</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="card-title">Tax Deductions</div>
+        <div class="pay-row"><span class="label">FICA (6.2%)</span><span class="amount" style="color:var(--red)" id="payFICA">$0.00</span></div>
+        <div class="pay-row"><span class="label">Medicare (1.45%)</span><span class="amount" style="color:var(--red)" id="payMedicare">$0.00</span></div>
+        <div class="pay-row"><span class="label">Federal Withholding (7.8%)</span><span class="amount" style="color:var(--red)" id="payFederal">$0.00</span></div>
+        <div class="pay-row"><span class="label">State Withholding (4.35%)</span><span class="amount" style="color:var(--red)" id="payState">$0.00</span></div>
+        <div class="pay-row"><span class="label">NYC Withholding (3.31%)</span><span class="amount" style="color:var(--red)" id="payNYC">$0.00</span></div>
+        <div class="pay-total" style="border-top:1px solid var(--dark4);margin-top:4px;">
+          <span class="label">Total Tax</span>
+          <span class="amount" style="color:var(--red)" id="payTotalTax">$0.00</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="card-title">Other Deductions</div>
+        <div class="pay-row"><span class="label">Health Ins (20yr)</span><span class="amount" style="color:var(--text2)" id="payHealth">$7.42</span></div>
+        <div class="pay-row"><span class="label">NYCE PPO Basic</span><span class="amount" style="color:var(--text2)" id="payPPO">$0.00</span></div>
+        <div class="pay-row"><span class="label">414H Disability</span><span class="amount" style="color:var(--text2)" id="payDisability">$18.89</span></div>
+        <div class="pay-row"><span class="label">NYCERS Pension</span><span class="amount" style="color:var(--text2)" id="payPension">$40.48</span></div>
+        <div class="pay-row"><span class="label">Uniform Sanitationmen Assn</span><span class="amount" style="color:var(--text2)" id="payUnionAssn">$21.00</span></div>
+        <div class="pay-row"><span class="label"><div id="pay457Label">457 Savings Plan</div><div style="font-size:10px;color:var(--text2);font-weight:400;">Go to profile to edit percentage</div></span><span class="amount" style="color:var(--text2)" id="pay457">$0.00</span></div>
+        <div class="pay-total" style="border-top:1px solid var(--dark4);margin-top:4px;">
+          <span class="label">Total Deductions</span>
+          <span class="amount" style="color:var(--red)" id="payTotalDeductions">$0.00</span>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;background:rgba(66,130,71,0.15);border:1px solid var(--green);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;">Net Pay</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green)" id="payNet">$0.00</div>
         </div>
       </div>
 
@@ -907,42 +971,32 @@
       </div>
     </div>
 
-    <!-- CALENDAR PAGE -->
-    <div id="calPage" class="page">
-      <div class="card">
-        <div class="cal-header">
-          <button class="cal-nav" onclick="prevMonth()">‹</button>
-          <div class="cal-month" id="calMonth">March 2025</div>
-          <button class="cal-nav" onclick="nextMonth()">›</button>
-        </div>
-        <div class="cal-grid" id="calGrid"></div>
-      </div>
-      <div id="calDayDetail" style="display:none">
-        <div class="section-title" id="calDayTitle">Shifts on this day</div>
-        <div id="calDayShifts"></div>
-      </div>
-    </div>
-
     <!-- TASKS PAGE -->
     <div id="tasksPage" class="page">
       <div class="section-title">Notes <span class="badge" id="taskCount">0</span></div>
 
       <!-- Category buttons -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-        <button class="note-cat-btn active" onclick="filterNotes('all')" id="cat-all">
-          <span>📋</span><div>All Notes</div>
+        <button class="note-cat-btn active" onclick="filterNotes('general')" id="cat-general">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><div>General</div>
         </button>
-        <button class="note-cat-btn" onclick="filterNotes('general')" id="cat-general">
-          <span>📝</span><div>General</div>
-        </button>
-        <button class="note-cat-btn" onclick="showRoutesPage()" id="cat-routes" style="grid-column:span 2;">
-          <span>🚛</span><div>My Favorite Routes</div>
+        <button class="note-cat-btn" onclick="showRoutesPage()" id="cat-routes">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div>My Favorite Routes</div>
         </button>
       </div>
 
       <div id="tasksList">
-        <div class="empty-state"><div class="icon">📝</div><p>No notes yet. Tap + to add one.</p></div>
+        <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><p>No notes yet. Tap + to add one.</p></div>
       </div>
+    </div>
+
+    <!-- ACHIEVEMENTS PAGE -->
+    <div id="achievementsPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('dash')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">‹</button>
+        <div class="section-title" style="margin-bottom:0;">Achievements</div>
+      </div>
+      <div id="achievementsList"></div>
     </div>
 
     <!-- ROUTES PAGE -->
@@ -952,7 +1006,7 @@
         <div class="section-title" style="margin-bottom:0;">My Favorite Routes <span class="badge" id="routeCount">0</span></div>
       </div>
       <div id="routesList">
-        <div class="empty-state"><div class="icon">🚛</div><p>No routes saved yet. Tap + to add one.</p></div>
+        <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><p>No routes saved yet. Tap + to add one.</p></div>
       </div>
     </div>
 
@@ -1027,6 +1081,10 @@
       <div class="section-title">My Info</div>
       <div class="card">
         <div class="settings-row">
+          <div><div>Badge Number</div><div class="label">Your shield number</div></div>
+          <div class="value" id="profileBadge">—</div>
+        </div>
+        <div class="settings-row">
           <div><div>Email</div><div class="label">Login email</div></div>
           <div class="value" id="profileId">—</div>
         </div>
@@ -1041,6 +1099,14 @@
         <div class="settings-row">
           <div><div>Base Salary</div><div class="label">Annual base salary</div></div>
           <div class="value" id="profileRate">—</div>
+        </div>
+        <div class="settings-row">
+          <div><div>Tax Rate</div><div class="label">For net pay estimate</div></div>
+          <div class="value" id="profileTaxRate">Not set</div>
+        </div>
+        <div class="settings-row">
+          <div><div>457 Contribution</div><div class="label">Per paycheck deduction</div></div>
+          <div class="value" id="profile457">Not set</div>
         </div>
         <div class="settings-row">
           <div><div>Hire Date</div><div class="label">Date hired</div></div>
@@ -1061,6 +1127,10 @@
         <div class="form-group" style="margin-bottom:12px">
           <label>Name (Initial + Last)</label>
           <input type="text" id="updateName" placeholder="e.g. M. Smith">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>Badge Number <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+          <input type="text" id="updateBadge" placeholder="e.g. 123456">
         </div>
         <div class="form-group" style="margin-bottom:12px">
           <label>Base Salary ($)</label>
@@ -1091,6 +1161,15 @@
           <input type="date" id="updateHireDate">
         </div>
         <div class="form-group" style="margin-bottom:12px">
+          <label>Tax Rate (%)</label>
+          <input type="number" id="updateTaxRate" placeholder="e.g. 28" min="0" max="100">
+          <p style="font-size:11px;color:var(--text3);margin-top:6px;">Used to estimate your net pay. Average for NYC sanitation workers is ~28%.</p>
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label>457 Contribution (% of gross) <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+          <input type="number" id="update457" placeholder="e.g. 4.78" min="0" max="100" step="0.01">
+        </div>
+        <div class="form-group" style="margin-bottom:12px">
           <label>Probationary Status</label>
           <select id="updateProbation">
             <option value="">Select status</option>
@@ -1110,25 +1189,26 @@
 
   </div>
 
-  <!-- BOTTOM NAV -->
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="showPage('dash')" id="nav-dash">
-      <span>🏠</span><p>Home</p>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <p>Home</p>
     </button>
     <button class="nav-item" onclick="showPage('shifts')" id="nav-shifts">
-      <span>🕐</span><p>Shifts</p>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <p>Shifts</p>
     </button>
     <button class="nav-item" onclick="showPage('pay')" id="nav-pay">
-      <span>💵</span><p>Pay</p>
-    </button>
-    <button class="nav-item" onclick="showPage('cal')" id="nav-cal">
-      <span>📅</span><p>Calendar</p>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <p>Pay</p>
     </button>
     <button class="nav-item" onclick="showPage('tasks')" id="nav-tasks">
-      <span>📝</span><p>Notes</p>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <p>Notes & Info</p>
     </button>
     <button class="nav-item" onclick="showPage('profile')" id="nav-profile">
-      <span>👤</span><p>Profile</p>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <p>Profile</p>
     </button>
   </nav>
 </div>
@@ -1145,25 +1225,130 @@
       <input type="date" id="shiftDate">
     </div>
     <div class="form-group">
-      <label>Shift Type</label>
+      <label>Start Time <span style="font-size:10px;color:var(--text2);text-transform:none;">(24h)</span></label>
+      <input type="time" id="shiftStart" step="60">
+    </div>
+    <div class="form-group">
+      <label>End Time <span style="font-size:10px;color:var(--text2);text-transform:none;">(24h)</span></label>
+      <input type="time" id="shiftEnd" step="60">
+    </div>
+    <div class="form-group">
+      <label>Chart Day?</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="radio" name="chartDay" id="chartDayYes" value="yes" style="width:auto;"> Yes — Chart Day (2x pay)
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="radio" name="chartDay" id="chartDayNo" value="no" checked style="width:auto;"> No
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Function</label>
       <select id="shiftType">
-        <option value="regular">Regular</option>
-        <option value="overtime">Overtime</option>
-        <option value="holiday">Holiday</option>
-        <option value="differential">Night Differential</option>
+        <option value="">Select function</option>
+        <option value="garbage">Garbage</option>
+        <option value="recycling">Recycling</option>
+        <option value="organics">Organics</option>
+        <option value="paper_rear_loader">Paper Rear Loader</option>
+        <option value="metal_rear_loader">Metal Rear Loader</option>
+        <option value="mechanical_broom">Mechanical Broom</option>
+        <option value="relays">Relays</option>
+        <option value="baskets">Baskets</option>
+        <option value="mlp">MLP</option>
+        <option value="garage_utility">Garage Utility</option>
+        <option value="other">Other</option>
+        <option value="plow">Plow</option>
+        <option value="salt_spreader">Salt Spreader</option>
+        <option value="haulster">Haulster</option>
+        <option value="flow_dump">Flow & Dump</option>
+        <option value="plow_chains">Plow & Chains</option>
+        <option value="atv">ATV</option>
+        <option value="quality_of_life">Quality of Life</option>
+        <option value="other_snow">Other Snow</option>
       </select>
     </div>
     <div class="form-group">
-      <label>Start Time</label>
-      <input type="time" id="shiftStart">
+      <label>Fraction Trucks <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <select id="shiftFraction">
+        <option value="">Select fraction</option>
+        <option>1/4 Garbage to MLP</option>
+        <option>1/2 Garbage to MLP</option>
+        <option>3/4 Garbage to MLP</option>
+        <option>1/4 Recycling to MLP</option>
+        <option>1/2 Recycling to MLP</option>
+        <option>3/4 Recycling to MLP</option>
+        <option>1/4 Organics to MLP</option>
+        <option>2/4 Organics to MLP</option>
+        <option>3/4 Organics to MLP</option>
+      </select>
     </div>
     <div class="form-group">
-      <label>End Time</label>
-      <input type="time" id="shiftEnd">
+      <label>Tons Dumped <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <input type="number" id="shiftTons" placeholder="e.g. 8.5" min="0" step="0.1" oninput="onTonsInput()">
+    </div>
+    <div class="form-group" id="dumpReceiptGroup" style="display:none;">
+      <label>Dump Receipt Photo <span style="color:var(--red);font-size:10px;text-transform:none;">(required if tons entered)</span></label>
+      <div style="display:flex;gap:8px;">
+        <button type="button" onclick="document.getElementById('dumpReceiptCam').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:10px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Take Photo
+        </button>
+        <button type="button" onclick="document.getElementById('dumpReceiptLib').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:10px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Choose Photo
+        </button>
+      </div>
+      <input type="file" id="dumpReceiptCam" accept="image/*" capture="environment" style="display:none;" onchange="handleDumpReceipt(event)">
+      <input type="file" id="dumpReceiptLib" accept="image/*" style="display:none;" onchange="handleDumpReceipt(event)">
+      <div id="dumpReceiptPreview" style="margin-top:8px;display:none;">
+        <img id="dumpReceiptImg" style="width:100%;border-radius:8px;max-height:120px;object-fit:cover;">
+        <button type="button" onclick="clearDumpReceipt()" style="background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;margin-top:4px;">Remove photo</button>
+      </div>
     </div>
     <div class="form-group">
       <label>Route / Assignment (optional)</label>
       <input type="text" id="shiftRoute" placeholder="e.g. Route 14 - Collection">
+    </div>
+    <div class="form-group">
+      <label>Partner Name <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <input type="text" id="shiftPartner" placeholder="e.g. J. Smith">
+    </div>
+    <div class="form-group">
+      <label>Sent Out of Town? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <select id="shiftLocation">
+        <option value="">No — worked home garage</option>
+        <optgroup label="Bronx">
+          <option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option>
+        </optgroup>
+        <optgroup label="Brooklyn North">
+          <option>BKN1</option><option>BKN3</option><option>BKN4</option><option>BKN5</option><option>BKN8</option><option>BKN9</option><option>BKN16</option><option>BKN17</option>
+        </optgroup>
+        <optgroup label="Brooklyn South">
+          <option>BKS2</option><option>BKS6</option><option>BKS7</option><option>BKS10</option><option>BKS11</option><option>BKS12</option><option>BKS13</option><option>BKS14</option><option>BKS15</option><option>BKS15A</option><option>BKS18</option>
+        </optgroup>
+        <optgroup label="Manhattan">
+          <option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option>
+        </optgroup>
+        <optgroup label="Queens East">
+          <option>QE7</option><option>QE8</option><option>QE10</option><option>QE11</option><option>QE12</option><option>QE13A</option><option>QE14</option>
+        </optgroup>
+        <optgroup label="Queens West">
+          <option>QW1</option><option>QW2</option><option>QW3</option><option>QW4</option><option>QW5</option><option>QW6</option><option>QW9</option>
+        </optgroup>
+        <optgroup label="Staten Island">
+          <option>SI1</option><option>SI2</option><option>SI3</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Truck Downed? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="radio" name="truckDowned" id="truckDownedYes" value="yes" style="width:auto;"> Yes
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="radio" name="truckDowned" id="truckDownedNo" value="no" checked style="width:auto;"> No
+        </label>
+      </div>
     </div>
     <div class="form-group">
       <label>Notes (optional)</label>
@@ -1231,7 +1416,9 @@
       <select id="routeQuality">
         <option value="">Select quality</option>
         <option>Light and Long</option>
+        <option>Light and Short</option>
         <option>Heavy and Short</option>
+        <option>Heavy and Long</option>
         <option>Normal Weight</option>
         <option>Weight Varies by Day</option>
       </select>
@@ -1248,8 +1435,8 @@
       <label>Photo (optional)</label>
       <input type="file" id="routePhoto" accept="image/*" capture="environment" style="display:none" onchange="previewRoutePhoto(event)">
       <div style="display:flex;gap:10px;margin-top:4px;">
-        <button type="button" onclick="document.getElementById('routePhoto').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:12px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;">📷 Take Photo</button>
-        <button type="button" onclick="document.getElementById('routePhotoLib').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:12px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;">🖼️ Choose Photo</button>
+        <button type="button" onclick="document.getElementById('routePhoto').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:12px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Take Photo</button>
+        <button type="button" onclick="document.getElementById('routePhotoLib').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:12px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Choose Photo</button>
         <input type="file" id="routePhotoLib" accept="image/*" style="display:none" onchange="previewRoutePhoto(event)">
       </div>
       <div id="routePhotoPreview" style="display:none;margin-top:10px;position:relative;">
@@ -1265,6 +1452,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
+window.onerror = function(msg, src, line, col, err) {
+  console.log('ERROR: ' + msg + ' Line: ' + line);
+  return false;
+};
 // ── STATE ──
 let currentUser = null;
 let currentPage = 'dash';
@@ -1272,7 +1463,7 @@ let calDate = new Date();
 
 function getUsers() { try { return JSON.parse(localStorage.getItem('dsny_users') || '{}'); } catch(e) { return {}; } }
 function saveUsers(u) { localStorage.setItem('dsny_users', JSON.stringify(u)); }
-function getUserData(id) { try { return JSON.parse(localStorage.getItem('dsny_data_' + id) || '{"shifts":[],"tasks":[]}'); } catch(e) { return {shifts:[], tasks:[]}; } }
+function getUserData(id) { try { var data = JSON.parse(localStorage.getItem('dsny_data_' + id) || '{}'); if (!data.shifts) data.shifts = []; if (!data.tasks) data.tasks = []; if (!data.routes) data.routes = []; return data; } catch(e) { return {shifts:[], tasks:[], routes:[]}; } }
 function saveUserData(id, d) { localStorage.setItem('dsny_data_' + id, JSON.stringify(d)); }
 
 // ── AUTH ──
@@ -1386,6 +1577,8 @@ function startApp() {
   document.getElementById('profileId').textContent = currentUser.id;
   document.getElementById('profileGarage').textContent = currentUser.district;
   document.getElementById('profileTitleRow').textContent = currentUser.title;
+  document.getElementById('profileTaxRate').textContent = currentUser.taxRate ? currentUser.taxRate + '%' : 'Not set';
+  document.getElementById('profile457').textContent = currentUser.contrib457 ? parseFloat(currentUser.contrib457).toFixed(2) + '%' : 'Not set';
   document.getElementById('profileRate').textContent = '$' + parseFloat(currentUser.rate).toFixed(0) + '/yr';
   document.getElementById('profileProbation').textContent = currentUser.probation === 'yes' ? '✅ Yes' : '❌ No';
   document.getElementById('profileHireDate').textContent = currentUser.hireDate ? new Date(currentUser.hireDate + 'T12:00:00').toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) : 'Not set';
@@ -1394,18 +1587,657 @@ function startApp() {
   document.getElementById('otRateDisplay').textContent = '$' + (currentUser.rate / 52).toFixed(2);
   document.getElementById('holidayRateDisplay').textContent = '$' + (currentUser.rate / 260).toFixed(2);
 
-  const h = new Date().getHours();
-  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('dashName').textContent = currentUser.name;
+  document.getElementById('dashBadge').textContent = currentUser.badge ? 'Badge #' + currentUser.badge : 'Badge #123456';
+  document.getElementById('profileBadge').textContent = currentUser.badge || '—';
   const first = currentUser.name.split(' ')[0];
-  document.getElementById('dashGreeting').innerHTML = `${greet}, ${first} <span class="badge" style="font-size:14px">👋</span>`;
+  const isProbation = currentUser.probation && currentUser.probation !== 'no';
+
+  if (currentUser.hireDate) {
+    const hire = new Date(currentUser.hireDate + 'T12:00:00');
+
+    if (isProbation) {
+      const extensionMonths = currentUser.probation === 'extended3' ? 3 : currentUser.probation === 'extended6' ? 6 : currentUser.probation === 'extended12' ? 12 : 0;
+      const probEnd = new Date(hire);
+      probEnd.setMonth(probEnd.getMonth() + 18 + extensionMonths);
+      const now = new Date();
+      const daysLeft = Math.ceil((probEnd - now) / (1000 * 60 * 60 * 24));
+      const endStr = probEnd.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+      if (daysLeft > 0) {
+        const extHtml = extensionMonths > 0 ? '<div style="font-size:11px;color:var(--orange);margin-top:2px;">Extended +' + extensionMonths + ' months</div>' : '';
+        document.getElementById('dashGreeting').innerHTML = '<div style="width:100%;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:6px;">Probation Countdown</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:42px;font-weight:900;color:var(--yellow);line-height:1;">' + daysLeft + ' <span style="font-size:20px;color:var(--text2);">days left</span></div><div style="font-size:12px;color:var(--text2);margin-top:4px;">Ends ' + endStr + '</div>' + extHtml + '</div>';
+      } else {
+        document.getElementById('dashGreeting').innerHTML = `<div style="color:var(--green);font-weight:800;">Probation complete, ${first}!</div>`;
+      }
+    } else {
+      // Retirement countdown — 22.5 years = 22 years + 6 months
+      const retireDate = new Date(hire);
+      retireDate.setFullYear(retireDate.getFullYear() + 22);
+      retireDate.setMonth(retireDate.getMonth() + 6);
+      const now = new Date();
+      const daysLeft = Math.ceil((retireDate - now) / (1000 * 60 * 60 * 24));
+      const yearsLeft = (daysLeft / 365.25).toFixed(1);
+      const retireStr = retireDate.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+
+      if (daysLeft > 0) {
+        const totalMonths = Math.ceil((retireDate - now) / (1000 * 60 * 60 * 24 * 30.44));
+        document.getElementById('dashGreeting').innerHTML = `
+          <div style="width:100%;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:4px;">Retirement Countdown</div>
+            <div style="display:flex;align-items:baseline;gap:8px;">
+              <span style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:var(--green);">${yearsLeft} yrs</span>
+              <span style="font-size:13px;color:var(--text3);">${totalMonths} months &nbsp;•&nbsp; ${retireStr}</span>
+            </div>
+          </div>`;
+      } else {
+        document.getElementById('dashGreeting').innerHTML = `<div style="color:var(--green);font-weight:800;">Congratulations ${first}, you can retire!</div>`;
+      }
+    }
+  } else {
+    const h = new Date().getHours();
+    const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('dashGreeting').innerHTML = `${greet}, ${first}`;
+  }
 
   showPage('dash');
   renderCalendar();
   refreshAll();
+
 }
 
 // ── NAVIGATION ──
 // ── ROUTES ──
+function renderWeeklyList() {
+  var el = document.getElementById('weeklyList');
+  if (!el) return;
+  var d = getUserData(currentUser.id);
+  var now = new Date();
+  var dow = now.getDay();
+  var monday = new Date(now);
+  monday.setDate(now.getDate() - (dow === 0 ? 6 : dow - 1));
+  monday.setHours(0,0,0,0);
+  var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var html = '';
+  for (var i = 0; i < days.length; i++) {
+    var date = new Date(monday);
+    date.setDate(monday.getDate() + i);
+    var yr = date.getFullYear();
+    var mo = date.getMonth() + 1;
+    var dy = date.getDate();
+    var dateStr = yr + '-' + (mo < 10 ? '0'+mo : mo) + '-' + (dy < 10 ? '0'+dy : dy);
+    var isToday = date.toDateString() === now.toDateString();
+    var isPast = date < now && !isToday;
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var shortDate = months[date.getMonth()] + ' ' + dy;
+    var shift = null;
+    for (var j = 0; j < d.shifts.length; j++) {
+      if (d.shifts[j].date === dateStr) { shift = d.shifts[j]; break; }
+    }
+    var bg = isToday ? 'rgba(66,130,71,0.15)' : 'var(--dark3)';
+    var border = isToday ? 'var(--green)' : 'var(--dark4)';
+    var dayColor = isToday ? 'var(--green)' : '#fff';
+    var barColor = shift ? 'var(--green)' : 'var(--dark4)';
+    if (shift && shift.chartDay) barColor = '#388BFD';
+    var row = '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:' + bg + ';border:1px solid ' + border + ';border-radius:5px;margin-bottom:3px;cursor:pointer;" onclick="openShiftForDay(\'' + dateStr + '\')">';
+    row += '<div style="display:flex;align-items:center;gap:5px;">';
+    row += '<div style="width:3px;min-height:30px;border-radius:2px;background:' + barColor + ';flex-shrink:0;"></div>';
+    row += '<div>';
+    row += '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;color:' + dayColor + ';">' + days[i].substring(0,3).toUpperCase() + ' <span style="font-size:10px;font-weight:400;color:var(--text2);">' + shortDate + '</span></div>';
+    if (shift) {
+      var detail = '';
+      if (shift.start && shift.end) detail += shift.start + '–' + shift.end;
+      if (shift.type) detail += (detail ? ' • ' : '') + shift.type.replace(/_/g,' ');
+      if (shift.fraction) detail += (detail ? ' • ' : '') + shift.fraction;
+      if (detail) row += '<div style="font-size:10px;color:var(--text2);">' + detail + '</div>';
+      var tags = '';
+      var _ns = shift.start ? (function(){ var p=shift.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })() : false;
+      if (shift.otHours > 0) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(168,85,247,0.2);color:#a855f7;margin-right:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>OT</span>';
+      if (shift.chartDay) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(56,139,253,0.2);color:#388BFD;margin-right:4px;">$$ Chart</span>';
+      if (_ns) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(30,58,138,0.4);color:#93c5fd;margin-right:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Night</span>';
+      if (tags) row += '<div style="margin-top:3px;">' + tags + '</div>';
+    }
+    row += '</div></div>';
+    if (shift && shift.pay > 0) {
+      row += '<div style="text-align:right;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;color:var(--green);">$' + shift.pay.toFixed(2) + '</div><div style="font-size:10px;color:var(--text2);">' + shift.hours + 'h</div></div>';
+    } else if (!shift) {
+      row += '<div style="font-size:10px;color:' + (isPast ? 'var(--text3)' : 'var(--text2)') + ';">' + (isPast ? 'No shift' : 'Tap to log') + '</div>';
+    }
+    row += '</div>';
+    html += row;
+  }
+  el.innerHTML = html;
+}
+
+function openShiftForDay(dateStr) {
+  document.getElementById('shiftDate').value = dateStr;
+  document.getElementById('shiftModal').classList.add('open');
+}
+
+function toggleAchievementCat(cat) {
+  var el = document.getElementById('achievementsList');
+  var openCats = el.dataset.openCats ? JSON.parse(el.dataset.openCats) : {};
+  openCats[cat] = !openCats[cat];
+  el.dataset.openCats = JSON.stringify(openCats);
+  renderAchievements();
+}
+
+function showAchievements() {
+  currentPage = 'achievements';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('achievementsPage').classList.add('active');
+  document.getElementById('fab').style.display = 'none';
+  renderAchievements();
+}
+
+function getAchievementSVG(id) {
+  const s = 'width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+  const icons = {
+    // Out of Town — road/map pin
+    out_of_town: `<svg ${s}><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+    // Comp Beast — lightning bolt
+    comp_beast: `<svg ${s}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+    // Comp Dude — person/user
+    comp_dude: `<svg ${s}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    // Comp Daddy — crown
+    comp_daddy: `<svg ${s}><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><path d="M2 8l5 4 5-7 5 7 5-4"/></svg>`,
+    // Comp Champion — trophy
+    comp_champion: `<svg ${s}><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>`,
+    // Comp Legend — star
+    comp_legend: `<svg ${s}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    // Comp God — sun/divine
+    comp_god: `<svg ${s}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
+    // Overdrive — bank icon
+    overdrive: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><rect x="2" y="11" width="20" height="4"/><line x1="6" y1="11" x2="6" y2="7"/><line x1="10" y1="11" x2="10" y2="7"/><line x1="14" y1="11" x2="14" y2="7"/><line x1="18" y1="11" x2="18" y2="7"/><path d="M12 2L2 7h20z"/><line x1="6" y1="15" x2="6" y2="22"/><line x1="10" y1="15" x2="10" y2="22"/><line x1="14" y1="15" x2="14" y2="22"/><line x1="18" y1="15" x2="18" y2="22"/></svg>',
+    // 1 Year Still Here — fire
+    one_year: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c0 0-5 4-5 9a5 5 0 0 0 10 0c0-3-2-5-2-5s0 3-3 4c0 0 2-5 0-8z"/><path d="M9 17c0 2 1.5 3 3 3s3-1 3-3"/></svg>',
+    // Stop Calling Me Jr — sponge (square with holes)
+    stop_jr: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="8" cy="10" r="1.5" fill="white"/><circle cx="14" cy="10" r="1.5" fill="white"/><circle cx="11" cy="15" r="1.5" fill="white"/><circle cx="17" cy="15" r="1.5" fill="white"/><circle cx="6" cy="15" r="1" fill="white"/></svg>',
+    // King of the Noobs — fluffy crown
+    king_noobs: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18v2H3z"/><path d="M3 18L6 8c0 0 1 3 3 3s2-3 3-3 1 3 3 3 2-3 3-3l3 10"/><circle cx="6" cy="7" r="2" fill="white"/><circle cx="12" cy="5" r="2" fill="white"/><circle cx="18" cy="7" r="2" fill="white"/></svg>',
+    // FREEEEEDOMMM — braveheart (sword + shield)
+    freedom: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/><path d="M8 8l4-6 4 6"/><line x1="9" y1="15" x2="15" y2="15"/></svg>',
+    // Top Pay — money with crown
+    top_pay: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="7"/><path d="M12 11v6"/><path d="M9.5 13.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5c0 2.5-2.5 3-2.5 3"/><path d="M8 4l2 3h4l2-3"/><path d="M7 4h10"/></svg>',
+    // Snowman — snowflake
+    snowman: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="17" r="4"/><circle cx="12" cy="9" r="3"/><circle cx="12" cy="3" r="1.5"/><line x1="10" y1="9" x2="8" y2="7"/><line x1="14" y1="9" x2="16" y2="7"/><line x1="10" y1="17" x2="8" y2="19"/><line x1="14" y1="17" x2="16" y2="19"/><circle cx="11" cy="8.5" r="0.5" fill="white"/><circle cx="13" cy="8.5" r="0.5" fill="white"/></svg>',
+    // Abominable — mountain/yeti
+    abominable: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l4-8 3 4 3-7 4 5 4-9"/><path d="M3 20h18"/></svg>',
+    // Round Robin — circular arrows
+    round_robin: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+    // Holiday Hero — gift
+    holiday_hero: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>',
+    // San2K — dollar sign with lightning
+    san2k: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" stroke-width="1.5" opacity="0.6"/></svg>',
+    // Hash Slinging Slasher — moon/night
+    hash_slasher: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+    // Seniority beats — people icons
+    beat5:  '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    beat10: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><text x="13" y="20" font-size="6" fill="white" stroke="none">+</text></svg>',
+    beat25: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    beat35: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    beat50: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    // WTF — question mark
+    wtf_dump: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    // Tanker — truck/tanker
+    tanker: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M4 8h8"/><path d="M4 11h6"/></svg>',
+    // Nobody Likes You — dump truck
+    nobody_likes_you: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><path d="M5 9l5-6"/><path d="M10 3l5 6"/></svg>',
+    // Pre Trip Surgeon — wrench/tool
+    pre_trip_surgeon: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    // Partner4eva — two hearts
+    partner4eva: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    // For the Hours — map/location
+    for_the_hours: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>',
+  };
+  return icons[id] || '';
+}
+
+function renderAchievements() {
+  const d = getUserData(currentUser.id);
+  const totalCompHours = d.shifts.reduce((a, s) => a + s.hours, 0);
+  const yearsOnJob = currentUser.hireDate ? (new Date() - new Date(currentUser.hireDate + 'T12:00:00')) / (1000 * 60 * 60 * 24 * 365.25) : 0;
+
+  // Calculate weekly comp hours (max in any single week)
+  const weekMap = {};
+  d.shifts.forEach(s => {
+    const date = new Date(s.date + 'T12:00:00');
+    const weekStart = new Date(date);
+    weekStart.setDate(date.getDate() - date.getDay());
+    const key = weekStart.toISOString().split('T')[0];
+    weekMap[key] = (weekMap[key] || 0) + s.hours;
+  });
+  const maxWeeklyHours = Math.max(0, ...Object.values(weekMap));
+
+  const ACHIEVEMENTS = [
+    {
+      id: 'overdrive',
+      name: 'Overdrive',
+      desc: 'Work 8 Hours OT on a Chart Day',
+      icon: '🏦',
+      color: '#388BFD',
+      unlocked: d.shifts.some(s => s.type === 'overtime' && s.hours >= 8),
+      progress: Math.min(Math.max(0, ...d.shifts.filter(s => s.type === 'overtime').map(s => s.hours)), 8),
+      total: 8
+    },
+    {
+      id: 'out_of_town',
+      name: 'Out of Town',
+      desc: 'Earn 4 Comp Hours',
+      icon: '🚗',
+      color: '#388BFD',
+      unlocked: totalCompHours >= 4,
+      progress: Math.min(totalCompHours, 4),
+      total: 4,
+      countable: true,
+      count: Math.floor(totalCompHours / 4)
+    },
+    {
+      id: 'comp_beast',
+      name: 'Comp Beast',
+      desc: '16 Comp Hours in 1 Week',
+      icon: '💪',
+      color: '#F0883E',
+      unlocked: maxWeeklyHours >= 16,
+      progress: Math.min(maxWeeklyHours, 16),
+      total: 16
+    },
+    {
+      id: 'comp_dude',
+      name: 'Comp Dude',
+      desc: '100 Concurrent Comp Hours',
+      icon: '🚗',
+      color: '#54a55a',
+      unlocked: totalCompHours >= 100,
+      progress: Math.min(totalCompHours, 100),
+      total: 100
+    },
+    {
+      id: 'comp_daddy',
+      name: 'Comp Daddy',
+      desc: '250 Concurrent Comp Hours',
+      icon: '🚕',
+      color: '#FFD100',
+      unlocked: totalCompHours >= 250,
+      progress: Math.min(totalCompHours, 250),
+      total: 250
+    },
+    {
+      id: 'comp_champion',
+      name: 'Comp Champion',
+      desc: '500 Concurrent Comp Hours',
+      icon: '🚓',
+      color: '#F0883E',
+      unlocked: totalCompHours >= 500,
+      progress: Math.min(totalCompHours, 500),
+      total: 500
+    },
+    {
+      id: 'comp_legend',
+      name: 'Comp Legend',
+      desc: '750 Concurrent Comp Hours',
+      icon: '🚒',
+      color: '#a855f7',
+      unlocked: totalCompHours >= 750,
+      progress: Math.min(totalCompHours, 750),
+      total: 750
+    },
+    {
+      id: 'comp_god',
+      name: 'Comp God',
+      desc: '1000 Concurrent Comp Hours',
+      icon: '🏎️',
+      color: '#FFD100',
+      unlocked: totalCompHours >= 1000,
+      progress: Math.min(totalCompHours, 1000),
+      total: 1000
+    },
+    {
+      id: 'one_year',
+      name: '1 Year Still Here',
+      desc: '1 year since hire date',
+      color: '#F0883E',
+      unlocked: yearsOnJob >= 1,
+      progress: Math.min(yearsOnJob, 1),
+      total: 1
+    },
+    {
+      id: 'stop_jr',
+      name: 'Stop Calling Me Jr',
+      desc: 'Pass Probation (18 months)',
+      color: '#54a55a',
+      unlocked: currentUser.probation === 'no' || yearsOnJob >= 1.5,
+      progress: Math.min(yearsOnJob, 1.5),
+      total: 1.5
+    },
+    {
+      id: 'king_noobs',
+      name: 'King of the Noobs',
+      desc: '3.5 years on the job',
+      color: '#FFD100',
+      unlocked: yearsOnJob >= 3.5,
+      progress: Math.min(yearsOnJob, 3.5),
+      total: 3.5
+    },
+    {
+      id: 'freedom',
+      name: 'FREEEEEDOMMM',
+      desc: '4.5 years on the job',
+      color: '#388BFD',
+      unlocked: yearsOnJob >= 4.5,
+      progress: Math.min(yearsOnJob, 4.5),
+      total: 4.5
+    },
+    {
+      id: 'top_pay',
+      name: 'Top Pay',
+      desc: '5.5 years on the job',
+      color: '#a855f7',
+      unlocked: yearsOnJob >= 5.5,
+      progress: Math.min(yearsOnJob, 5.5),
+      total: 5.5
+    },
+    {
+      id: 'snowman',
+      name: 'Snowman',
+      desc: 'First 12-Hour Snow Day',
+      color: '#88ccff',
+      unlocked: (function() {
+        var snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+        return d.shifts.some(function(s) { return s.hours >= 12 && snowFunctions.indexOf(s.type) !== -1; });
+      })(),
+      progress: (function() {
+        var snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+        var best = d.shifts.filter(function(s){ return snowFunctions.indexOf(s.type) !== -1; }).reduce(function(a,s){ return Math.max(a, s.hours); }, 0);
+        return Math.min(best, 12);
+      })(),
+      total: 12
+    },
+    {
+      id: 'abominable',
+      name: 'Abominable',
+      desc: 'Work 21 Days in a Row',
+      color: '#00CED1',
+      unlocked: (function() {
+        if (d.shifts.length < 21) return false;
+        var dates = d.shifts.map(function(s){ return s.date; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort();
+        var streak = 1;
+        for (var i = 1; i < dates.length; i++) {
+          var prev = new Date(dates[i-1]+'T12:00:00');
+          var curr = new Date(dates[i]+'T12:00:00');
+          var diff = (curr - prev) / (1000*60*60*24);
+          if (diff === 1) { streak++; if (streak >= 21) return true; }
+          else streak = 1;
+        }
+        return false;
+      })(),
+      progress: (function() {
+        if (!d.shifts.length) return 0;
+        var dates = d.shifts.map(function(s){ return s.date; }).filter(function(v,i,a){ return a.indexOf(v)===i; }).sort();
+        var streak = 1, best = 1;
+        for (var i = 1; i < dates.length; i++) {
+          var prev = new Date(dates[i-1]+'T12:00:00');
+          var curr = new Date(dates[i]+'T12:00:00');
+          var diff = (curr - prev) / (1000*60*60*24);
+          if (diff === 1) { streak++; best = Math.max(best, streak); }
+          else streak = 1;
+        }
+        return Math.min(best, 21);
+      })(),
+      total: 21
+    },
+    {
+      id: 'round_robin',
+      name: 'Round Robin',
+      desc: '3 Shifts Within 8 Hours of Each Other',
+      color: '#F0883E',
+      unlocked: (function() {
+        var shifts = d.shifts.filter(function(s){ return s.start; }).slice().sort(function(a,b){ return a.date+a.start > b.date+b.start ? 1 : -1; });
+        for (var i = 0; i < shifts.length - 2; i++) {
+          var t1 = new Date(shifts[i].date+'T'+shifts[i].start);
+          var t3 = new Date(shifts[i+2].date+'T'+shifts[i+2].start);
+          if ((t3 - t1) / (1000*60*60) <= 8) return true;
+        }
+        return false;
+      })(),
+      progress: 1,
+      total: 1,
+      countable: true,
+      count: (function(){ var shifts=d.shifts.filter(function(s){return s.start;}).slice().sort(function(a,b){return a.date+a.start>b.date+b.start?1:-1;}); var count=0; for(var i=0;i<shifts.length-2;i++){var t1=new Date(shifts[i].date+'T'+shifts[i].start),t3=new Date(shifts[i+2].date+'T'+shifts[i+2].start); if((t3-t1)/(1000*60*60)<=8)count++;} return count; })()
+    },
+    {
+      id: 'holiday_hero',
+      name: 'Holiday Hero',
+      desc: 'Work a Holiday on the 4-12 Shift',
+      color: '#ff6b6b',
+      unlocked: d.shifts.some(function(s){ return s.type === 'holiday' && s.start === '16:00'; }),
+      progress: 1,
+      total: 1,
+      countable: true,
+      count: d.shifts.filter(function(s){ return s.type === 'holiday' && s.start === '16:00'; }).length
+    },
+    {
+      id: 'san2k',
+      name: 'San2K',
+      desc: 'Make $2,000 Net Pay in 1 Week',
+      color: '#54a55a',
+      unlocked: (function() {
+        var taxRate = currentUser.taxRate ? parseFloat(currentUser.taxRate)/100 : 0.343;
+        var weekMap = {};
+        d.shifts.forEach(function(s) {
+          var d2 = new Date(s.date+'T12:00:00');
+          var ws = new Date(d2); ws.setDate(d2.getDate()-d2.getDay());
+          var key = ws.toISOString().split('T')[0];
+          weekMap[key] = (weekMap[key]||0) + s.pay;
+        });
+        return Object.values(weekMap).some(function(p){ return p*(1-taxRate) >= 2000; });
+      })(),
+      progress: 1,
+      total: 1
+    },
+    {
+      id: 'hash_slasher',
+      name: 'Hash Slinging Slasher',
+      desc: 'Work All Nights in One Week',
+      color: '#6366f1',
+      unlocked: (function() {
+        var nightStarts = ['11:00','16:00','19:00','00:00'];
+        var weekMap = {};
+        d.shifts.forEach(function(s) {
+          if (nightStarts.indexOf(s.start) !== -1) {
+            var d2 = new Date(s.date+'T12:00:00');
+            var ws = new Date(d2); ws.setDate(d2.getDate()-d2.getDay()+1);
+            var key = ws.toISOString().split('T')[0];
+            if (!weekMap[key]) weekMap[key] = {};
+            weekMap[key][s.date] = true;
+          }
+        });
+        return Object.values(weekMap).some(function(days){ return Object.keys(days).length >= 6; });
+      })(),
+      progress: 1,
+      total: 1,
+      countable: true,
+      count: (function(){ var nightStarts=['11:00','16:00','19:00','00:00'],weekMap={}; d.shifts.forEach(function(s){if(nightStarts.indexOf(s.start)!==-1){var d2=new Date(s.date+'T12:00:00'),ws=new Date(d2);ws.setDate(d2.getDate()-d2.getDay()+1);var key=ws.toISOString().split('T')[0];if(!weekMap[key])weekMap[key]={};weekMap[key][s.date]=true;}}); return Object.values(weekMap).filter(function(days){return Object.keys(days).length>=6;}).length; })()
+    },
+    { id: 'beat5',  name: '+5',  desc: 'Beat 5 people in seniority in your garage',  color: '#54a55a', unlocked: false, progress: 0, total: 1, comingSoon: true },
+    { id: 'beat10', name: '+10', desc: 'Beat 10 people in seniority in your garage', color: '#388BFD', unlocked: false, progress: 0, total: 1, comingSoon: true },
+    { id: 'beat25', name: '+25', desc: 'Beat 25 people in seniority in your garage', color: '#FFD100', unlocked: false, progress: 0, total: 1, comingSoon: true },
+    { id: 'beat35', name: '+35', desc: 'Beat 35 people in seniority in your garage', color: '#F0883E', unlocked: false, progress: 0, total: 1, comingSoon: true },
+    { id: 'beat50', name: '+50', desc: 'Beat 50 people in seniority in your garage', color: '#a855f7', unlocked: false, progress: 0, total: 1, comingSoon: true },
+    {
+      id: 'wtf_dump',
+      name: 'WTF Did I Just Dump',
+      desc: 'Dump less than 1 ton on a relay or dump shift',
+      color: '#888888',
+      unlocked: d.shifts.some(function(s){ return s.tons !== null && s.tons !== undefined && s.tons < 1 && (s.type === 'relays' || s.type === 'flow_dump'); }),
+      progress: 1,
+      total: 1,
+      countable: true,
+      count: d.shifts.filter(function(s){ return s.tons !== null && s.tons !== undefined && s.tons < 1 && (s.type === 'relays' || s.type === 'flow_dump'); }).length
+    },
+    {
+      id: 'tanker',
+      name: 'Tanker',
+      desc: 'Dump more than 14 tons on a relay or dump shift',
+      color: '#F0883E',
+      unlocked: d.shifts.some(function(s){ return s.tons && s.tons > 14 && (s.type === 'relays' || s.type === 'flow_dump'); }),
+      progress: (function(){ var best = d.shifts.filter(function(s){ return s.type==='relays'||s.type==='flow_dump'; }).reduce(function(a,s){ return Math.max(a, s.tons||0); },0); return Math.min(best,14); })(),
+      total: 14,
+      countable: true,
+      count: d.shifts.filter(function(s){return s.tons&&s.tons>14&&(s.type==='relays'||s.type==='flow_dump');}).length
+    },
+    {
+      id: 'nobody_likes_you',
+      name: 'Nobody Likes You',
+      desc: 'Do a collection AND a relay in the same 8-hour shift',
+      color: '#888888',
+      unlocked: (function() {
+        var collectionTypes = ['garbage','recycling','organics','paper_rear_loader','metal_rear_loader'];
+        var byDate = {};
+        d.shifts.forEach(function(s) {
+          if (!byDate[s.date]) byDate[s.date] = [];
+          byDate[s.date].push(s);
+        });
+        return Object.values(byDate).some(function(shifts) {
+          var hasCollection = shifts.some(function(s){ return collectionTypes.indexOf(s.type) !== -1; });
+          var hasRelay = shifts.some(function(s){ return s.type === 'relays'; });
+          if (!hasCollection || !hasRelay) return false;
+          // Check within 8 hours
+          for (var i = 0; i < shifts.length; i++) {
+            for (var j = 0; j < shifts.length; j++) {
+              if (i === j) continue;
+              if (collectionTypes.indexOf(shifts[i].type) === -1) continue;
+              if (shifts[j].type !== 'relays') continue;
+              if (!shifts[i].start || !shifts[j].start) return true;
+              var t1 = new Date('2000-01-01T' + shifts[i].start);
+              var t2 = new Date('2000-01-01T' + shifts[j].start);
+              if (Math.abs(t2 - t1) / (1000*60*60) <= 8) return true;
+            }
+          }
+          return false;
+        });
+      })(),
+      progress: 1,
+      total: 1
+    },
+    {
+      id: 'pre_trip_surgeon',
+      name: 'Pre Trip Surgeon',
+      desc: 'Down your truck on shift',
+      color: '#ff6b6b',
+      unlocked: d.shifts.some(function(s){ return s.truckDowned === true; }),
+      progress: 1,
+      total: 1,
+      countable: true,
+      count: d.shifts.filter(function(s){ return s.truckDowned === true; }).length
+    },
+    {
+      id: 'partner4eva',
+      name: 'Partner4eva',
+      desc: 'Work with the same person 100 times',
+      color: '#54a55a',
+      unlocked: (function() {
+        var counts = {};
+        d.shifts.forEach(function(s) {
+          if (s.partner) {
+            var name = s.partner.trim().toLowerCase();
+            counts[name] = (counts[name] || 0) + 1;
+          }
+        });
+        return Object.values(counts).some(function(c){ return c >= 100; });
+      })(),
+      progress: (function() {
+        var counts = {};
+        d.shifts.forEach(function(s) {
+          if (s.partner) {
+            var name = s.partner.trim().toLowerCase();
+            counts[name] = (counts[name] || 0) + 1;
+          }
+        });
+        return Math.min(Math.max.apply(null, Object.values(counts).concat([0])), 100);
+      })(),
+      total: 100,
+      countable: true,
+      count: (function(){var counts={};d.shifts.forEach(function(s){if(s.partner){var n=s.partner.trim().toLowerCase();counts[n]=(counts[n]||0)+1;}});var max=Math.max.apply(null,Object.values(counts).concat([0]));return max;})()
+    },
+    {
+      id: 'for_the_hours',
+      name: 'For the Hours',
+      desc: 'Get sent out of town to the Bronx',
+      color: '#388BFD',
+      unlocked: d.shifts.some(function(s){ return s.location && s.location.startsWith('BX'); }),
+      progress: 1,
+      total: 1,
+      countable: true,
+      count: d.shifts.filter(function(s){ return s.location && s.location.startsWith('BX'); }).length
+    }
+  ];
+
+  const unlocked = ACHIEVEMENTS.filter(a => a.unlocked).length;
+  const el = document.getElementById('achievementsList');
+
+  const CATEGORIES = ['Out of Town', 'Mechanical', 'Seniority', 'Snow', 'Money', 'Night Shift', 'Relays & Dumping', 'Social'];
+  const CATEGORY_MAP = {
+    out_of_town: 'Out of Town', comp_beast: 'Out of Town', comp_dude: 'Out of Town', comp_daddy: 'Out of Town',
+    comp_champion: 'Out of Town', comp_legend: 'Out of Town', comp_god: 'Out of Town', for_the_hours: 'Out of Town',
+    pre_trip_surgeon: 'Mechanical',
+    one_year: 'Seniority', stop_jr: 'Seniority', king_noobs: 'Seniority', freedom: 'Seniority', top_pay: 'Seniority',
+    beat5: 'Seniority', beat10: 'Seniority', beat25: 'Seniority', beat35: 'Seniority', beat50: 'Seniority',
+    snowman: 'Snow', abominable: 'Snow',
+    overdrive: 'Money', holiday_hero: 'Money', nobody_likes_you: 'Money',
+    round_robin: 'Night Shift', hash_slasher: 'Night Shift',
+    wtf_dump: 'Relays & Dumping', tanker: 'Relays & Dumping',
+    partner4eva: 'Social'
+  };
+
+  const openCats = el.dataset.openCats ? JSON.parse(el.dataset.openCats) : {};
+
+  let html = `
+    <div class="card" style="margin-bottom:12px;text-align:center;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--green);">${unlocked}<span style="font-size:18px;color:var(--text2);"> / ${ACHIEVEMENTS.length}</span></div>
+      <div style="font-size:12px;color:var(--text2);margin-top:2px;">Achievements Unlocked</div>
+    </div>`;
+
+  CATEGORIES.forEach(cat => {
+    const catAchievements = ACHIEVEMENTS.filter(a => CATEGORY_MAP[a.id] === cat);
+    const catUnlocked = catAchievements.filter(a => a.unlocked).length;
+    const isOpen = openCats[cat] || false;
+
+    html += `<div style="margin-bottom:8px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--dark4);">
+      <div onclick="toggleAchievementCat('${cat}')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--dark3);cursor:pointer;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:#fff;">${cat}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:12px;color:${catUnlocked > 0 ? 'var(--green)' : 'var(--text2)'};">${catUnlocked}/${catAchievements.length}</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--text2);transform:rotate(${isOpen ? '180' : '0'}deg);transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div style="display:${isOpen ? 'block' : 'none'};background:var(--dark2);padding:8px;">`;
+
+    catAchievements.forEach(a => {
+      const pct = Math.round((a.progress / a.total) * 100);
+      html += `<div class="card" style="margin-bottom:8px;opacity:${a.unlocked ? '1' : '0.5'};">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:42px;height:42px;border-radius:10px;background:${a.unlocked ? a.color : 'var(--dark4)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">${getAchievementSVG(a.id)}</div>
+          <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:${a.unlocked ? '#fff' : 'var(--text2)'};">${a.name}</div>
+              <div style="font-size:10px;font-weight:700;color:${a.unlocked ? a.color : 'var(--text3)'};">${a.unlocked ? (a.countable && a.count > 1 ? 'Earned ' + a.count + 'x' : '✓ UNLOCKED') : a.comingSoon ? '🔒 SOON' : pct + '%'}</div>
+            </div>
+            <div style="font-size:11px;color:var(--text2);margin-bottom:5px;">${a.desc}</div>
+            <div style="background:var(--dark4);border-radius:4px;height:3px;">
+              <div style="background:${a.unlocked ? a.color : 'var(--text3)'};height:3px;border-radius:4px;width:${pct}%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  el.innerHTML = html;
+}
+
 function showRoutesPage() {
   currentPage = 'routes';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1416,6 +2248,43 @@ function showRoutesPage() {
 
 let routePhotoData = null;
 let editingRouteId = null;
+var dumpReceiptData = null;
+
+function handleDumpReceipt(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var max = 600;
+      var ratio = Math.min(max/img.width, max/img.height, 1);
+      canvas.width = img.width * ratio;
+      canvas.height = img.height * ratio;
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+      dumpReceiptData = canvas.toDataURL('image/jpeg', 0.6);
+      document.getElementById('dumpReceiptImg').src = dumpReceiptData;
+      document.getElementById('dumpReceiptPreview').style.display = 'block';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearDumpReceipt() {
+  dumpReceiptData = null;
+  document.getElementById('dumpReceiptPreview').style.display = 'none';
+  document.getElementById('dumpReceiptImg').src = '';
+  document.getElementById('dumpReceiptCam').value = '';
+  document.getElementById('dumpReceiptLib').value = '';
+}
+
+function onTonsInput() {
+  var val = document.getElementById('shiftTons').value;
+  document.getElementById('dumpReceiptGroup').style.display = val ? 'block' : 'none';
+  if (!val) clearDumpReceipt();
+}
 
 function openAddRoute() {
   editingRouteId = null;
@@ -1536,7 +2405,7 @@ function renderRoutes() {
   document.getElementById('routeCount').textContent = routes.length;
   const el = document.getElementById('routesList');
   if (!routes.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">🚛</div><p>No routes saved yet. Tap + to add one.</p></div>';
+    el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><p>No routes saved yet. Tap + to add one.</p></div>';
     return;
   }
   el.innerHTML = routes.map((r, i) => `
@@ -1544,22 +2413,22 @@ function renderRoutes() {
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div>
           <div class="shift-date">🚛 ${r.garage || ''} — Sec ${r.section || ''}, Rt ${r.routeNum || ''}</div>
-          ${r.quality ? `<div><span class="tag tag-regular" style="margin-top:4px;">${r.quality}</span></div>` : ''}
-          ${r.duration ? `<div class="shift-hours">⏱ ${r.duration}</div>` : ''}
+          ${r.quality ? '<div><span class="tag ' + (r.quality === 'Heavy and Short' ? 'tag-quality-heavy' : r.quality === 'Heavy and Long' ? 'tag-quality-heavy-long' : r.quality === 'Light and Long' ? 'tag-quality-light' : r.quality === 'Light and Short' ? 'tag-quality-light-short' : r.quality === 'Normal Weight' ? 'tag-quality-normal' : 'tag-quality-varies') + '" style="margin-top:4px;">' + r.quality + '</span></div>' : ''}
+          ${r.duration ? `<div class="shift-hours"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${r.duration}</div>` : ''}
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
-          ${r.photo ? '<span style="font-size:14px;">📷</span>' : ''}
+          ${r.photo ? '<span style="display:inline-flex;align-items:center;color:var(--green)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>' : ''}
           <span style="color:var(--text3);font-size:18px;">›</span>
-          <button class="delete-btn" onclick="event.stopPropagation();editRoute(${r.id})" style="color:var(--green);">✏️</button>
-          <button class="delete-btn" onclick="event.stopPropagation();deleteRoute(${r.id})">🗑️</button>
+          <button class="delete-btn" onclick="event.stopPropagation();editRoute(${r.id})" style="color:var(--green);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+          <button class="delete-btn" onclick="event.stopPropagation();deleteRoute(${r.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
         </div>
       </div>
       <div id="rd-${i}" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--dark4);">
         ${r.photo ? `<img src="${r.photo}" style="width:100%;border-radius:12px;max-height:220px;object-fit:cover;margin-bottom:10px;" onerror="this.style.display='none'" />` : ''}
-        <div style="font-size:14px;color:var(--text);margin-bottom:6px;">📍 <strong>Garage:</strong> ${r.garage || '—'}</div>
+        <div style="font-size:14px;color:var(--text);margin-bottom:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><strong>Garage:</strong> ${r.garage || '—'}</div>
         <div style="font-size:14px;color:var(--text);margin-bottom:6px;">📋 <strong>Section:</strong> ${r.section || '—'} &nbsp;|&nbsp; <strong>Route:</strong> ${r.routeNum || '—'}</div>
-        ${r.quality ? `<div style="font-size:14px;color:var(--text);margin-bottom:6px;">⚖️ <strong>Quality:</strong> ${r.quality}</div>` : ''}
-        ${r.duration ? `<div style="font-size:14px;color:var(--text);margin-bottom:6px;">⏱ <strong>Duration:</strong> ${r.duration}</div>` : ''}
+        ${r.quality ? `<div style="font-size:14px;color:var(--text);margin-bottom:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 9l9-7 9 7"/><path d="M6 21h12"/><line x1="3" y1="9" x2="21" y2="9"/></svg><strong>Quality:</strong> ${r.quality}</div>` : ''}
+        ${r.duration ? `<div style="font-size:14px;color:var(--text);margin-bottom:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong>Duration:</strong> ${r.duration}</div>` : ''}
         ${r.notes ? `<div style="font-size:14px;color:var(--text2);line-height:1.6;margin-top:8px;">${r.notes}</div>` : ''}
       </div>
     </div>`).join('');
@@ -1577,8 +2446,8 @@ function showPage(page) {
   const fab = document.getElementById('fab');
   fab.style.display = (page === 'profile' || page === 'pay') ? 'none' : 'flex';
 
-  if (page === 'cal') renderCalendar();
-  if (page === 'pay') updatePayPage();
+  if (page === 'shifts') renderCalendar();
+  if (page === 'pay') { populateWeeklyOptions(); updatePayPage(); }
 }
 
 function openFab() {
@@ -1605,11 +2474,25 @@ function calcHours(start, end) {
 }
 
 function calcShiftPay(shift, rate) {
+  const hourly = rate / 2080;
   const h = shift.hours;
-  if (shift.type === 'overtime') return h * rate * 1.5;
-  if (shift.type === 'holiday') return h * rate * 2;
-  if (shift.type === 'differential') return h * (rate + rate * 0.1);
-  return h * rate;
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  const isSunday = shift.date ? new Date(shift.date + 'T12:00:00').getDay() === 0 : false;
+
+  if (shift.type === 'holiday') return h * hourly * 2;
+  if (shift.type === 'differential') return h * hourly * 1.10;
+
+  // Sunday premium
+  if (isSunday) {
+    const isSnow = snowFunctions.indexOf(shift.type) !== -1;
+    const multiplier = isSnow ? 2.0 : 1.5;
+    if (h > 8) return (8 * hourly * multiplier) + ((h - 8) * hourly * 1.5);
+    return h * hourly * multiplier;
+  }
+
+  // OT starts at hour 9
+  if (h > 8) return (8 * hourly) + ((h - 8) * hourly * 1.5);
+  return h * hourly;
 }
 
 function addShift() {
@@ -1617,19 +2500,37 @@ function addShift() {
   const type = document.getElementById('shiftType').value;
   const start = document.getElementById('shiftStart').value;
   const end = document.getElementById('shiftEnd').value;
+  const fraction = document.getElementById('shiftFraction').value;
+  const chartDay = document.querySelector('input[name="chartDay"]:checked').value === 'yes';
+  const tons = parseFloat(document.getElementById('shiftTons').value) || null;
+  const partner = document.getElementById('shiftPartner').value.trim();
+  const location = document.getElementById('shiftLocation').value;
+  const truckDowned = document.querySelector('input[name="truckDowned"]:checked').value === 'yes';
   const route = document.getElementById('shiftRoute').value.trim();
   const notes = document.getElementById('shiftNotes').value.trim();
 
-  if (!date || !start || !end) { showToast('Please fill date and times'); return; }
+  if (!date) { showToast('Please fill in the date'); return; }
+  if (tons && !dumpReceiptData) { showToast('Please add a dump receipt photo'); return; }
   const hours = calcHours(start, end);
-  const pay = calcShiftPay({type, hours}, currentUser.rate);
+  const regHours = Math.min(hours, 8);
+  const otHours = Math.max(hours - 8, 0);
+  let pay = calcShiftPay({type, hours, date}, currentUser.rate);
+  if (chartDay && type) pay = (currentUser.rate / 260) * 2;
 
   const d = getUserData(currentUser.id);
-  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, pay, route, notes });
+  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, notes });
   saveUserData(currentUser.id, d);
   closeModal('shiftModal');
   document.getElementById('shiftNotes').value = '';
   document.getElementById('shiftRoute').value = '';
+  document.getElementById('shiftFraction').value = '';
+  document.getElementById('chartDayNo').checked = true;
+  document.getElementById('shiftTons').value = '';
+  document.getElementById('shiftPartner').value = '';
+  document.getElementById('shiftLocation').value = '';
+  document.getElementById('truckDownedNo').checked = true;
+  document.getElementById('dumpReceiptGroup').style.display = 'none';
+  clearDumpReceipt();
   showToast('✅ Shift logged!');
   refreshAll();
 }
@@ -1658,18 +2559,18 @@ function renderShiftItem(s) {
   return `<div class="shift-item">
     <div class="shift-left">
       <div class="shift-date">${dateStr}</div>
-      <div class="shift-type"><span class="tag ${typeTagClass(s.type)}">${typeLabel(s.type)}</span></div>
+      <div class="shift-type"><span class="tag ${typeTagClass(s.type)}">${typeLabel(s.type)}</span>${s.otHours > 0 ? ' <span class="tag" style="background:rgba(168,85,247,0.2);color:#a855f7;">OT</span>' : ''}${s.chartDay ? ' <span style="color:#388BFD;font-size:11px;font-weight:700;">$$ Chart</span>' : ''}${(s.start && (function(){ var p=s.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })()) ? ' <span class="tag" style="background:rgba(30,58,138,0.4);color:#93c5fd;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Night</span>' : ''}</div>
       <div class="shift-hours">${s.start} – ${s.end} &nbsp;•&nbsp; ${s.hours}h ${s.route ? '&nbsp;•&nbsp; ' + s.route : ''}</div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
       <div class="shift-pay">$${s.pay.toFixed(2)}</div>
-      <button class="delete-btn" onclick="deleteShift(${s.id})">🗑️</button>
+      <button class="delete-btn" onclick="deleteShift(${s.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
     </div>
   </div>`;
 }
 
 // ── TASKS ──
-let activeNoteFilter = 'all';
+let activeNoteFilter = 'general';
 
 function filterNotes(cat) {
   activeNoteFilter = cat;
@@ -1715,7 +2616,7 @@ function renderTasks() {
   document.getElementById('taskCount').textContent = d.tasks.length;
   const filtered = activeNoteFilter === 'all' ? d.tasks : d.tasks.filter(t => t.priority && t.priority.toLowerCase().includes(activeNoteFilter));
   if (!filtered.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><p>No notes yet. Tap + to add one.</p></div>';
+    el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><p>No notes yet. Tap + to add one.</p></div>';
     return;
   }
   el.innerHTML = filtered.map(t => `
@@ -1723,9 +2624,9 @@ function renderTasks() {
       <div style="flex:1">
         <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">${t.priority || '📝 General'}</div>
         <div class="task-text" style="white-space:pre-wrap;line-height:1.5;">${t.text}</div>
-        ${t.due ? `<div style="font-size:12px;color:var(--text2);margin-top:6px;">📅 ${new Date(t.due+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>` : ''}
+        ${t.due ? '<div style="font-size:12px;color:var(--text2);margin-top:6px;">📅 ' + new Date(t.due+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + '</div>' : ''}
       </div>
-      <button class="delete-btn" onclick="deleteTask(${t.id})">🗑️</button>
+      <button class="delete-btn" onclick="deleteTask(${t.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
     </div>`).join('');
 }
 
@@ -1750,7 +2651,7 @@ function renderCalendar() {
 
   for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
   for (let day = 1; day <= daysInMonth; day++) {
-    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
     const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
     const shiftType = shiftDates[dateStr];
     const cls = [
@@ -1783,6 +2684,30 @@ function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(
 function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); document.getElementById('calDayDetail').style.display = 'none'; }
 
 // ── PAY ──
+function populateWeeklyOptions() {
+  const group = document.getElementById('weeklyOptionsGroup');
+  if (!group) return;
+  const now = new Date();
+  const year = now.getFullYear();
+  const jan1 = new Date(year, 0, 1);
+  let monday = new Date(jan1);
+  const day = jan1.getDay();
+  monday.setDate(jan1.getDate() + (day === 0 ? 1 : day === 1 ? 0 : 8 - day));
+  group.innerHTML = '';
+  while (monday.getFullYear() === year) {
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    const val = monday.toISOString().split('T')[0];
+    const isCurrentWeek = now >= monday && now <= sunday;
+    const opt = document.createElement('option');
+    opt.value = 'specific:' + val;
+    opt.textContent = fmt(monday) + ' – ' + fmt(sunday) + (isCurrentWeek ? ' (current)' : '');
+    group.appendChild(opt);
+    monday.setDate(monday.getDate() + 7);
+  }
+}
+
 function getPayPeriodShifts(period) {
   const d = getUserData(currentUser.id);
   const now = new Date();
@@ -1791,6 +2716,11 @@ function getPayPeriodShifts(period) {
     if (period === 'week') {
       const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
       return sd >= weekStart;
+    }
+    if (period.startsWith('specific:')) {
+      const monday = new Date(period.replace('specific:', '') + 'T12:00:00');
+      const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+      return sd >= monday && sd <= sunday;
     }
     if (period === 'month') return sd.getMonth() === now.getMonth() && sd.getFullYear() === now.getFullYear();
     if (period === 'year') return sd.getFullYear() === now.getFullYear();
@@ -1803,25 +2733,74 @@ function updatePayPage() {
   const shifts = getPayPeriodShifts(period);
   const rate = parseFloat(currentUser.rate);
 
-  let regH = 0, regP = 0, otH = 0, otP = 0, holP = 0, diffP = 0;
+  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0;
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  const weeklyBase = rate / 52;
+  const regH = period === 'week' ? 40 : period === 'month' ? Math.round(40 * 4.33) : period === 'year' ? 2080 : 40;
+  const regP = period === 'week' ? weeklyBase : period === 'month' ? weeklyBase * 4.33 : period === 'year' ? rate : weeklyBase;
+
   shifts.forEach(s => {
-    if (s.type === 'regular') { regH += s.hours; regP += s.pay; }
-    else if (s.type === 'overtime') { otH += s.hours; otP += s.pay; }
-    else if (s.type === 'holiday') { holP += s.pay; }
-    else if (s.type === 'differential') { diffP += s.pay; }
+    const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
+    const calculatedPay = s.chartDay && s.type ? (rate / 260) * 2 : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+    if (s.chartDay && s.type) { chartP += calculatedPay; }
+    else if (s.type === 'holiday') { holP += calculatedPay; }
+    else if (s.type === 'differential') { diffP += calculatedPay; }
+    else if (isSunday) { sundayP += calculatedPay; }
+    else {
+      otH += (s.otHours || 0);
+      otP += (s.otHours || 0) * (rate / 2080) * 1.5;
+    }
   });
 
-  const uniformPer = period === 'year' ? 1200 : period === 'month' ? 100 : period === 'week' ? 23.08 : 1200;
-  const total = regP + otP + holP + diffP + uniformPer;
+  const total = regP + otP + holP + diffP + chartP + sundayP;
 
   document.getElementById('payRegHours').textContent = regH.toFixed(1) + 'h';
   document.getElementById('payRegPay').textContent = '$' + regP.toFixed(2);
+  document.getElementById('payChartPay').textContent = '$' + chartP.toFixed(2);
   document.getElementById('payOTHours').textContent = otH.toFixed(1) + 'h';
   document.getElementById('payOTPay').textContent = '$' + otP.toFixed(2);
   document.getElementById('payHolidayPay').textContent = '$' + holP.toFixed(2);
   document.getElementById('payDiffPay').textContent = '$' + diffP.toFixed(2);
-  document.getElementById('payUniform').textContent = '$' + uniformPer.toFixed(2);
+  document.getElementById('paySundayPay').textContent = '$' + sundayP.toFixed(2);
   document.getElementById('payTotal').textContent = '$' + total.toFixed(2);
+
+  // Tax deductions
+  const fica = total * 0.062;
+  const medicare = total * 0.0145;
+  const federal = total * 0.078;
+  const state = total * 0.0435;
+  const nyc = total * 0.0331;
+  const totalTax = fica + medicare + federal + state + nyc;
+
+  document.getElementById('payFICA').textContent = '$' + fica.toFixed(2);
+  document.getElementById('payMedicare').textContent = '$' + medicare.toFixed(2);
+  document.getElementById('payFederal').textContent = '$' + federal.toFixed(2);
+  document.getElementById('payState').textContent = '$' + state.toFixed(2);
+  document.getElementById('payNYC').textContent = '$' + nyc.toFixed(2);
+  document.getElementById('payTotalTax').textContent = '$' + totalTax.toFixed(2);
+
+  // Other deductions (fixed from stub + user's 457)
+  const health = 7.42;
+  const ppo = 0;
+  const disability = 18.89;
+  const pension = 40.48;
+  const unionAssn = 21.00;
+  const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
+  const contrib457 = total * contrib457Pct / 100;
+  document.getElementById('pay457Label').textContent = '457 Savings Plan' + (contrib457Pct ? ' (' + contrib457Pct.toFixed(2) + '%)' : ' (not set)');
+  const totalOther = health + ppo + disability + pension + unionAssn + contrib457;
+
+  document.getElementById('payHealth').textContent = '$' + health.toFixed(2);
+  document.getElementById('payPPO').textContent = '$' + ppo.toFixed(2);
+  document.getElementById('payDisability').textContent = '$' + disability.toFixed(2);
+  document.getElementById('payPension').textContent = '$' + pension.toFixed(2);
+  document.getElementById('payUnionAssn').textContent = '$' + unionAssn.toFixed(2);
+  document.getElementById('pay457').textContent = '$' + contrib457.toFixed(2);
+  document.getElementById('payTotalDeductions').textContent = '$' + (totalTax + totalOther).toFixed(2);
+
+  // Net Pay
+  const netPay = total - totalTax - totalOther;
+  document.getElementById('payNet').textContent = '$' + netPay.toFixed(2);
 }
 
 // ── DASHBOARD REFRESH ──
@@ -1838,30 +2817,59 @@ function refreshAll() {
 
   const weekH = weekShifts.reduce((a, s) => a + s.hours, 0);
   const weekOT = weekShifts.filter(s => s.type === 'overtime').reduce((a, s) => a + s.hours, 0);
-  const weekP = weekShifts.reduce((a, s) => a + s.pay, 0);
-  const monthH = monthShifts.reduce((a, s) => a + s.hours, 0);
-  const monthP = monthShifts.reduce((a, s) => a + s.pay, 0);
+  const weekP = 1349.41; // TEST VALUE - remove before release
+  const monthH = 76; // TEST VALUE - remove before release
+  const monthP = 6745; // TEST VALUE - remove before release
 
-  document.getElementById('weekHours').textContent = weekH.toFixed(1) + 'h';
-  document.getElementById('weekOT').textContent = weekOT.toFixed(1) + 'h overtime';
-  document.getElementById('weekPay').textContent = '$' + weekP.toFixed(0);
-  document.getElementById('monthHours').textContent = monthH.toFixed(1) + 'h';
-  document.getElementById('monthPay').textContent = '$' + monthP.toFixed(0);
-  document.getElementById('monthShifts').textContent = monthShifts.length;
+  document.getElementById('weekOT').textContent = '';
+  document.getElementById('weekPay').textContent = '$' + Math.round(weekP).toLocaleString();
+  const testTaxRate = 0.343; // TEST VALUE - remove before release
+  const netPay = Math.round(weekP * (1 - testTaxRate));
+  document.getElementById('weekPayNetSub').textContent = 'est. net: $' + netPay.toLocaleString();
+  // Update est. net subtitle
+  const weekPayCard = document.getElementById('weekPay').parentElement;
+  const subDivs = weekPayCard.querySelectorAll('.card-sub');
+  if (subDivs[1]) subDivs[1].textContent = 'est. net: $' + netPay.toLocaleString();
+  const compEl = document.getElementById('monthHours');
+  compEl.textContent = Math.round(monthH);
+  if (monthH >= 250) {
+    compEl.style.background = 'linear-gradient(135deg, #a855f7, #6366f1)';
+    compEl.style.webkitBackgroundClip = 'text';
+    compEl.style.webkitTextFillColor = 'transparent';
+    compEl.style.backgroundClip = 'text';
+  } else if (monthH >= 100) {
+    compEl.style.background = 'linear-gradient(135deg, #428247, #00C863)';
+    compEl.style.webkitBackgroundClip = 'text';
+    compEl.style.webkitTextFillColor = 'transparent';
+    compEl.style.backgroundClip = 'text';
+  } else {
+    compEl.style.background = '';
+    compEl.style.webkitBackgroundClip = '';
+    compEl.style.webkitTextFillColor = '';
+    compEl.style.backgroundClip = '';
+    compEl.style.color = monthH < 52 ? 'var(--red)' : 'var(--yellow)';
+  }
+  document.getElementById('monthPay').textContent = '$' + monthP.toLocaleString();
+  document.getElementById('monthPayNet').textContent = 'est. net: $' + Math.round(monthP * (1 - 0.343)).toLocaleString();
+  const monthShiftsEl = document.getElementById('monthShifts');
+  if (monthShiftsEl) monthShiftsEl.textContent = monthShifts.length;
 
   // Recent shifts
   const recent = d.shifts.slice(0, 5);
-  document.getElementById('recentShifts').innerHTML = recent.length
+  const recentEl = document.getElementById('recentShiftsList');
+  if (recentEl) recentEl.innerHTML = recent.length
     ? recent.map(renderShiftItem).join('')
-    : '<div class="empty-state"><div class="icon">📋</div><p>No shifts logged yet. Tap + to add your first shift.</p></div>';
+    : '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div><p>No shifts logged yet.</p></div>';
 
   // All shifts
   document.getElementById('shiftCount').textContent = d.shifts.length;
   document.getElementById('shiftsList').innerHTML = d.shifts.length
     ? d.shifts.map(renderShiftItem).join('')
-    : '<div class="empty-state"><div class="icon">🕐</div><p>No shifts yet. Tap + to log a shift.</p></div>';
+    : '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>No shifts yet. Tap + to log a shift.</p></div>';
 
-  document.getElementById('profileShiftTotal').textContent = d.shifts.length;
+  const profileShiftEl = document.getElementById('profileShiftTotal');
+  if (profileShiftEl) profileShiftEl.textContent = d.shifts.length;
+  renderWeeklyList();
   renderTasks();
 }
 
@@ -1904,28 +2912,37 @@ function updateProfile() {
   const users = getUsers();
   const u = users[currentUser.id];
   const name = document.getElementById('updateName').value.trim();
+  const badge = document.getElementById('updateBadge').value.trim();
   const r = parseFloat(document.getElementById('updateRate').value);
   const garage = document.getElementById('updateGarage').value;
   const title = document.getElementById('updateTitle').value;
+  const taxRate = parseFloat(document.getElementById('updateTaxRate').value);
+  const contrib457 = parseFloat(document.getElementById('update457').value);
   const hireDate = document.getElementById('updateHireDate').value;
   const probation = document.getElementById('updateProbation').value;
 
-  if (name) { u.name = name; currentUser.name = name; document.getElementById('profileName').textContent = name; }
+  if (name) { u.name = name; currentUser.name = name; document.getElementById('profileName').textContent = name; document.getElementById('dashName').textContent = name; }
+  if (badge) { u.badge = badge; currentUser.badge = badge; document.getElementById('profileBadge').textContent = badge; document.getElementById('dashBadge').textContent = 'Badge #' + badge; }
   if (r && r > 0) { u.rate = r; currentUser.rate = r; document.getElementById('profileRate').textContent = '$' + r.toFixed(0) + '/yr'; document.getElementById('baseRateDisplay').textContent = '$' + r.toFixed(0) + '/yr'; document.getElementById('otRateDisplay').textContent = '$' + (r/52).toFixed(2); document.getElementById('holidayRateDisplay').textContent = '$' + (r/260).toFixed(2); }
   if (garage) { u.district = garage; currentUser.district = garage; document.getElementById('profileGarage').textContent = garage; document.getElementById('profileDistrict').textContent = garage; document.getElementById('avatarGarage').textContent = garage; }
   if (title) { u.title = title; currentUser.title = title; document.getElementById('profileTitleRow').textContent = title; document.getElementById('profileTitle').textContent = title; }
   if (hireDate) { u.hireDate = hireDate; currentUser.hireDate = hireDate; document.getElementById('profileHireDate').textContent = new Date(hireDate+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
   if (probation) { u.probation = probation; currentUser.probation = probation; }
+  if (taxRate && taxRate > 0) { u.taxRate = taxRate; currentUser.taxRate = taxRate; document.getElementById('profileTaxRate').textContent = taxRate + '%'; }
+  if (contrib457 && contrib457 > 0) { u.contrib457 = contrib457; currentUser.contrib457 = contrib457; document.getElementById('profile457').textContent = contrib457.toFixed(2) + '%'; }
 
-  if (!name && !r && !garage && !title && !hireDate && !probation) { showToast('Nothing to update'); return; }
+  if (!name && !r && !garage && !title && !hireDate && !probation && !taxRate && !contrib457) { showToast('Nothing to update'); return; }
 
   saveUsers(users);
   updateProbationDisplay();
   document.getElementById('updateName').value = '';
+  document.getElementById('updateBadge').value = '';
   document.getElementById('updateRate').value = '';
   document.getElementById('updateGarage').value = '';
   document.getElementById('updateTitle').value = '';
   document.getElementById('updateHireDate').value = '';
+  document.getElementById('updateTaxRate').value = '';
+  document.getElementById('update457').value = '';
   document.getElementById('updateProbation').value = '';
   showToast('✅ Profile updated!');
 }
@@ -1952,13 +2969,32 @@ window.addEventListener('click', e => {
   if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
 });
 
-// ⚠️ BYPASS LOGIN - REMOVE BEFORE SHARING WITH COWORKERS ⚠️
-const TEST_ACCOUNT = { name: 'T. Developer', id: 'test@santrack.app', district: 'BKN1', title: 'Sanitation Worker', rate: 75000, pass: 'test123', probation: 'no', hireDate: '' };
-const users = getUsers();
-if (!users[TEST_ACCOUNT.id]) { users[TEST_ACCOUNT.id] = TEST_ACCOUNT; saveUsers(users); }
-currentUser = TEST_ACCOUNT;
+// ⚠️ BYPASS HANDLED AT TOP OF SCRIPT ⚠️
+
+// ── BYPASS LOGIN ⚠️ REMOVE BEFORE SHARING ⚠️ ──
+var _T = { name: 'T. Developer', id: 'test@santrack.app', district: 'BKN1', title: 'Sanitation Worker', rate: 50321, pass: 'test123', probation: 'yes', hireDate: '2025-06-23', badge: '123456' };
+var _u = getUsers(); _u[_T.id] = _T; saveUsers(_u);
+localStorage.setItem('santrack_welcomed', 'true');
+currentUser = _T;
+
+// Add test shifts for this week
+var _d = getUserData(_T.id);
+var _now = new Date();
+var _mon = new Date(_now); _mon.setDate(_now.getDate() - (_now.getDay() === 0 ? 6 : _now.getDay() - 1));
+function _ds(offset) { var d = new Date(_mon); d.setDate(_mon.getDate()+offset); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+if (true) {
+  _d.shifts = [
+    { id: 7, date: _ds(-1), type: 'garbage', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 290.31, fraction: '', chartDay: false, route: '', notes: '' },
+    { id: 1, date: _ds(0), type: 'recycling', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 193.54, fraction: '', chartDay: false, route: '', notes: '' },
+    { id: 2, date: _ds(1), type: 'recycling', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 387.08, fraction: '1/2 Recycling to MLP', chartDay: true, route: '', notes: '' },
+    { id: 3, date: _ds(2), type: 'organics', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 193.54, fraction: '', chartDay: false, route: '', notes: '' },
+    { id: 4, date: _ds(3), type: 'garbage', start: '06:00', end: '22:00', hours: 16, regHours: 8, otHours: 8, pay: 483.85, fraction: '', chartDay: false, route: '', notes: '' },
+    { id: 5, date: _ds(4), type: 'differential', start: '16:00', end: '00:00', hours: 8, regHours: 8, otHours: 0, pay: 212.88, fraction: '', chartDay: false, route: '', notes: '' },
+    { id: 6, date: _ds(5), type: 'holiday', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 387.08, fraction: '', chartDay: false, route: '', notes: '' },
+  ];
+  saveUserData(_T.id, _d);
+}
 startApp();
-// ⚠️ END BYPASS ⚠️
 
 </script>
 </body>
