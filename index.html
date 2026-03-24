@@ -72,7 +72,7 @@
     padding: 40px 32px;
     width: 100%;
     max-width: 400px;
-    box-shadow: var(--shadow);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
     position: relative;
     z-index: 1;
   }
@@ -80,6 +80,7 @@
   .logo {
     text-align: center;
     margin-bottom: 32px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
   }
   .logo-icon {
     width: 64px; height: 64px;
@@ -94,13 +95,14 @@
   }
   .logo h1 {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 28px;
+    font-size: 35px;
     font-weight: 800;
     letter-spacing: 1px;
     color: var(--text);
+    text-shadow: 0 2px 16px rgba(0,0,0,0.6);
   }
   .logo span { color: var(--green); }
-  .logo p { color: var(--text2); font-size: 13px; margin-top: 4px; }
+  .logo p { color: var(--text2); font-size: 13px; margin-top: 4px; text-shadow: 0 1px 6px rgba(0,0,0,0.4); }
 
   .form-group { margin-bottom: 16px; }
   .form-group label {
@@ -123,9 +125,11 @@
     font-size: 15px;
     outline: none;
     transition: border-color 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 3px rgba(0,0,0,0.2);
   }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     border-color: var(--green);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 0 2px rgba(0,166,81,0.15), inset 0 1px 3px rgba(0,0,0,0.2);
   }
   .form-group select option { background: var(--dark3); }
 
@@ -145,9 +149,9 @@
   .btn-primary {
     background: var(--green);
     color: #fff;
-    box-shadow: 0 4px 16px rgba(0,166,81,0.3);
+    box-shadow: 0 4px 20px rgba(0,166,81,0.45), 0 2px 6px rgba(0,0,0,0.3);
   }
-  .btn-primary:hover { background: var(--green-light); transform: translateY(-1px); }
+  .btn-primary:hover { background: var(--green-light); transform: translateY(-1px); box-shadow: 0 6px 24px rgba(0,166,81,0.55), 0 2px 8px rgba(0,0,0,0.3); }
   .btn-secondary {
     background: transparent;
     color: var(--green);
@@ -669,10 +673,10 @@
     margin-bottom: 16px;
   }
   .profile-avatar {
-    width: 90px; height: 90px;
+    width: 70px; height: 70px;
     background: var(--dark3);
     border: 2px solid var(--green);
-    border-radius: 16px;
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -683,27 +687,27 @@
   }
   .profile-avatar .garage-label {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 800;
     color: var(--green);
     letter-spacing: 1px;
     text-transform: uppercase;
     margin-bottom: 2px;
   }
-  .profile-info h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; }
-  .profile-info p { font-size: 13px; color: var(--text2); margin-top: 2px; }
+  .profile-info h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; }
+  .profile-info p { font-size: 12px; color: var(--text2); margin-top: 1px; }
 
   .settings-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 0;
+    padding: 8px 0;
     border-bottom: 1px solid var(--dark3);
-    font-size: 15px;
+    font-size: 13px;
   }
   .settings-row:last-child { border-bottom: none; }
-  .settings-row .label { color: var(--text2); font-size: 13px; }
-  .settings-row .value { font-weight: 600; font-size: 14px; }
+  .settings-row .label { color: var(--text2); font-size: 11px; }
+  .settings-row .value { font-weight: 600; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -726,10 +730,11 @@
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="screen active">
-  <div class="login-box">
+  <div class="login-box" style="position:relative;">
+    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.4</div>
     <div class="logo">
       <h1>San<span>Track</span></h1>
-      <p>Track your pay and schedule</p>
+      <p>Track your pay, shifts, seniority, routes and more!</p>
     </div>
     <div id="loginError" class="alert" style="display:none"></div>
     <div id="loginForm">
@@ -740,6 +745,11 @@
       <div class="form-group">
         <label>Password</label>
         <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <input type="checkbox" id="rememberMe" style="width:auto;accent-color:var(--green);cursor:pointer;">
+        <label for="rememberMe" style="font-size:13px;color:var(--text2);cursor:pointer;text-transform:none;font-weight:400;letter-spacing:0;">Remember my password</label>
+        <span style="font-size:11px;color:var(--text3);font-style:italic;">· Logs out in 24 hours</span>
       </div>
       <button class="btn btn-primary" onclick="login()">Sign In</button>
       <div class="auth-toggle" style="margin-top:12px;">Forgot your password? <a onclick="showForgot()">Reset it</a></div>
@@ -924,10 +934,13 @@
     <!-- DASHBOARD PAGE -->
     <div id="dashPage" class="page active">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
-        <div class="section-title" id="dashGreeting" style="flex-direction:column;align-items:flex-start;margin-bottom:0;">Good morning</div>
-        <div style="text-align:right;">
-          <div id="dashName" style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;color:#FFFFFF;letter-spacing:0.5px;line-height:1.1;">—</div>
+        <div>
+          <div id="dashName" style="font-family:'Barlow',sans-serif;font-size:28px;font-weight:700;color:#FFFFFF;letter-spacing:0.5px;line-height:1.1;">—</div>
           <div id="dashBadge" style="font-size:12px;color:var(--text2);margin-top:2px;">—</div>
+        </div>
+        <div style="text-align:right;">
+          <div id="dashGarage" style="font-family:'Barlow',sans-serif;font-size:22px;font-weight:700;color:#ffffff;line-height:1.1;">—</div>
+          <div id="dashSeniority" style="font-size:12px;color:var(--text2);margin-top:2px;"></div>
         </div>
       </div>
 
@@ -1109,34 +1122,44 @@
 
     <!-- TASKS PAGE -->
     <div id="tasksPage" class="page">
-      <div class="section-title">Notes <span class="badge" id="taskCount">0</span></div>
+      <div style="text-align:center;margin-bottom:16px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffffff;display:inline-block;padding-bottom:4px;border-bottom:2px solid var(--green);">Information &amp; Features</div>
+      </div>
 
       <!-- Category buttons -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
-        <button class="note-cat-btn active" onclick="filterNotes('general')" id="cat-general">
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><div>Notebook</div>
-        </button>
         <button class="note-cat-btn" onclick="showRoutesPage()" id="cat-routes">
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div>My Favorite Routes</div>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div>Route Diary</div>
+        </button>
+        <button class="note-cat-btn" onclick="showSeniorityPage()" id="cat-seniority">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <div>Seniority Tracker <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
+        </button>
+        <button class="note-cat-btn" onclick="showCountdownsPage()" id="cat-countdowns">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <div>Countdowns</div>
+        </button>
+        <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;" disabled>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <div>Locations <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
+          <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
         </button>
         <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;grid-column:1/-1;" disabled>
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="5" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="3" y="11" width="8" height="5" rx="1"/><rect x="13" y="11" width="8" height="5" rx="1"/><rect x="3" y="19" width="8" height="2" rx="1"/><rect x="13" y="19" width="8" height="2" rx="1"/></svg></span>
           <div>Board <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
           <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
         </button>
-        <button class="note-cat-btn" onclick="showSeniorityPage()" id="cat-seniority" style="grid-column:1/-1;">
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
-          <div>Seniority Tracker <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
-        </button>
         <button class="note-cat-btn" onclick="showCareerStatsPage()" id="cat-career" style="grid-column:1/-1;">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></span>
           <div>Career Statistics</div>
         </button>
+        <button class="note-cat-btn" onclick="showChangelogPage()" id="cat-changelog" style="grid-column:1/-1;">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <div>Updates</div>
+        </button>
       </div>
 
-      <div id="tasksList">
-        <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><p>No notes yet. Tap + to add one.</p></div>
-      </div>
+      <div id="tasksList" style="display:none;"></div>
     </div>
 
     <!-- ACHIEVEMENTS PAGE -->
@@ -1152,10 +1175,96 @@
     <div id="routesPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
         <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">‹</button>
-        <div class="section-title" style="margin-bottom:0;">My Favorite Routes <span class="badge" id="routeCount">0</span></div>
+        <div class="section-title" style="margin-bottom:0;">Route Diary <span class="badge" id="routeCount">0</span></div>
       </div>
       <div id="routesList">
         <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><p>No routes saved yet. Tap + to add one.</p></div>
+      </div>
+    </div>
+
+    <!-- COUNTDOWNS PAGE -->
+    <div id="countdownsPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Countdowns</div>
+      </div>
+
+      <!-- Add custom countdown -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;margin-bottom:10px;text-transform:uppercase;">Add Countdown</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <input type="text" id="countdownLabel" placeholder="Label (e.g. Vacation)" style="flex:1;padding:9px 12px;font-size:14px;">
+          <input type="date" id="countdownDate" style="flex:1;padding:9px 12px;font-size:14px;">
+        </div>
+        <button onclick="addCustomCountdown()" class="btn btn-primary" style="padding:9px;font-size:14px;">Add</button>
+      </div>
+
+      <div id="countdownsList"></div>
+    </div>
+
+    <!-- CHANGELOG PAGE -->
+    <div id="changelogPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Updates</div>
+      </div>
+
+      <!-- Known Bugs -->
+      <div class="card" style="margin-bottom:16px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--red);letter-spacing:0.5px;margin-bottom:10px;">🐛 Known Bugs</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6;">
+          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Pay breakdown totals may not be 100% accurate in all edge cases</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Comp Hours card is not yet functional</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Next Chart Day card is not yet functional</div>
+          <div style="padding:6px 0;">• Board feature is coming soon</div>
+        </div>
+      </div>
+
+      <!-- Changelog -->
+      <div class="card">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:0.5px;margin-bottom:10px;">📋 Changelog</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.4 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 2026</span></div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+            • Added Career Statistics page<br>
+            • Added Updates page<br>
+            • Calendar redesigned — squares, Sunday highlights, Night Plow Ends annotation<br>
+            • Tap calendar day to log or edit shifts<br>
+            • Overtime Pay dropdown in pay breakdown<br>
+            • Chart Day Pay dropdown in pay breakdown<br>
+            • Chart Day now supports overtime<br>
+            • Truck money 2x on chart days<br>
+            • Pay periods fixed to Sun–Sat<br>
+            • Profile page compacted<br>
+            • Login: Remember password + 24hr session<br>
+            • Login bypass removed
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.3 <span style="font-size:11px;color:var(--text3);font-weight:400;">Early 2026</span></div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+            • Pay breakdown with tax deductions<br>
+            • Truck money dropdown in breakdown<br>
+            • Seniority Tracker added<br>
+            • Favorite Routes page<br>
+            • Chart Day pay (2x / 1.5x snow)<br>
+            • Night Differential pay<br>
+            • Sunday premium (2x)
+          </div>
+        </div>
+
+        <div style="padding-top:10px;border-top:1px solid var(--dark3);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.1 – v0.0.2 <span style="font-size:11px;color:var(--text3);font-weight:400;">Initial builds</span></div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+            • Core shift logging<br>
+            • Pay calculation engine<br>
+            • Calendar view<br>
+            • User accounts &amp; login<br>
+            • Homepage dashboard
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1358,7 +1467,7 @@
         </div>
       </div>
 
-      <div class="section-title">My Info</div>
+      <div class="section-title" style="margin-bottom:6px;font-size:13px;">My Info</div>
       <div class="card">
         <div class="settings-row">
           <div><div>Badge Number</div><div class="label">Your shield number</div></div>
@@ -1381,10 +1490,6 @@
           <div class="value" id="profileRate">—</div>
         </div>
         <div class="settings-row">
-          <div><div>Tax Rate</div><div class="label">For net pay estimate</div></div>
-          <div class="value" id="profileTaxRate">Not set</div>
-        </div>
-        <div class="settings-row">
           <div><div>457 Contribution</div><div class="label">Per paycheck deduction</div></div>
           <div class="value" id="profile457">Not set</div>
         </div>
@@ -1402,21 +1507,21 @@
         </div>
       </div>
 
-      <div class="section-title">Edit Profile</div>
+      <div class="section-title" style="margin-bottom:6px;font-size:13px;">Edit Profile</div>
       <div class="card">
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Name (Initial + Last)</label>
           <input type="text" id="updateName" placeholder="e.g. M. Smith">
         </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Badge Number <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
           <input type="text" id="updateBadge" placeholder="e.g. 123456">
         </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Base Salary ($)</label>
           <input type="number" id="updateRate" placeholder="Annual salary e.g. 75000">
         </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Garage</label>
           <select id="updateGarage">
             <option value="">Select garage</option>
@@ -1429,27 +1534,22 @@
             <optgroup label="Staten Island"><option>SI1</option><option>SI2</option><option>SI3</option></optgroup>
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Title</label>
           <select id="updateTitle">
             <option value="">Select title</option>
             <option>Sanitation Worker</option>
           </select>
         </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Hire Date</label>
           <input type="date" id="updateHireDate">
         </div>
-        <div class="form-group" style="margin-bottom:12px">
-          <label>Tax Rate (%)</label>
-          <input type="number" id="updateTaxRate" placeholder="e.g. 28" min="0" max="100">
-          <p style="font-size:11px;color:var(--text3);margin-top:6px;">Used to estimate your net pay. Average for NYC sanitation workers is ~28%.</p>
-        </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>457 Contribution (% of gross) <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
           <input type="number" id="update457" placeholder="e.g. 4.78" min="0" max="100" step="0.01">
         </div>
-        <div class="form-group" style="margin-bottom:12px">
+        <div class="form-group" style="margin-bottom:8px">
           <label>Probationary Status</label>
           <select id="updateProbation">
             <option value="">Select status</option>
@@ -1459,9 +1559,9 @@
             <option value="extended6">Extended +6 months</option>
             <option value="extended12">Extended +12 months</option>
           </select>
-          <p style="font-size:11px;color:var(--text3);margin-top:6px;">Probation automatically ends 18 months after hire date. Select an extension if your probation was extended.</p>
+          <p style="font-size:10px;color:var(--text3);margin-top:4px;">Probation automatically ends 18 months after hire date.</p>
         </div>
-        <button class="btn btn-primary" style="margin-bottom:12px" onclick="updateProfile()">Save Changes</button>
+        <button class="btn btn-primary" style="margin-bottom:8px" onclick="updateProfile()">Save Changes</button>
       </div>
 
       <button class="btn btn-danger" onclick="logout()">Sign Out</button>
@@ -1484,7 +1584,7 @@
     </button>
     <button class="nav-item" onclick="showPage('tasks')" id="nav-tasks">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-      <p>Notes & Info</p>
+      <p>Info & Apps</p>
     </button>
     <button class="nav-item" onclick="showPage('profile')" id="nav-profile">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1999,22 +2099,41 @@ function register() {
 function login() {
   const id = document.getElementById('loginId').value.trim();
   const pass = document.getElementById('loginPass').value;
+  const remember = document.getElementById('rememberMe').checked;
   const users = getUsers();
   if (!users[id] || users[id].pass !== pass) {
     showError('Invalid email or password.'); return;
   }
   currentUser = users[id];
+  const expiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
   localStorage.setItem('dsny_session', id);
+  localStorage.setItem('dsny_session_expiry', expiry);
+  if (remember) {
+    localStorage.setItem('dsny_saved_email', id);
+    localStorage.setItem('dsny_saved_pass', pass);
+    localStorage.setItem('dsny_remember', 'true');
+  } else {
+    localStorage.removeItem('dsny_saved_email');
+    localStorage.removeItem('dsny_saved_pass');
+    localStorage.removeItem('dsny_remember');
+  }
   startApp();
 }
 
 function logout() {
   currentUser = null;
   localStorage.removeItem('dsny_session');
+  localStorage.removeItem('dsny_session_expiry');
   document.getElementById('loginScreen').classList.add('active');
   document.getElementById('appScreen').classList.remove('active');
   document.getElementById('loginId').value = '';
   document.getElementById('loginPass').value = '';
+  // Pre-fill saved credentials if remembered
+  if (localStorage.getItem('dsny_remember') === 'true') {
+    document.getElementById('loginId').value = localStorage.getItem('dsny_saved_email') || '';
+    document.getElementById('loginPass').value = localStorage.getItem('dsny_saved_pass') || '';
+    document.getElementById('rememberMe').checked = true;
+  }
 }
 
 function showError(msg) {
@@ -2037,7 +2156,6 @@ function startApp() {
   document.getElementById('profileId').textContent = currentUser.id;
   document.getElementById('profileGarage').textContent = currentUser.district;
   document.getElementById('profileTitleRow').textContent = currentUser.title;
-  document.getElementById('profileTaxRate').textContent = currentUser.taxRate ? currentUser.taxRate + '%' : 'Not set';
   document.getElementById('profile457').textContent = currentUser.contrib457 ? parseFloat(currentUser.contrib457).toFixed(2) + '%' : 'Not set';
   document.getElementById('profileRate').textContent = '$' + parseFloat(currentUser.rate).toFixed(0) + '/yr';
   document.getElementById('profileProbation').textContent = currentUser.probation === 'yes' ? '✅ Yes' : '❌ No';
@@ -2049,56 +2167,20 @@ function startApp() {
 
   document.getElementById('dashName').textContent = currentUser.name;
   document.getElementById('dashBadge').textContent = currentUser.badge ? 'Badge #' + currentUser.badge : 'Badge #123456';
+  document.getElementById('dashGarage').textContent = currentUser.district || '—';
+  // Find user's seniority number from tracker
+  (function() {
+    const d = getUserData(currentUser.id);
+    const userName = (currentUser.name || '').toLowerCase().trim();
+    const match = (d.seniority || []).find(p => { if (!p.name) return false; const pn = p.name.toLowerCase().trim(); return pn === userName || pn.includes(userName) || userName.includes(pn); });
+    const senEl = document.getElementById('dashSeniority');
+    if (senEl) senEl.textContent = match ? 'Seniority #' + match.num : '';
+  })();
   document.getElementById('profileBadge').textContent = currentUser.badge || '—';
   const first = currentUser.name.split(' ')[0];
   const isProbation = currentUser.probation && currentUser.probation !== 'no';
 
-  if (currentUser.hireDate) {
-    const hire = new Date(currentUser.hireDate + 'T12:00:00');
-
-    if (isProbation) {
-      const extensionMonths = currentUser.probation === 'extended3' ? 3 : currentUser.probation === 'extended6' ? 6 : currentUser.probation === 'extended12' ? 12 : 0;
-      const probEnd = new Date(hire);
-      probEnd.setMonth(probEnd.getMonth() + 18 + extensionMonths);
-      const now = new Date();
-      const daysLeft = Math.ceil((probEnd - now) / (1000 * 60 * 60 * 24));
-      const endStr = probEnd.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-
-      if (daysLeft > 0) {
-        const extHtml = extensionMonths > 0 ? '<div style="font-size:11px;color:var(--orange);margin-top:2px;">Extended +' + extensionMonths + ' months</div>' : '';
-        document.getElementById('dashGreeting').innerHTML = '<div style="width:100%;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:6px;">Probation Countdown</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:42px;font-weight:900;color:var(--yellow);line-height:1;">' + daysLeft + ' <span style="font-size:20px;color:var(--text2);">days left</span></div><div style="font-size:12px;color:var(--text2);margin-top:4px;">Ends ' + endStr + '</div>' + extHtml + '</div>';
-      } else {
-        document.getElementById('dashGreeting').innerHTML = `<div style="color:var(--green);font-weight:800;">Probation complete, ${first}!</div>`;
-      }
-    } else {
-      // Retirement countdown — 22.5 years = 22 years + 6 months
-      const retireDate = new Date(hire);
-      retireDate.setFullYear(retireDate.getFullYear() + 22);
-      retireDate.setMonth(retireDate.getMonth() + 6);
-      const now = new Date();
-      const daysLeft = Math.ceil((retireDate - now) / (1000 * 60 * 60 * 24));
-      const yearsLeft = (daysLeft / 365.25).toFixed(1);
-      const retireStr = retireDate.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-
-      if (daysLeft > 0) {
-        const totalMonths = Math.ceil((retireDate - now) / (1000 * 60 * 60 * 24 * 30.44));
-        document.getElementById('dashGreeting').innerHTML = `
-          <div style="width:100%;">
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:4px;">Retirement Countdown</div>
-            <div style="display:flex;align-items:baseline;gap:8px;">
-              <span style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:var(--green);">${yearsLeft} yrs</span>
-              <span style="font-size:13px;color:var(--text3);">${totalMonths} months &nbsp;•&nbsp; ${retireStr}</span>
-            </div>
-          </div>`;
-      } else {
-        document.getElementById('dashGreeting').innerHTML = `<div style="color:var(--green);font-weight:800;">Congratulations ${first}, you can retire!</div>`;
-      }
-    }
-  } else {
-    const h = new Date().getHours();
-    const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-    document.getElementById('dashGreeting').innerHTML = `${greet}, ${first}`;
-  }
+  const h = new Date().getHours();
 
   showPage('dash');
   renderCalendar();
@@ -2758,6 +2840,117 @@ function showRoutesPage() {
   document.getElementById('routesPage').classList.add('active');
   
   renderRoutes();
+}
+
+function addCustomCountdown() {
+  const label = document.getElementById('countdownLabel').value.trim();
+  const date = document.getElementById('countdownDate').value;
+  if (!label || !date) { showToast('Enter a label and date'); return; }
+  const d = getUserData(currentUser.id);
+  if (!d.countdowns) d.countdowns = [];
+  d.countdowns.push({ id: Date.now(), label, date });
+  saveUserData(currentUser.id, d);
+  document.getElementById('countdownLabel').value = '';
+  document.getElementById('countdownDate').value = '';
+  renderCountdowns();
+}
+
+function deleteCustomCountdown(id) {
+  const d = getUserData(currentUser.id);
+  d.countdowns = (d.countdowns || []).filter(c => c.id !== id);
+  saveUserData(currentUser.id, d);
+  renderCountdowns();
+}
+
+function showCountdownsPage() {
+  currentPage = 'countdowns';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('countdownsPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
+  renderCountdowns();
+}
+
+function renderCountdowns() {
+  const el = document.getElementById('countdownsList');
+  const now = new Date();
+  const year = now.getFullYear();
+
+  function daysUntil(month, day) {
+    let target = new Date(year, month - 1, day);
+    if (target < now) target = new Date(year + 1, month - 1, day);
+    return Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+  }
+
+  function probationDays() {
+    if (!currentUser || !currentUser.hireDate) return null;
+    const hire = new Date(currentUser.hireDate + 'T12:00:00');
+    const months = 18 + (currentUser.probation === 'extended3' ? 3 : currentUser.probation === 'extended6' ? 6 : currentUser.probation === 'extended12' ? 12 : 0);
+    const end = new Date(hire);
+    end.setMonth(end.getMonth() + months);
+    const days = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+    return days > 0 ? { days, date: end.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) } : null;
+  }
+
+  const countdowns = [];
+
+  const probation = probationDays();
+
+  let html = '';
+  if (probation) {
+    html += `<div class="card" style="margin-bottom:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;border:1px solid rgba(248,81,73,0.4);">
+      <div style="font-size:28px;">⏳</div>
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">Probation Ends</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--red);line-height:1.1;">${probation.days} <span style="font-size:16px;font-weight:600;">days</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">${probation.date}</div>
+      </div>
+    </div>`;
+  }
+
+  html += countdowns.map(c => `
+    <div class="card" style="margin-bottom:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:26px;">${c.icon}</div>
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">${c.label}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--green);line-height:1.1;">${c.days} <span style="font-size:16px;font-weight:600;color:var(--text2);">days</span></div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">${c.sub}</div>
+      </div>
+    </div>`).join('');
+
+  el.innerHTML = html;
+
+  // Custom countdowns
+  const dUser = getUserData(currentUser.id);
+  const custom = dUser.countdowns || [];
+  if (custom.length) {
+    const customHtml = custom.map(c => {
+      const target = new Date(c.date + 'T12:00:00');
+      const days = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+      const past = days < 0;
+      const color = past ? 'var(--text3)' : 'var(--green)';
+      const dayLabel = past ? Math.abs(days) + ' days ago' : days + ' days';
+      const sub = target.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+      return `<div class="card" style="margin-bottom:10px;padding:14px 16px;display:flex;align-items:center;gap:14px;">
+        <div style="font-size:26px;">📅</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">${c.label}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:${color};line-height:1.1;">${dayLabel}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;">${sub}</div>
+        </div>
+        <button onclick="deleteCustomCountdown(${c.id})" class="delete-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      </div>`;
+    }).join('');
+    el.innerHTML += customHtml;
+  }
+}
+
+function showChangelogPage() {
+  currentPage = 'changelog';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('changelogPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
 }
 
 function showCareerStatsPage() {
@@ -3690,7 +3883,8 @@ function deleteTask(id) {
 function renderTasks() {
   const d = getUserData(currentUser.id);
   const el = document.getElementById('tasksList');
-  document.getElementById('taskCount').textContent = d.tasks.length;
+  const taskCountEl = document.getElementById('taskCount');
+  if (taskCountEl) taskCountEl.textContent = d.tasks.length;
   const filtered = activeNoteFilter === 'all' ? d.tasks : d.tasks.filter(t => (t.priority || '📝 Notebook').toLowerCase().includes(activeNoteFilter));
   if (!filtered.length) {
     el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><p>No notes yet. Tap + to add one.</p></div>';
@@ -3936,6 +4130,7 @@ function toggleChartBreakdown() {
 
 function populateChartBreakdown(shifts, period) {
   const list = document.getElementById('chartBreakdownList');
+  if (!list) return;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   const seen = new Set();
   const chartShifts = shifts.filter(s => {
@@ -3973,6 +4168,7 @@ function toggleOTBreakdown() {
 
 function populateOTBreakdown(shifts, rate) {
   const list = document.getElementById('otBreakdownList');
+  if (!list) return;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   const otShifts = shifts.filter(s => (s.otHours || 0) > 0);
   if (!otShifts.length) {
@@ -4003,6 +4199,7 @@ function toggleTruckBreakdown() {
 
 function populateTruckBreakdown(shifts) {
   const list = document.getElementById('truckBreakdownList');
+  if (!list) return;
   // Deduplicate by shift ID first
   const seen = new Set();
   let truckShifts = shifts.filter(s => {
@@ -4118,7 +4315,8 @@ function updatePayPage() {
   document.getElementById('truckBreakdownList').style.display = 'none';
   document.getElementById('truckChevron').style.transform = '';
   populateTruckBreakdown(shifts);
-  document.getElementById('payOTHours').textContent = otH.toFixed(1) + 'h';
+  const payOTHoursEl = document.getElementById('payOTHours');
+  if (payOTHoursEl) payOTHoursEl.textContent = otH.toFixed(1) + 'h';
   document.getElementById('payOTPay').textContent = '$' + (otP + chartOtP).toFixed(2);
   document.getElementById('otBreakdownList').style.display = 'none';
   document.getElementById('otChevron').style.transform = '';
@@ -4194,6 +4392,14 @@ function refreshAll() {
   recalculateAllShiftPays();
   const d = getUserData(currentUser.id);
   const now = new Date();
+
+  // Update seniority number on homepage
+  const senEl = document.getElementById('dashSeniority');
+  if (senEl) {
+    const userName = (currentUser.name || '').toLowerCase().trim();
+    const match = (d.seniority || []).find(p => { if (!p.name) return false; const pn = p.name.toLowerCase().trim(); return pn === userName || pn.includes(userName) || userName.includes(pn); });
+    senEl.textContent = match ? 'Seniority #' + match.num : '';
+  }
 
   const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay()); weekStart.setHours(0,0,0,0);
   const weekShifts = d.shifts.filter(s => new Date(s.date + 'T12:00:00') >= weekStart);
@@ -4347,7 +4553,6 @@ function updateProfile() {
   const r = parseFloat(document.getElementById('updateRate').value);
   const garage = document.getElementById('updateGarage').value;
   const title = document.getElementById('updateTitle').value;
-  const taxRate = parseFloat(document.getElementById('updateTaxRate').value);
   const contrib457 = parseFloat(document.getElementById('update457').value);
   const hireDate = document.getElementById('updateHireDate').value;
   const probation = document.getElementById('updateProbation').value;
@@ -4355,14 +4560,13 @@ function updateProfile() {
   if (name) { u.name = name; currentUser.name = name; document.getElementById('profileName').textContent = name; document.getElementById('dashName').textContent = name; }
   if (badge) { u.badge = badge; currentUser.badge = badge; document.getElementById('profileBadge').textContent = badge; document.getElementById('dashBadge').textContent = 'Badge #' + badge; }
   if (r && r > 0) { u.rate = r; currentUser.rate = r; document.getElementById('profileRate').textContent = '$' + r.toFixed(0) + '/yr'; document.getElementById('baseRateDisplay').textContent = '$' + r.toFixed(0) + '/yr'; document.getElementById('otRateDisplay').textContent = '$' + (r/52).toFixed(2); document.getElementById('holidayRateDisplay').textContent = '$' + (r/260).toFixed(2); }
-  if (garage) { u.district = garage; currentUser.district = garage; document.getElementById('profileGarage').textContent = garage; document.getElementById('profileDistrict').textContent = garage; document.getElementById('avatarGarage').textContent = garage; }
+  if (garage) { u.district = garage; currentUser.district = garage; document.getElementById('profileGarage').textContent = garage; document.getElementById('profileDistrict').textContent = garage; document.getElementById('avatarGarage').textContent = garage; document.getElementById('dashGarage').textContent = garage; }
   if (title) { u.title = title; currentUser.title = title; document.getElementById('profileTitleRow').textContent = title; document.getElementById('profileTitle').textContent = title; }
   if (hireDate) { u.hireDate = hireDate; currentUser.hireDate = hireDate; document.getElementById('profileHireDate').textContent = new Date(hireDate+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
   if (probation) { u.probation = probation; currentUser.probation = probation; }
-  if (taxRate && taxRate > 0) { u.taxRate = taxRate; currentUser.taxRate = taxRate; document.getElementById('profileTaxRate').textContent = taxRate + '%'; }
   if (contrib457 && contrib457 > 0) { u.contrib457 = contrib457; currentUser.contrib457 = contrib457; document.getElementById('profile457').textContent = contrib457.toFixed(2) + '%'; }
 
-  if (!name && !r && !garage && !title && !hireDate && !probation && !taxRate && !contrib457) { showToast('Nothing to update'); return; }
+  if (!name && !r && !garage && !title && !hireDate && !probation && !contrib457) { showToast('Nothing to update'); return; }
 
   saveUsers(users);
   updateProbationDisplay();
@@ -4372,7 +4576,6 @@ function updateProfile() {
   document.getElementById('updateGarage').value = '';
   document.getElementById('updateTitle').value = '';
   document.getElementById('updateHireDate').value = '';
-  document.getElementById('updateTaxRate').value = '';
   document.getElementById('update457').value = '';
   document.getElementById('updateProbation').value = '';
   showToast('✅ Profile updated!');
@@ -4401,27 +4604,28 @@ window.addEventListener('click', e => {
   if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
 });
 
-// ── BYPASS LOGIN ⚠️ REMOVE BEFORE SHARING ⚠️ ──
-var _T = { name: 'T. Developer', id: 'test@santrack.app', district: 'BKN1', title: 'Sanitation Worker', rate: 50128, pass: 'test123', probation: 'yes', hireDate: '2025-06-23', badge: '123456' };
-var _u = getUsers(); _u[_T.id] = _T; saveUsers(_u);
-localStorage.setItem('santrack_welcomed', 'true');
-localStorage.setItem('dsny_session', _T.id);
-currentUser = _T;
-
-// ── CLEAR TEST SHIFTS (one-time wipe) ──
-var _clearData = getUserData(_T.id);
-_clearData.shifts = [];
-saveUserData(_T.id, _clearData);
-
-// Force screen switch immediately
-document.getElementById('loginScreen').classList.remove('active');
-document.getElementById('appScreen').classList.add('active');
-
-// Run full app init after DOM settles
-window.addEventListener('load', function() {
-  currentUser = _T;
-  startApp();
-});
+// ── AUTO-LOGIN CHECK ──
+(function() {
+  const savedId = localStorage.getItem('dsny_session');
+  const expiry = parseInt(localStorage.getItem('dsny_session_expiry') || '0');
+  if (savedId && Date.now() < expiry) {
+    const users = getUsers();
+    if (users[savedId]) {
+      currentUser = users[savedId];
+      startApp();
+      return;
+    }
+  }
+  // Session expired or missing — clear it
+  localStorage.removeItem('dsny_session');
+  localStorage.removeItem('dsny_session_expiry');
+  // Pre-fill saved credentials if remembered
+  if (localStorage.getItem('dsny_remember') === 'true') {
+    document.getElementById('loginId').value = localStorage.getItem('dsny_saved_email') || '';
+    document.getElementById('loginPass').value = localStorage.getItem('dsny_saved_pass') || '';
+    document.getElementById('rememberMe').checked = true;
+  }
+})();
 
 </script>
 </body>
