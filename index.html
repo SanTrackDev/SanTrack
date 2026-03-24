@@ -352,46 +352,107 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
   .cal-nav { background: var(--dark3); border: 1px solid var(--dark4); border-radius: 8px; color: var(--text); font-size: 18px; cursor: pointer; padding: 6px 12px; }
   .cal-month { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
   .cal-day-name {
     text-align: center;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--text3);
     text-transform: uppercase;
-    padding: 4px 0;
+    padding: 4px 0 6px;
+    letter-spacing: 0.3px;
   }
   .cal-day {
-    aspect-ratio: 1;
+    min-height: 64px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: stretch;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     transition: all 0.15s;
     position: relative;
+    overflow: hidden;
+    padding: 5px 4px 4px;
+    background: var(--dark3);
+    border: 1px solid transparent;
   }
-  .cal-day:hover { background: var(--dark3); }
-  .cal-day.empty { cursor: default; }
-  .cal-day.today { background: rgba(0,166,81,0.15); color: var(--green); font-weight: 800; }
-  .cal-day.has-shift::after {
-    content: '';
-    position: absolute;
-    bottom: 3px;
-    width: 4px; height: 4px;
-    border-radius: 50%;
-    background: var(--green);
+  .cal-day:hover { border-color: var(--dark4); filter: brightness(1.15); }
+  .cal-day.empty { cursor: default; background: transparent; border-color: transparent; min-height: 64px; }
+  .cal-day.today { border-color: var(--green) !important; box-shadow: 0 0 0 1px var(--green); }
+  .cal-day.other-month { opacity: 0.4; }
+  .cal-day-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 3px;
+    padding-left: 2px;
   }
-  .cal-day.ot::after { background: var(--yellow); }
-  .cal-day.holiday::after { background: var(--red); }
-  .cal-day.other-month { color: var(--text3); }
+  .cal-day.today .cal-day-num {
+    color: var(--green);
+  }
+  .cal-shift-chip {
+    border-radius: 4px;
+    padding: 2px 3px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+  }
+  .cal-shift-chip .chip-type { font-size: 9px; font-weight: 800; }
+  .cal-shift-chip .chip-hours { font-size: 8px; font-weight: 600; opacity: 0.85; }
+  .cal-shift-chip .chip-pay { font-size: 8px; font-weight: 700; opacity: 0.95; }
+
+  /* Shift type colors */
+  .chip-garbage    { background: rgba(66,130,71,0.35);  color: #7dd87f; }
+  .chip-recycling  { background: rgba(56,139,253,0.3);  color: #82b8ff; }
+  .chip-organics   { background: rgba(139,90,43,0.4);   color: #e0a96d; }
+  .chip-holiday    { background: rgba(248,81,73,0.35);  color: #ff9d9a; }
+  .chip-differential { background: rgba(240,136,62,0.35); color: #f9b87a; }
+  .chip-overtime   { background: rgba(168,85,247,0.35); color: #d4a0ff; }
+  .chip-snow       { background: rgba(147,197,253,0.3); color: #bde0ff; }
+  .chip-default    { background: rgba(255,255,255,0.12); color: #ccc; }
+  .chip-ot-badge {
+    display: inline-block;
+    background: rgba(168,85,247,0.5);
+    color: #d4a0ff;
+    font-size: 7px;
+    font-weight: 800;
+    border-radius: 3px;
+    padding: 0px 3px;
+    margin-left: 2px;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+  }
+
+  /* Week total row */
+  .cal-week-total {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text3);
+    padding: 2px 4px 4px;
+    gap: 8px;
+    border-bottom: 1px solid var(--dark3);
+    margin-bottom: 2px;
+  }
+  .cal-week-total .wt-hrs { color: var(--green); }
+  .cal-week-total .wt-pay { color: #fff; }
 
   /* TASKS */
   .task-item {
@@ -421,6 +482,26 @@
   .task-priority { font-size: 16px; }
   .delete-btn { background: none; border: none; color: var(--text3); cursor: pointer; padding: 4px; transition: color 0.2s; display:inline-flex; align-items:center; justify-content:center; }
   .delete-btn:hover { color: var(--red); }
+  .time-preset-btn {
+    background: var(--dark3);
+    border: 1px solid var(--dark4);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .time-preset-btn:hover { border-color: var(--green); color: var(--green); }
+  .time-preset-btn.selected { background: var(--green); border-color: var(--green); color: #fff; }
+  .time-preset-btn.night-btn { border-color: rgba(47,114,196,0.4); color: #ffffff; }
+  .time-preset-btn.night-btn:hover { border-color: #2F72C4; color: #ffffff; background: rgba(47,114,196,0.2); }
+  .time-preset-btn.night-btn.selected { background: #2F72C4; border-color: #2F72C4; color: #fff; }
+  .time-preset-btn.ot-btn { border-color: rgba(168,85,247,0.4); color: #ffffff; }
+  .time-preset-btn.ot-btn:hover, .time-preset-btn.ot-btn.selected { background: rgba(168,85,247,0.3); border-color: #a855f7; color: #ffffff; }
   .note-cat-btn {
     background: var(--dark2);
     border: 1px solid var(--dark4);
@@ -845,21 +926,21 @@
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
         <div class="card" style="padding:8px 6px;text-align:center;">
           <div class="card-title" style="font-size:9px;text-align:center;">This Week Pay</div>
-          <div class="card-value yellow" style="font-size:24px;" id="weekPay">$0</div>
-          <div class="card-sub" style="font-size:8px;" id="weekPayNetSub">est. net</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="weekPay">$0</div>
+          <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="weekPayNetSub">net: —</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;">
           <div class="card-title" style="font-size:9px;text-align:center;">Month Pay</div>
-          <div class="card-value green" style="font-size:24px;" id="monthPay">$0</div>
-          <div class="card-sub" style="font-size:8px;" id="monthPayNet">est. net</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="monthPay">$0</div>
+          <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="monthPayNet">net: —</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;">
           <div class="card-title" style="font-size:9px;text-align:center;margin-bottom:2px;">Comp Hours</div>
-          <div class="card-value" style="font-size:52px;text-align:center;line-height:1;" id="monthHours">0</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:40px;font-weight:700;text-align:center;line-height:1;" id="monthHours">0</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;">
           <div class="card-title" style="font-size:9px;text-align:center;">Next Chart</div>
-          <div class="card-value" style="font-size:24px;text-align:center;color:#388BFD;" id="weekHours">04/01</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:22px;font-weight:700;text-align:center;color:#388BFD;line-height:1.1;" id="weekHours">04/01</div>
           <div class="card-sub" id="weekOT" style="font-size:8px"></div>
         </div>
       </div>
@@ -869,9 +950,12 @@
         <div id="weeklyList"></div>
       </div>
 
-      <button class="note-cat-btn" onclick="showAchievements()" style="width:100%;margin-top:8px;margin-bottom:16px;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-        <div>Achievements</div>
+      <button onclick="showAchievements()" style="width:100%;margin-top:8px;margin-bottom:16px;background:var(--dark2);border:1px solid var(--dark3);border-radius:var(--radius);padding:14px 16px;color:var(--text);display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all 0.2s;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          Achievements
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
     </div>
 
@@ -882,21 +966,24 @@
       <!-- Calendar inside shifts -->
       <div class="card" style="margin-bottom:16px;">
         <div class="cal-header">
-          <button class="cal-nav" onclick="prevMonth()">‹</button>
+          <button class="cal-nav" onclick="prevMonth()">&#8249;</button>
           <div class="cal-month" id="calMonth">March 2026</div>
-          <button class="cal-nav" onclick="nextMonth()">›</button>
+          <button class="cal-nav" onclick="nextMonth()">&#8250;</button>
         </div>
         <div class="cal-grid" id="calGrid"></div>
       </div>
+
       <div id="calDayDetail" style="display:none;margin-bottom:16px;">
-        <div class="section-title" id="calDayTitle"></div>
+        <div class="section-title" id="calDayTitle" style="margin-bottom:12px;"></div>
         <div id="calDayShifts"></div>
       </div>
 
-      <div class="section-title">All Shifts</div>
-      <div id="shiftsList">
-        <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>No shifts yet. Tap + to log a shift.</p></div>
+      <div id="calNoSelection" style="text-align:center;padding:32px 0;color:var(--text3);">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:10px;opacity:0.4;display:block;margin-left:auto;margin-right:auto;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <p style="font-size:13px;">Tap a day to see shift details</p>
       </div>
+
+      <div id="shiftsList" style="display:none;"></div>
     </div>
 
     <!-- PAY PAGE -->
@@ -915,14 +1002,25 @@
       </div>
 
       <div class="card">
-        <div class="card-title">Breakdown</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
+          <div class="card-title" style="margin-bottom:0;">Breakdown</div>
+          <div style="font-size:10px;color:var(--text3);font-style:italic;">This feature is still in development. Totals may not be 100% accurate.</div>
+        </div>
         <div class="pay-row"><span class="label">Regular Hours</span><span class="amount" id="payRegHours">0h</span></div>
         <div class="pay-row"><span class="label">Regular Pay</span><span class="amount" id="payRegPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Chart Day Pay (2x)</span><span class="amount" style="color:#388BFD" id="payChartPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Chart Day Pay (2x / 1.5x snow)</span><span class="amount" style="color:#388BFD" id="payChartPay">$0.00</span></div>
+        <div class="pay-row" id="payTruckMoneyRow" style="cursor:pointer;user-select:none;" onclick="toggleTruckBreakdown()">
+          <span class="label" style="display:flex;align-items:center;gap:6px;">
+            Truck Money
+            <svg id="truckChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="amount" style="color:#FFD100" id="payTruckMoney">$0.00</span>
+        </div>
+        <div id="truckBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
         <div class="pay-row"><span class="label">Overtime Hours</span><span class="amount" style="color:#a855f7" id="payOTHours">0h</span></div>
         <div class="pay-row"><span class="label">Overtime Pay (1.5x)</span><span class="amount" style="color:#a855f7" id="payOTPay">$0.00</span></div>
         <div class="pay-row"><span class="label">Holiday Pay (2x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Night Differential (base + 10%)</span><span class="amount" style="color:var(--orange)" id="payDiffPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Night Differential (+10%)</span><span class="amount" style="color:var(--orange)" id="payDiffPay">$0.00</span></div>
         <div class="pay-row"><span class="label">Sunday Pay (1.5x / 2x snow)</span><span class="amount" style="color:var(--red)" id="paySundayPay">$0.00</span></div>
         <div class="pay-total">
           <span class="label">Gross Pay</span>
@@ -931,7 +1029,10 @@
       </div>
 
       <div class="card" style="margin-top:12px;">
-        <div class="card-title">Tax Deductions</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
+          <div class="card-title" style="margin-bottom:0;">Tax Deductions</div>
+          <div style="font-size:10px;color:var(--text3);font-style:italic;">This feature is still in development</div>
+        </div>
         <div class="pay-row"><span class="label">FICA (6.2%)</span><span class="amount" style="color:var(--red)" id="payFICA">$0.00</span></div>
         <div class="pay-row"><span class="label">Medicare (1.45%)</span><span class="amount" style="color:var(--red)" id="payMedicare">$0.00</span></div>
         <div class="pay-row"><span class="label">Federal Withholding (7.8%)</span><span class="amount" style="color:var(--red)" id="payFederal">$0.00</span></div>
@@ -944,7 +1045,10 @@
       </div>
 
       <div class="card" style="margin-top:12px;">
-        <div class="card-title">Other Deductions</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
+          <div class="card-title" style="margin-bottom:0;">Other Deductions</div>
+          <div style="font-size:10px;color:var(--text3);font-style:italic;">This feature is still in development</div>
+        </div>
         <div class="pay-row"><span class="label">Health Ins (20yr)</span><span class="amount" style="color:var(--text2)" id="payHealth">$7.42</span></div>
         <div class="pay-row"><span class="label">NYCE PPO Basic</span><span class="amount" style="color:var(--text2)" id="payPPO">$0.00</span></div>
         <div class="pay-row"><span class="label">414H Disability</span><span class="amount" style="color:var(--text2)" id="payDisability">$18.89</span></div>
@@ -959,7 +1063,10 @@
 
       <div class="card" style="margin-top:12px;background:rgba(66,130,71,0.15);border:1px solid var(--green);">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;">Net Pay</div>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;">Net Pay</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.5);font-style:italic;">This feature is still in development</div>
+          </div>
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green)" id="payNet">$0.00</div>
         </div>
       </div>
@@ -978,10 +1085,23 @@
       <!-- Category buttons -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
         <button class="note-cat-btn active" onclick="filterNotes('general')" id="cat-general">
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><div>General</div>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><div>Notebook</div>
         </button>
         <button class="note-cat-btn" onclick="showRoutesPage()" id="cat-routes">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div>My Favorite Routes</div>
+        </button>
+        <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;grid-column:1/-1;" disabled>
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="5" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="3" y="11" width="8" height="5" rx="1"/><rect x="13" y="11" width="8" height="5" rx="1"/><rect x="3" y="19" width="8" height="2" rx="1"/><rect x="13" y="19" width="8" height="2" rx="1"/></svg></span>
+          <div>Board <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
+          <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
+        </button>
+        <button class="note-cat-btn" onclick="showSeniorityPage()" id="cat-seniority" style="grid-column:1/-1;">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <div>Seniority Tracker <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
+        </button>
+        <button class="note-cat-btn" onclick="showCareerStatsPage()" id="cat-career" style="grid-column:1/-1;">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></span>
+          <div>Career Statistics</div>
         </button>
       </div>
 
@@ -1007,6 +1127,137 @@
       </div>
       <div id="routesList">
         <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><p>No routes saved yet. Tap + to add one.</p></div>
+      </div>
+    </div>
+
+    <!-- CAREER STATS PAGE -->
+    <div id="careerStatsPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Career Statistics</div>
+      </div>
+      <div id="careerStatsList"></div>
+    </div>
+
+    <!-- SENIORITY PAGE -->
+    <div id="seniorityPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Seniority Tracker <span class="badge" id="seniorityCount">0</span></div>
+      </div>
+
+      <!-- Add San Man form -->
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-title" style="margin-bottom:12px;">Add San Man</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <div class="form-group" style="width:80px;margin-bottom:0;">
+            <label style="font-size:11px;">#</label>
+            <input type="number" id="seniorityNum" placeholder="12" min="1" style="padding:10px 12px;font-size:15px;">
+          </div>
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <label style="font-size:11px;">Name</label>
+            <input type="text" id="seniorityName" placeholder="e.g. J. Smith">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Role</label>
+            <select id="seniorityRole">
+              <option value="">Select role</option>
+              <option value="Driver">Driver</option>
+              <option value="Loader">Loader</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Section <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
+            <select id="senioritySection">
+              <option value="">None</option>
+              <option value="1">Section 1</option>
+              <option value="2">Section 2</option>
+              <option value="3">Section 3</option>
+              <option value="4">Section 4</option>
+              <option value="5">Section 5</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Tissue <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
+            <select id="seniorityTissue">
+              <option value="">None</option>
+              <option value="GU">GU</option>
+              <option value="MB">MB</option>
+              <option value="WR">WR</option>
+              <option value="DSA">DSA</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Night Signee</label>
+            <select id="seniorityNight">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="addSeniorityPerson()" class="btn btn-primary">Add San Man</button>
+      </div>
+
+      <div id="seniorityList">
+        <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><p>No one added yet. Add a San Man above.</p></div>
+      </div>
+    </div>
+
+    <!-- EDIT SAN MAN MODAL -->
+    <div class="modal-overlay" id="editSanManModal">
+      <div class="modal">
+        <div class="modal-header">Edit San Man <button class="close-btn" onclick="closeModal('editSanManModal')">&#x2715;</button></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <div class="form-group" style="width:80px;margin-bottom:0;">
+            <label style="font-size:11px;">#</label>
+            <input type="number" id="editSeniorityNum" placeholder="12" min="1" style="padding:10px 12px;font-size:15px;">
+          </div>
+          <div class="form-group" style="flex:1;margin-bottom:0;">
+            <label style="font-size:11px;">Name</label>
+            <input type="text" id="editSeniorityName" placeholder="e.g. J. Smith">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Role</label>
+            <select id="editSeniorityRole">
+              <option value="">Select role</option>
+              <option value="Driver">Driver</option>
+              <option value="Loader">Loader</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Section</label>
+            <select id="editSenioritySection">
+              <option value="">None</option>
+              <option value="1">Section 1</option>
+              <option value="2">Section 2</option>
+              <option value="3">Section 3</option>
+              <option value="4">Section 4</option>
+              <option value="5">Section 5</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Tissue</label>
+            <select id="editSeniorityTissue">
+              <option value="">None</option>
+              <option value="GU">GU</option>
+              <option value="MB">MB</option>
+              <option value="WR">WR</option>
+              <option value="DSA">DSA</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label style="font-size:11px;">Night Signee</label>
+            <select id="editSeniorityNight">
+              <option value="no">No</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+        </div>
+        <button onclick="saveEditSanMan()" class="btn btn-primary">Save Changes</button>
       </div>
     </div>
 
@@ -1225,18 +1476,10 @@
       <input type="date" id="shiftDate">
     </div>
     <div class="form-group">
-      <label>Start Time <span style="font-size:10px;color:var(--text2);text-transform:none;">(24h)</span></label>
-      <input type="time" id="shiftStart" step="60">
-    </div>
-    <div class="form-group">
-      <label>End Time <span style="font-size:10px;color:var(--text2);text-transform:none;">(24h)</span></label>
-      <input type="time" id="shiftEnd" step="60">
-    </div>
-    <div class="form-group">
       <label>Chart Day?</label>
       <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="chartDay" id="chartDayYes" value="yes" style="width:auto;"> Yes — Chart Day (2x pay)
+          <input type="radio" name="chartDay" id="chartDayYes" value="yes" style="width:auto;"> Yes — Chart Day (2x / 1.5x snow)
         </label>
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
           <input type="radio" name="chartDay" id="chartDayNo" value="no" checked style="width:auto;"> No
@@ -1244,8 +1487,42 @@
       </div>
     </div>
     <div class="form-group">
+      <label>Start Time</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;" id="startTimePresets">
+        <button type="button" class="time-preset-btn" onclick="selectStartTime('05:00')">05:00</button>
+        <button type="button" class="time-preset-btn" onclick="selectStartTime('06:00')">06:00</button>
+        <button type="button" class="time-preset-btn" onclick="selectStartTime('07:00')">07:00</button>
+        <button type="button" class="time-preset-btn" onclick="selectStartTime('08:00')">08:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="selectStartTime('11:00')">11:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="selectStartTime('16:00')">16:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="selectStartTime('19:00')">19:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="selectStartTime('00:00')">00:00</button>
+      </div>
+      <input type="time" id="shiftStart" step="60" oninput="onStartTimeInput()">
+    </div>
+    <div class="form-group">
+      <label>End Time <span style="font-size:10px;color:var(--green);text-transform:none;" id="endTimeNote"></span></label>
+      <input type="time" id="shiftEnd" step="60" readonly style="opacity:0.6;cursor:default;">
+    </div>
+    <div class="form-group" id="otQuestionGroup" style="display:none;">
+      <label>Did you work Overtime?</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="radio" name="didOT" id="didOTYes" value="yes" style="width:auto;" onchange="onDidOTChange()"> Yes
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="radio" name="didOT" id="didOTNo" value="no" checked style="width:auto;" onchange="onDidOTChange()"> No
+        </label>
+      </div>
+    </div>
+    <div class="form-group" id="otStartGroup" style="display:none;">
+      <label>Overtime <span style="font-size:10px;color:var(--text2);text-transform:none;">starts at <span id="otStartLabel" style="color:#a855f7;font-weight:700;"></span> — pick end time</span></label>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px;" id="otEndPresets"></div>
+      <input type="time" id="shiftOTEnd" step="60" oninput="onOTEndInput()">
+    </div>
+    <div class="form-group">
       <label>Function</label>
-      <select id="shiftType">
+      <select id="shiftType" onchange="onShiftTypeChange(this.value, 'truckMoneyGroup', 'shiftFraction')">
         <option value="">Select function</option>
         <option value="garbage">Garbage</option>
         <option value="recycling">Recycling</option>
@@ -1268,45 +1545,43 @@
         <option value="other_snow">Other Snow</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>Fraction Trucks <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+    <div class="form-group" id="truckMoneyGroup" style="display:none;">
+      <label>Truck Money <span style="color:var(--green);font-size:10px;text-transform:none;">Full truck (+$81) is automatic — only select if fractional</span></label>
       <select id="shiftFraction">
-        <option value="">Select fraction</option>
-        <option>1/4 Garbage to MLP</option>
-        <option>1/2 Garbage to MLP</option>
-        <option>3/4 Garbage to MLP</option>
-        <option>1/4 Recycling to MLP</option>
-        <option>1/2 Recycling to MLP</option>
-        <option>3/4 Recycling to MLP</option>
-        <option>1/4 Organics to MLP</option>
-        <option>2/4 Organics to MLP</option>
-        <option>3/4 Organics to MLP</option>
+        <option value="">None (full truck is automatic)</option>
+        <option value="1/4 Garbage to MLP">1/4 Garbage to MLP (+$20.25)</option>
+        <option value="1/2 Garbage to MLP">1/2 Garbage to MLP (+$40.50)</option>
+        <option value="3/4 Garbage to MLP">3/4 Garbage to MLP (+$60.75)</option>
+        <option value="1/4 Recycling to MLP">1/4 Recycling to MLP (+$20.25)</option>
+        <option value="1/2 Recycling to MLP">1/2 Recycling to MLP (+$40.50)</option>
+        <option value="3/4 Recycling to MLP">3/4 Recycling to MLP (+$60.75)</option>
+        <option value="1/4 Organics to MLP">1/4 Organics to MLP (+$20.25)</option>
+        <option value="1/2 Organics to MLP">1/2 Organics to MLP (+$40.50)</option>
+        <option value="3/4 Organics to MLP">3/4 Organics to MLP (+$60.75)</option>
       </select>
     </div>
     <div class="form-group">
-      <label>Tons Dumped <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
-      <input type="number" id="shiftTons" placeholder="e.g. 8.5" min="0" step="0.1" oninput="onTonsInput()">
-    </div>
-    <div class="form-group" id="dumpReceiptGroup" style="display:none;">
-      <label>Dump Receipt Photo <span style="color:var(--red);font-size:10px;text-transform:none;">(required if tons entered)</span></label>
-      <div style="display:flex;gap:8px;">
-        <button type="button" onclick="document.getElementById('dumpReceiptCam').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:10px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Take Photo
-        </button>
-        <button type="button" onclick="document.getElementById('dumpReceiptLib').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:10px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Choose Photo
-        </button>
+      <label>Section & Route <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <select id="shiftSection">
+          <option value="">Section</option>
+          <option value="Section 1">Section 1</option>
+          <option value="Section 2">Section 2</option>
+          <option value="Section 3">Section 3</option>
+          <option value="Section 4">Section 4</option>
+          <option value="Section 5">Section 5</option>
+        </select>
+        <select id="shiftRoute">
+          <option value="">Route</option>
+          <option value="Route 1">Route 1</option>
+          <option value="Route 2">Route 2</option>
+          <option value="Route 3">Route 3</option>
+          <option value="Route 4">Route 4</option>
+          <option value="Route 5">Route 5</option>
+          <option value="Route 6">Route 6</option>
+          <option value="Route 7">Route 7</option>
+        </select>
       </div>
-      <input type="file" id="dumpReceiptCam" accept="image/*" capture="environment" style="display:none;" onchange="handleDumpReceipt(event)">
-      <input type="file" id="dumpReceiptLib" accept="image/*" style="display:none;" onchange="handleDumpReceipt(event)">
-      <div id="dumpReceiptPreview" style="margin-top:8px;display:none;">
-        <img id="dumpReceiptImg" style="width:100%;border-radius:8px;max-height:120px;object-fit:cover;">
-        <button type="button" onclick="clearDumpReceipt()" style="background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;margin-top:4px;">Remove photo</button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label>Route / Assignment (optional)</label>
-      <input type="text" id="shiftRoute" placeholder="e.g. Route 14 - Collection">
     </div>
     <div class="form-group">
       <label>Partner Name <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
@@ -1340,15 +1615,46 @@
       </select>
     </div>
     <div class="form-group">
-      <label>Truck Downed? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <label>Did you dump?</label>
       <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="truckDowned" id="truckDownedYes" value="yes" style="width:auto;"> Yes
+          <input type="radio" name="didDump" id="didDumpYes" value="yes" style="width:auto;" onchange="onDidDumpChange()"> Yes
         </label>
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="truckDowned" id="truckDownedNo" value="no" checked style="width:auto;"> No
+          <input type="radio" name="didDump" id="didDumpNo" value="no" checked style="width:auto;" onchange="onDidDumpChange()"> No
         </label>
       </div>
+    </div>
+    <div class="form-group" id="tonsGroup" style="display:none;">
+      <label>Tons Dumped</label>
+      <input type="number" id="shiftTons" placeholder="e.g. 8.5" min="0" step="0.1" oninput="onTonsInput()">
+    </div>
+    <div class="form-group" id="dumpReceiptGroup" style="display:none;">
+      <label>Dump Receipt Photo <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <div style="display:flex;gap:8px;">
+        <button type="button" onclick="document.getElementById('dumpReceiptCam').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:10px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg> Take Photo
+        </button>
+        <button type="button" onclick="document.getElementById('dumpReceiptLib').click()" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:var(--radius);padding:10px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:4px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> Choose Photo
+        </button>
+      </div>
+      <input type="file" id="dumpReceiptCam" accept="image/*" capture="environment" style="display:none;" onchange="handleDumpReceipt(event)">
+      <input type="file" id="dumpReceiptLib" accept="image/*" style="display:none;" onchange="handleDumpReceipt(event)">
+      <div id="dumpReceiptPreview" style="margin-top:8px;display:none;">
+        <img id="dumpReceiptImg" style="width:100%;border-radius:8px;max-height:120px;object-fit:cover;">
+        <button type="button" onclick="clearDumpReceipt()" style="background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;margin-top:4px;">Remove photo</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Did you down any trucks today? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <p style="font-size:11px;color:var(--text3);margin-bottom:6px;">For Achievements &amp; Counting Purposes</p>
+      <select id="truckDowned">
+        <option value="0">No</option>
+        <option value="1">1 Truck</option>
+        <option value="2">2 Trucks</option>
+        <option value="3">3 Trucks</option>
+      </select>
     </div>
     <div class="form-group">
       <label>Notes (optional)</label>
@@ -1359,13 +1665,138 @@
 </div>
 
 <!-- ADD TASK MODAL -->
+<!-- EDIT SHIFT MODAL -->
+<div class="modal-overlay" id="editShiftModal">
+  <div class="modal">
+    <div class="modal-title">Edit Shift <button class="close-btn" onclick="closeModal('editShiftModal')">&#x2715;</button></div>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" id="editShiftDate">
+    </div>
+    <div class="form-group">
+      <label>Start Time</label>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:8px;" id="editStartTimePresets">
+        <button type="button" class="time-preset-btn" onclick="editSelectStartTime('05:00')">05:00</button>
+        <button type="button" class="time-preset-btn" onclick="editSelectStartTime('06:00')">06:00</button>
+        <button type="button" class="time-preset-btn" onclick="editSelectStartTime('07:00')">07:00</button>
+        <button type="button" class="time-preset-btn" onclick="editSelectStartTime('08:00')">08:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="editSelectStartTime('11:00')">11:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="editSelectStartTime('16:00')">16:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="editSelectStartTime('19:00')">19:00</button>
+        <button type="button" class="time-preset-btn night-btn" onclick="editSelectStartTime('00:00')">00:00</button>
+      </div>
+      <input type="time" id="editShiftStart" step="60" oninput="onEditStartTimeInput()">
+    </div>
+    <div class="form-group">
+      <label>End Time <span style="font-size:10px;color:var(--green);text-transform:none;" id="editEndTimeNote"></span></label>
+      <input type="time" id="editShiftEnd" step="60" readonly style="opacity:0.6;cursor:default;">
+    </div>
+    <div class="form-group" id="editOTStartGroup" style="display:none;">
+      <label>Overtime <span style="font-size:10px;color:var(--text2);text-transform:none;">starts at <span id="editOTStartLabel" style="color:#a855f7;font-weight:700;"></span> — pick end time</span></label>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px;" id="editOTEndPresets"></div>
+      <input type="time" id="editShiftOTEnd" step="60" oninput="onEditOTEndInput()">
+    </div>
+    <div class="form-group">
+      <label>Chart Day?</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;"><input type="radio" name="editChartDay" id="editChartDayYes" value="yes" style="width:auto;"> Yes (2x / 1.5x snow)</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;"><input type="radio" name="editChartDay" id="editChartDayNo" value="no" checked style="width:auto;"> No</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Function</label>
+      <select id="editShiftType" onchange="onShiftTypeChange(this.value, 'editTruckMoneyGroup', 'editShiftFraction')">
+        <option value="">Select function</option>
+        <option value="garbage">Garbage</option>
+        <option value="recycling">Recycling</option>
+        <option value="organics">Organics</option>
+        <option value="paper_rear_loader">Paper Rear Loader</option>
+        <option value="metal_rear_loader">Metal Rear Loader</option>
+        <option value="mechanical_broom">Mechanical Broom</option>
+        <option value="relays">Relays</option>
+        <option value="baskets">Baskets</option>
+        <option value="mlp">MLP</option>
+        <option value="garage_utility">Garage Utility</option>
+        <option value="other">Other</option>
+        <option value="plow">Plow</option>
+        <option value="salt_spreader">Salt Spreader</option>
+        <option value="haulster">Haulster</option>
+        <option value="flow_dump">Flow &amp; Dump</option>
+        <option value="plow_chains">Plow &amp; Chains</option>
+        <option value="atv">ATV</option>
+        <option value="quality_of_life">Quality of Life</option>
+        <option value="other_snow">Other Snow</option>
+        <option value="holiday">Holiday</option>
+        <option value="differential">Night Differential</option>
+      </select>
+    </div>
+    <div class="form-group" id="editTruckMoneyGroup" style="display:none;">
+      <label>Truck Money <span style="color:var(--green);font-size:10px;text-transform:none;">Full truck (+$81) is automatic — only select if fractional</span></label>
+      <select id="editShiftFraction">
+        <option value="">None (full truck is automatic)</option>
+        <option value="1/4 Garbage to MLP">1/4 Garbage to MLP (+$20.25)</option>
+        <option value="1/2 Garbage to MLP">1/2 Garbage to MLP (+$40.50)</option>
+        <option value="3/4 Garbage to MLP">3/4 Garbage to MLP (+$60.75)</option>
+        <option value="1/4 Recycling to MLP">1/4 Recycling to MLP (+$20.25)</option>
+        <option value="1/2 Recycling to MLP">1/2 Recycling to MLP (+$40.50)</option>
+        <option value="3/4 Recycling to MLP">3/4 Recycling to MLP (+$60.75)</option>
+        <option value="1/4 Organics to MLP">1/4 Organics to MLP (+$20.25)</option>
+        <option value="1/2 Organics to MLP">1/2 Organics to MLP (+$40.50)</option>
+        <option value="3/4 Organics to MLP">3/4 Organics to MLP (+$60.75)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Section & Route <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <select id="editShiftSection">
+          <option value="">Section</option>
+          <option value="Section 1">Section 1</option>
+          <option value="Section 2">Section 2</option>
+          <option value="Section 3">Section 3</option>
+          <option value="Section 4">Section 4</option>
+          <option value="Section 5">Section 5</option>
+        </select>
+        <select id="editShiftRoute">
+          <option value="">Route</option>
+          <option value="Route 1">Route 1</option>
+          <option value="Route 2">Route 2</option>
+          <option value="Route 3">Route 3</option>
+          <option value="Route 4">Route 4</option>
+          <option value="Route 5">Route 5</option>
+          <option value="Route 6">Route 6</option>
+          <option value="Route 7">Route 7</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Partner Name <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <input type="text" id="editShiftPartner" placeholder="e.g. J. Smith">
+    </div>
+    <div class="form-group">
+      <label>Did you down any trucks today? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <p style="font-size:11px;color:var(--text3);margin-bottom:6px;">For Achievements &amp; Counting Purposes</p>
+      <select id="editTruckDowned">
+        <option value="0">No</option>
+        <option value="1">1 Truck</option>
+        <option value="2">2 Trucks</option>
+        <option value="3">3 Trucks</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Notes <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <textarea id="editShiftNotes" rows="2" placeholder="Any notes..."></textarea>
+    </div>
+    <button onclick="saveEditShift()" class="btn btn-primary">Save Changes</button>
+  </div>
+</div>
+
 <div class="modal-overlay" id="taskModal">
   <div class="modal">
     <div class="modal-title">Add Note <button class="close-btn" onclick="closeModal('taskModal')">✕</button></div>
     <div class="form-group">
       <label>Category</label>
       <select id="taskPriority">
-        <option value="📝 General">📝 General</option>
+        <option value="📝 Notebook">📝 Notebook</option>
       </select>
     </div>
     <div class="form-group">
@@ -1654,14 +2085,14 @@ function renderWeeklyList() {
   var d = getUserData(currentUser.id);
   var now = new Date();
   var dow = now.getDay();
-  var monday = new Date(now);
-  monday.setDate(now.getDate() - (dow === 0 ? 6 : dow - 1));
-  monday.setHours(0,0,0,0);
-  var days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var sunday = new Date(now);
+  sunday.setDate(now.getDate() - dow);
+  sunday.setHours(0,0,0,0);
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var html = '';
   for (var i = 0; i < days.length; i++) {
-    var date = new Date(monday);
-    date.setDate(monday.getDate() + i);
+    var date = new Date(sunday);
+    date.setDate(sunday.getDate() + i);
     var yr = date.getFullYear();
     var mo = date.getMonth() + 1;
     var dy = date.getDate();
@@ -1679,11 +2110,12 @@ function renderWeeklyList() {
     var dayColor = isToday ? 'var(--green)' : '#fff';
     var barColor = shift ? 'var(--green)' : 'var(--dark4)';
     if (shift && shift.chartDay) barColor = '#388BFD';
+    if (days[i] === 'Sunday') barColor = shift ? 'var(--red)' : 'rgba(248,81,73,0.3)';
     var row = '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:' + bg + ';border:1px solid ' + border + ';border-radius:5px;margin-bottom:3px;cursor:pointer;" onclick="openShiftForDay(\'' + dateStr + '\')">';
     row += '<div style="display:flex;align-items:center;gap:5px;">';
     row += '<div style="width:3px;min-height:30px;border-radius:2px;background:' + barColor + ';flex-shrink:0;"></div>';
     row += '<div>';
-    row += '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;color:' + dayColor + ';">' + days[i].substring(0,3).toUpperCase() + ' <span style="font-size:10px;font-weight:400;color:var(--text2);">' + shortDate + '</span></div>';
+    row += '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:16px;font-weight:800;color:' + dayColor + ';">' + days[i].substring(0,3).toUpperCase() + ' <span style="font-size:13px;font-weight:600;color:var(--text2);">' + shortDate + '</span></div>';
     if (shift) {
       var detail = '';
       if (shift.start && shift.end) detail += shift.start + '–' + shift.end;
@@ -1699,7 +2131,7 @@ function renderWeeklyList() {
     }
     row += '</div></div>';
     if (shift && shift.pay > 0) {
-      row += '<div style="text-align:right;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;color:var(--green);">$' + shift.pay.toFixed(2) + '</div><div style="font-size:10px;color:var(--text2);">' + shift.hours + 'h</div></div>';
+      row += '<div style="text-align:right;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:16px;font-weight:800;color:var(--green);">$' + shift.pay.toFixed(2) + '</div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div></div>';
     } else if (!shift) {
       row += '<div style="font-size:10px;color:' + (isPast ? 'var(--text3)' : 'var(--text2)') + ';">' + (isPast ? 'No shift' : 'Tap to log') + '</div>';
     }
@@ -2125,11 +2557,11 @@ function renderAchievements() {
       name: 'Pre Trip Surgeon',
       desc: 'Down your truck on shift',
       color: '#ff6b6b',
-      unlocked: d.shifts.some(function(s){ return s.truckDowned === true; }),
+      unlocked: d.shifts.some(function(s){ return s.truckDowned && s.truckDowned > 0; }),
       progress: 1,
       total: 1,
       countable: true,
-      count: d.shifts.filter(function(s){ return s.truckDowned === true; }).length
+      count: d.shifts.filter(function(s){ return s.truckDowned && s.truckDowned > 0; }).length
     },
     {
       id: 'partner4eva',
@@ -2238,12 +2670,308 @@ function renderAchievements() {
   el.innerHTML = html;
 }
 
+function addChecklistItem() {
+  const input = document.getElementById('checklistInput');
+  const text = input.value.trim();
+  if (!text) { showToast('Enter an item'); return; }
+  const d = getUserData(currentUser.id);
+  if (!d.checklist) d.checklist = [];
+  d.checklist.push({ id: Date.now(), text, done: false });
+  saveUserData(currentUser.id, d);
+  input.value = '';
+  renderChecklist();
+}
+
+function toggleChecklistItem(id) {
+  const d = getUserData(currentUser.id);
+  const item = (d.checklist || []).find(i => i.id === id);
+  if (item) item.done = !item.done;
+  saveUserData(currentUser.id, d);
+  renderChecklist();
+}
+
+function deleteChecklistItem(id) {
+  const d = getUserData(currentUser.id);
+  d.checklist = (d.checklist || []).filter(i => i.id !== id);
+  saveUserData(currentUser.id, d);
+  renderChecklist();
+}
+
+function renderChecklist() {
+  const d = getUserData(currentUser.id);
+  const items = d.checklist || [];
+  const countEl = document.getElementById('checklistCount');
+  if (countEl) countEl.textContent = items.length;
+  const el = document.getElementById('checklistItems');
+  if (!items.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><p>No items yet. Add one above.</p></div>';
+    return;
+  }
+  el.innerHTML = items.map(item => `
+    <div class="task-item" style="cursor:pointer;" onclick="toggleChecklistItem(${item.id})">
+      <div class="task-check ${item.done ? 'done' : ''}" style="flex-shrink:0;">
+        ${item.done ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+      </div>
+      <div class="task-text ${item.done ? 'done' : ''}" style="flex:1;">${item.text}</div>
+      <button class="delete-btn" onclick="event.stopPropagation();deleteChecklistItem(${item.id})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
+    </div>`).join('');
+}
+
 function showRoutesPage() {
   currentPage = 'routes';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('routesPage').classList.add('active');
   document.getElementById('fab').style.display = 'flex';
   renderRoutes();
+}
+
+function showCareerStatsPage() {
+  currentPage = 'careerStats';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('careerStatsPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
+  document.getElementById('fab').style.display = 'none';
+  renderCareerStats();
+}
+
+function renderCareerStats() {
+  const d = getUserData(currentUser.id);
+  const shifts = d.shifts || [];
+  const el = document.getElementById('careerStatsList');
+
+  // Full Trucks Made (no fraction = full truck on eligible types)
+  const eligible = ['garbage','recycling','organics','paper_rear_loader','metal_rear_loader'];
+  const fullTrucks = shifts.filter(s => eligible.indexOf(s.type) !== -1 && (!s.fraction || s.fraction.trim() === '')).length;
+
+  // Favorite Route
+  const routeCounts = {};
+  shifts.forEach(s => {
+    if (s.route) { routeCounts[s.route] = (routeCounts[s.route] || 0) + 1; }
+  });
+  const topRoute = Object.entries(routeCounts).sort((a,b) => b[1]-a[1])[0];
+
+  // Favorite Partner
+  const partnerCounts = {};
+  shifts.forEach(s => {
+    if (s.partner) { const p = s.partner.trim(); partnerCounts[p] = (partnerCounts[p] || 0) + 1; }
+  });
+  const topPartner = Object.entries(partnerCounts).sort((a,b) => b[1]-a[1])[0];
+
+  // Most People Beat at Once (max truckDowned in a single shift)
+  const mostBeaten = shifts.reduce((max, s) => Math.max(max, parseInt(s.truckDowned) || 0), 0);
+
+  // Career Comp Hours
+  const totalHours = shifts.reduce((a, s) => a + (s.hours || 0), 0);
+
+  // Most Shifts Worked Consecutively
+  const sortedDates = [...new Set(shifts.map(s => s.date))].sort();
+  let maxConsecShifts = 0, curConsecShifts = 1;
+  for (let i = 1; i < sortedDates.length; i++) {
+    const prev = new Date(sortedDates[i-1] + 'T12:00:00');
+    const curr = new Date(sortedDates[i] + 'T12:00:00');
+    const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+    if (diff === 1) { curConsecShifts++; maxConsecShifts = Math.max(maxConsecShifts, curConsecShifts); }
+    else curConsecShifts = 1;
+  }
+  if (sortedDates.length > 0) maxConsecShifts = Math.max(maxConsecShifts, curConsecShifts);
+
+  // Most Hours Worked Consecutively (consecutive days)
+  let maxConsecHours = 0, curConsecHours = 0;
+  for (let i = 0; i < sortedDates.length; i++) {
+    const dayHours = shifts.filter(s => s.date === sortedDates[i]).reduce((a,s) => a + (s.hours||0), 0);
+    if (i > 0) {
+      const prev = new Date(sortedDates[i-1] + 'T12:00:00');
+      const curr = new Date(sortedDates[i] + 'T12:00:00');
+      const diff = (curr - prev) / (1000 * 60 * 60 * 24);
+      if (diff === 1) { curConsecHours += dayHours; }
+      else curConsecHours = dayHours;
+    } else { curConsecHours = dayHours; }
+    maxConsecHours = Math.max(maxConsecHours, curConsecHours);
+  }
+
+  // Most Hours in 1 Week
+  const weekMap = {};
+  shifts.forEach(s => {
+    const d2 = new Date(s.date + 'T12:00:00');
+    const weekSun = new Date(d2); weekSun.setDate(d2.getDate() - d2.getDay());
+    const key = weekSun.toISOString().split('T')[0];
+    weekMap[key] = (weekMap[key] || 0) + (s.hours || 0);
+  });
+  const maxWeekHours = Object.values(weekMap).length ? Math.max(...Object.values(weekMap)) : 0;
+  const maxWeekKey = Object.entries(weekMap).sort((a,b) => b[1]-a[1])[0];
+
+  // Highest Gross Pay in 1 Shift
+  const payByDate = {};
+  shifts.forEach(s => { payByDate[s.date] = (payByDate[s.date] || 0) + (s.pay || 0); });
+  const maxGrossDay = Object.entries(payByDate).sort((a,b) => b[1]-a[1])[0];
+
+  // Highest Net Pay in 1 Shift
+  const taxRate = currentUser.taxRate ? parseFloat(currentUser.taxRate) / 100 : 0.343;
+  const totalDeductRate = taxRate + 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331;
+  const maxNetDay = maxGrossDay ? [maxGrossDay[0], maxGrossDay[1] * (1 - totalDeductRate)] : null;
+
+  const svgAttrs = 'width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+  const stats = [
+    { icon: `<svg ${svgAttrs}><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>`, label: 'Full Trucks Made', value: fullTrucks || '0', sub: '' },
+    { icon: `<svg ${svgAttrs}><path d="M3 12h18M3 6h18M3 18h18"/></svg>`, label: 'Favorite Route', value: topRoute ? topRoute[0] : '—', sub: topRoute ? topRoute[1] + ' times' : '' },
+    { icon: `<svg ${svgAttrs}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`, label: 'Favorite Partner', value: topPartner ? topPartner[0] : '—', sub: topPartner ? topPartner[1] + ' shifts together' : '' },
+    { icon: `<svg ${svgAttrs}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`, label: 'Trucks Downed', value: mostBeaten || '0', sub: '' },
+    { icon: `<svg ${svgAttrs}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`, label: 'Career Comp Hours', value: totalHours.toFixed(1) + 'h', sub: '' },
+    { icon: `<svg ${svgAttrs}><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`, label: 'Most Shifts Worked Consecutively', value: maxConsecShifts + ' days', sub: '' },
+    { icon: `<svg ${svgAttrs}><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`, label: 'Most Hours Worked Consecutively', value: maxConsecHours.toFixed(1) + 'h', sub: '' },
+    { icon: `<svg ${svgAttrs}><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`, label: 'Most Hours in 1 Week', value: maxWeekHours.toFixed(1) + 'h', sub: maxWeekKey ? 'Week of ' + new Date(maxWeekKey + 'T12:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'}) : '' },
+    { icon: `<svg ${svgAttrs}><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, label: 'Highest Gross Pay in 1 Shift', value: maxGrossDay ? '$' + maxGrossDay[1].toFixed(2) : '—', sub: maxGrossDay ? new Date(maxGrossDay[0] + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}) : '' },
+    { icon: `<svg ${svgAttrs}><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 6v6l4 2"/></svg>`, label: 'Highest Net Pay in 1 Shift', value: maxNetDay ? '$' + maxNetDay[1].toFixed(2) : '—', sub: maxNetDay ? new Date(maxNetDay[0] + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}) : '' },
+  ];
+
+  el.innerHTML = stats.map(s => `
+    <div class="card" style="display:flex;align-items:center;gap:14px;padding:16px;margin-bottom:10px;">
+      <div style="flex-shrink:0;width:28px;display:flex;align-items:center;justify-content:center;">${s.icon}</div>
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">${s.label}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--green);line-height:1.1;">${s.value}</div>
+        ${s.sub ? `<div style="font-size:11px;color:var(--text3);margin-top:2px;">${s.sub}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+function showSeniorityPage() {
+  currentPage = 'seniority';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('seniorityPage').classList.add('active');
+  document.getElementById('fab').style.display = 'none';
+  renderSeniorityList();
+}
+
+function moveSanMan(id, direction) {
+  const d = getUserData(currentUser.id);
+  const list = d.seniority || [];
+  const idx = list.findIndex(p => p.id === id);
+  if (idx === -1) return;
+  const newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= list.length) return;
+  const temp = list[idx];
+  list[idx] = list[newIdx];
+  list[newIdx] = temp;
+  d.seniority = list;
+  saveUserData(currentUser.id, d);
+  renderSeniorityList();
+}
+
+function addSeniorityPerson() {
+  const num = parseInt(document.getElementById('seniorityNum').value);
+  const name = document.getElementById('seniorityName').value.trim();
+  const role = document.getElementById('seniorityRole').value;
+  const section = document.getElementById('senioritySection').value;
+  const tissue = document.getElementById('seniorityTissue').value;
+  const night = document.getElementById('seniorityNight').value;
+  if (!num || !name) { showToast('Please enter a seniority number and name'); return; }
+  const d = getUserData(currentUser.id);
+  if (!d.seniority) d.seniority = [];
+  d.seniority.push({ id: Date.now(), num, name, role, section, tissue, night });
+  d.seniority.sort((a, b) => a.num - b.num);
+  saveUserData(currentUser.id, d);
+  document.getElementById('seniorityNum').value = '';
+  document.getElementById('seniorityName').value = '';
+  document.getElementById('seniorityRole').value = '';
+  document.getElementById('senioritySection').value = '';
+  document.getElementById('seniorityTissue').value = '';
+  document.getElementById('seniorityNight').value = 'no';
+  renderSeniorityList();
+  showToast('✅ San Man added!');
+}
+
+let editingSanManId = null;
+
+function openEditSanMan(id) {
+  const d = getUserData(currentUser.id);
+  const p = (d.seniority || []).find(p => p.id === id);
+  if (!p) return;
+  editingSanManId = id;
+  document.getElementById('editSeniorityNum').value = p.num;
+  document.getElementById('editSeniorityName').value = p.name;
+  document.getElementById('editSeniorityRole').value = p.role || '';
+  document.getElementById('editSenioritySection').value = p.section || '';
+  document.getElementById('editSeniorityTissue').value = p.tissue || '';
+  document.getElementById('editSeniorityNight').value = p.night || 'no';
+  document.getElementById('editSanManModal').classList.add('open');
+}
+
+function saveEditSanMan() {
+  const num = parseInt(document.getElementById('editSeniorityNum').value);
+  const name = document.getElementById('editSeniorityName').value.trim();
+  const role = document.getElementById('editSeniorityRole').value;
+  const section = document.getElementById('editSenioritySection').value;
+  const tissue = document.getElementById('editSeniorityTissue').value;
+  const night = document.getElementById('editSeniorityNight').value;
+  if (!num || !name) { showToast('Please enter a number and name'); return; }
+  const d = getUserData(currentUser.id);
+  const idx = (d.seniority || []).findIndex(p => p.id === editingSanManId);
+  if (idx !== -1) {
+    d.seniority[idx] = { ...d.seniority[idx], num, name, role, section, tissue, night };
+    d.seniority.sort((a, b) => a.num - b.num);
+    saveUserData(currentUser.id, d);
+  }
+  closeModal('editSanManModal');
+  editingSanManId = null;
+  renderSeniorityList();
+  showToast('✅ Updated!');
+}
+
+function deleteSeniorityPerson(id) {
+  const d = getUserData(currentUser.id);
+  d.seniority = (d.seniority || []).filter(p => p.id !== id);
+  saveUserData(currentUser.id, d);
+  renderSeniorityList();
+}
+
+function renderSeniorityList() {
+  const d = getUserData(currentUser.id);
+  const list = d.seniority || [];
+  document.getElementById('seniorityCount').textContent = list.length;
+  const el = document.getElementById('seniorityList');
+  if (!list.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><p>No one added yet. Add a San Man above.</p></div>';
+    return;
+  }
+  el.innerHTML = list.map(p => {
+    const tags = [
+      p.night === 'yes' ? `<span class="tag" style="background:#000000;color:#93c5fd;border:1px solid #1e3a5f;font-size:10px;display:inline-flex;align-items:center;gap:3px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>NS</span>` : '',
+      p.tissue ? `<span class="tag" style="background:#ffffff;color:#000000;border:1px solid #ccc;font-size:10px;">${p.tissue}</span>` : '',
+      p.role ? `<span class="tag" style="background:#ffffff;color:#000000;border:1px solid #ccc;font-size:10px;">${p.role}</span>` : '',
+      ''
+    ].filter(Boolean).join(' ');
+    const isDriver = p.role === 'Driver';
+    const sectionColors = { '1': '#F52795', '2': '#F58E27', '3': '#7D4710', '4': '#66FF4D', '5': '#4DFFF9' };
+    const loaderBg = (!isDriver && p.section && sectionColors[p.section]) ? sectionColors[p.section] : null;
+    const isDarkBg = loaderBg && ['#F52795','#7D4710'].includes(loaderBg);
+    const loaderTextColor = loaderBg ? (isDarkBg ? '#ffffff' : '#000000') : '';
+    const rowStyle = isDriver
+      ? 'background:#ffffff;border-color:#e0e0e0;'
+      : loaderBg ? `background:${loaderBg};border-color:${loaderBg};` : '';
+    const numColor = isDriver ? '#000000' : loaderBg ? (isDarkBg ? '#ffffff' : '#000000') : 'var(--green)';
+    const nameColor = isDriver ? '#000000' : loaderTextColor;
+    const btnColor = (isDriver || loaderBg) ? (isDarkBg ? 'rgba(255,255,255,0.7)' : '#555') : 'var(--text3)';    return `<div class="shift-item" style="padding:12px 16px;${rowStyle}">
+      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:0;">
+        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:${numColor};min-width:36px;text-align:center;">${p.num}</div>
+        <div style="min-width:0;">
+          <div style="font-size:15px;font-weight:600;margin-bottom:3px;${nameColor ? 'color:' + nameColor + ';' : ''}">${p.name}</div>
+          ${tags ? `<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">${tags}</div>` : ''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-right:6px;">
+        <button class="delete-btn" onclick="moveSanMan(${p.id}, -1)" style="color:${btnColor};padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+        <button class="delete-btn" onclick="moveSanMan(${p.id}, 1)" style="color:${btnColor};padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button class="delete-btn" onclick="openEditSanMan(${p.id})" style="color:${btnColor};"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="delete-btn" onclick="deleteSeniorityPerson(${p.id})" style="color:${btnColor};"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 let routePhotoData = null;
@@ -2278,6 +3006,119 @@ function clearDumpReceipt() {
   document.getElementById('dumpReceiptImg').src = '';
   document.getElementById('dumpReceiptCam').value = '';
   document.getElementById('dumpReceiptLib').value = '';
+}
+
+function to2400(time24) {
+  // Converts HH:MM to display format — midnight shown as 24:00
+  if (time24 === '00:00') return '24:00';
+  return time24;
+}
+
+function addHours(time, hours) {
+  // Handle 24:00 as input
+  const normalized = time === '24:00' ? '00:00' : time;
+  const [h, m] = normalized.split(':').map(Number);
+  const totalMins = h * 60 + m + hours * 60;
+  const wrapped = totalMins % 1440;
+  return String(Math.floor(wrapped / 60)).padStart(2, '0') + ':' + String(wrapped % 60).padStart(2, '0');
+}
+
+function selectStartTime(time) {
+  document.getElementById('shiftStart').value = time;
+  document.querySelectorAll('#startTimePresets .time-preset-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent === time);
+  });
+  const endTime = addHours(time, 8);
+  document.getElementById('shiftEnd').value = endTime;
+  document.getElementById('endTimeNote').textContent = '→ ends ' + to2400(endTime);
+  document.getElementById('otQuestionGroup').style.display = 'block';
+  document.getElementById('didOTNo').checked = true;
+  document.getElementById('otStartGroup').style.display = 'none';
+  document.getElementById('shiftOTEnd').value = '';
+  renderOTPresets(endTime);
+}
+
+function onStartTimeInput() {
+  const time = document.getElementById('shiftStart').value;
+  if (!time) return;
+  document.querySelectorAll('#startTimePresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  const endTime = addHours(time, 8);
+  document.getElementById('shiftEnd').value = endTime;
+  document.getElementById('endTimeNote').textContent = '→ ends ' + to2400(endTime);
+  document.getElementById('otQuestionGroup').style.display = 'block';
+  document.getElementById('didOTNo').checked = true;
+  document.getElementById('otStartGroup').style.display = 'none';
+  document.getElementById('shiftOTEnd').value = '';
+  renderOTPresets(endTime);
+}
+
+function onDidOTChange() {
+  const yes = document.getElementById('didOTYes').checked;
+  document.getElementById('otStartGroup').style.display = yes ? 'block' : 'none';
+  if (!yes) {
+    // Revert end time to 8h shift end
+    const start = document.getElementById('shiftStart').value;
+    if (start) document.getElementById('shiftEnd').value = addHours(start, 8);
+    document.getElementById('shiftOTEnd').value = '';
+    document.querySelectorAll('#otEndPresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  }
+}
+
+function renderOTPresets(startFrom) {
+  const label = document.getElementById('otStartLabel');
+  if (label) label.textContent = to2400(startFrom);
+  const container = document.getElementById('otEndPresets');
+  const presets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(h => addHours(startFrom, h));
+  container.innerHTML = presets.map(t =>
+    `<button type="button" class="time-preset-btn ot-btn" onclick="selectOTEnd('${t}')">${to2400(t)}</button>`
+  ).join('');
+}
+
+function selectOTEnd(time) {
+  const already = document.getElementById('shiftOTEnd').value === time;
+  if (already) {
+    // Deselect — revert end time back to shift end (8h after start)
+    const start = document.getElementById('shiftStart').value;
+    const shiftEnd = start ? addHours(start, 8) : '';
+    document.getElementById('shiftOTEnd').value = '';
+    document.getElementById('shiftEnd').value = shiftEnd;
+    document.querySelectorAll('#otEndPresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  } else {
+    document.getElementById('shiftOTEnd').value = time;
+    document.getElementById('shiftEnd').value = time;
+    document.querySelectorAll('#otEndPresets .time-preset-btn').forEach(b => {
+      b.classList.toggle('selected', b.textContent === to2400(time));
+    });
+  }
+}
+
+function onOTEndInput() {
+  const time = document.getElementById('shiftOTEnd').value;
+  if (time) {
+    document.getElementById('shiftEnd').value = time;
+    document.querySelectorAll('#otEndPresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  }
+}
+
+function onShiftTypeChange(type, groupId, fractionId) {
+  const eligible = ['garbage','recycling','organics','paper_rear_loader','metal_rear_loader'];
+  const group = document.getElementById(groupId);
+  if (eligible.indexOf(type) !== -1) {
+    group.style.display = 'block';
+  } else {
+    group.style.display = 'none';
+    document.getElementById(fractionId).value = '';
+  }
+}
+
+function onDidDumpChange() {
+  const yes = document.getElementById('didDumpYes').checked;
+  document.getElementById('tonsGroup').style.display = yes ? 'block' : 'none';
+  if (!yes) {
+    document.getElementById('shiftTons').value = '';
+    document.getElementById('dumpReceiptGroup').style.display = 'none';
+    clearDumpReceipt();
+  }
 }
 
 function onTonsInput() {
@@ -2458,6 +3299,18 @@ function openFab() {
     openAddRoute();
   } else {
     document.getElementById('shiftDate').value = new Date().toISOString().split('T')[0];
+    document.getElementById('shiftStart').value = '';
+    document.getElementById('shiftEnd').value = '';
+    document.getElementById('endTimeNote').textContent = '';
+    document.getElementById('otStartGroup').style.display = 'none';
+    document.getElementById('otQuestionGroup').style.display = 'none';
+    document.getElementById('didOTNo').checked = true;
+    document.getElementById('shiftOTEnd').value = '';
+    document.querySelectorAll('#startTimePresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+    document.getElementById('truckMoneyGroup').style.display = 'none';
+    document.getElementById('shiftFraction').value = '';
+    document.getElementById('didDumpNo').checked = true;
+    document.getElementById('tonsGroup').style.display = 'none';
     document.getElementById('shiftModal').classList.add('open');
   }
 }
@@ -2474,6 +3327,8 @@ function calcHours(start, end) {
 }
 
 function calcShiftPay(shift, rate) {
+  // No pay if shift times are not set
+  if (!shift.start || !shift.end) return 0;
   const hourly = rate / 2080;
   const h = shift.hours;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
@@ -2495,6 +3350,22 @@ function calcShiftPay(shift, rate) {
   return h * hourly;
 }
 
+const TRUCK_MONEY_ELIGIBLE = ['garbage','recycling','organics','paper_rear_loader','metal_rear_loader'];
+const TRUCK_MONEY_FULL = 81.00;
+
+function calcTruckMoney(type, fraction) {
+  if (!type || TRUCK_MONEY_ELIGIBLE.indexOf(type) === -1) return 0;
+  // If a fractional truck is selected, it OVERRIDES full truck — can't have both
+  if (fraction) {
+    const lower = fraction.toLowerCase();
+    if (lower.includes('1/4')) return TRUCK_MONEY_FULL * 0.25;
+    if (lower.includes('1/2') || lower.includes('2/4')) return TRUCK_MONEY_FULL * 0.50;
+    if (lower.includes('3/4')) return TRUCK_MONEY_FULL * 0.75;
+  }
+  // No fraction selected = full truck
+  return TRUCK_MONEY_FULL;
+}
+
 function addShift() {
   const date = document.getElementById('shiftDate').value;
   const type = document.getElementById('shiftType').value;
@@ -2505,34 +3376,185 @@ function addShift() {
   const tons = parseFloat(document.getElementById('shiftTons').value) || null;
   const partner = document.getElementById('shiftPartner').value.trim();
   const location = document.getElementById('shiftLocation').value;
-  const truckDowned = document.querySelector('input[name="truckDowned"]:checked').value === 'yes';
-  const route = document.getElementById('shiftRoute').value.trim();
+  const truckDowned = parseInt(document.getElementById('truckDowned').value) || 0;
+  const route = document.getElementById('shiftRoute').value;
+  const section = document.getElementById('shiftSection').value;
   const notes = document.getElementById('shiftNotes').value.trim();
 
   if (!date) { showToast('Please fill in the date'); return; }
-  if (tons && !dumpReceiptData) { showToast('Please add a dump receipt photo'); return; }
   const hours = calcHours(start, end);
   const regHours = Math.min(hours, 8);
   const otHours = Math.max(hours - 8, 0);
-  let pay = calcShiftPay({type, hours, date}, currentUser.rate);
-  if (chartDay && type) pay = (currentUser.rate / 260) * 2;
+  let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  if (start && end && chartDay && type) pay = (currentUser.rate / 260) * (snowFunctions.indexOf(type) !== -1 ? 1.5 : 2);
+  const truckMoney = (start && end) ? calcTruckMoney(type, fraction) : 0;
+  pay += truckMoney;
 
   const d = getUserData(currentUser.id);
-  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, notes });
+  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney });
   saveUserData(currentUser.id, d);
   closeModal('shiftModal');
-  document.getElementById('shiftNotes').value = '';
-  document.getElementById('shiftRoute').value = '';
-  document.getElementById('shiftFraction').value = '';
-  document.getElementById('chartDayNo').checked = true;
-  document.getElementById('shiftTons').value = '';
-  document.getElementById('shiftPartner').value = '';
-  document.getElementById('shiftLocation').value = '';
-  document.getElementById('truckDownedNo').checked = true;
-  document.getElementById('dumpReceiptGroup').style.display = 'none';
-  clearDumpReceipt();
   showToast('✅ Shift logged!');
   refreshAll();
+}
+
+let editingShiftId = null;
+
+function editSelectStartTime(time) {
+  document.getElementById('editShiftStart').value = time;
+  document.querySelectorAll('#editStartTimePresets .time-preset-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent === time);
+  });
+  const endTime = addHours(time, 8);
+  document.getElementById('editShiftEnd').value = endTime;
+  document.getElementById('editEndTimeNote').textContent = '→ ends ' + to2400(endTime);
+  document.getElementById('editOTStartGroup').style.display = 'block';
+  document.getElementById('editOTStartLabel').textContent = to2400(endTime);
+  document.getElementById('editShiftOTEnd').value = '';
+  renderEditOTPresets(endTime);
+}
+
+function onEditStartTimeInput() {
+  const time = document.getElementById('editShiftStart').value;
+  if (!time) return;
+  document.querySelectorAll('#editStartTimePresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  const endTime = addHours(time, 8);
+  document.getElementById('editShiftEnd').value = endTime;
+  document.getElementById('editEndTimeNote').textContent = '→ ends ' + to2400(endTime);
+  document.getElementById('editOTStartGroup').style.display = 'block';
+  document.getElementById('editOTStartLabel').textContent = to2400(endTime);
+  document.getElementById('editShiftOTEnd').value = '';
+  renderEditOTPresets(endTime);
+}
+
+function renderEditOTPresets(startFrom) {
+  const container = document.getElementById('editOTEndPresets');
+  const presets = [1,2,3,4,5,6,7,8,9,10].map(h => addHours(startFrom, h));
+  container.innerHTML = presets.map(t =>
+    `<button type="button" class="time-preset-btn ot-btn" onclick="selectEditOTEnd('${t}')">${to2400(t)}</button>`
+  ).join('');
+}
+
+function selectEditOTEnd(time) {
+  const already = document.getElementById('editShiftOTEnd').value === time;
+  if (already) {
+    const start = document.getElementById('editShiftStart').value;
+    const shiftEnd = start ? addHours(start, 8) : '';
+    document.getElementById('editShiftOTEnd').value = '';
+    document.getElementById('editShiftEnd').value = shiftEnd;
+    document.querySelectorAll('#editOTEndPresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  } else {
+    document.getElementById('editShiftOTEnd').value = time;
+    document.getElementById('editShiftEnd').value = time;
+    document.querySelectorAll('#editOTEndPresets .time-preset-btn').forEach(b => {
+      b.classList.toggle('selected', b.textContent === to2400(time));
+    });
+  }
+}
+
+function onEditOTEndInput() {
+  const time = document.getElementById('editShiftOTEnd').value;
+  if (time) {
+    document.getElementById('editShiftEnd').value = time;
+    document.querySelectorAll('#editOTEndPresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  }
+}
+
+function openEditShift(id) {
+  const d = getUserData(currentUser.id);
+  const s = d.shifts.find(s => s.id === id);
+  if (!s) return;
+  editingShiftId = id;
+
+  document.getElementById('editShiftDate').value = s.date;
+  document.getElementById('editShiftType').value = s.type || '';
+  document.getElementById('editShiftFraction').value = s.fraction || '';
+  // Show truck money field only for eligible types
+  onShiftTypeChange(s.type || '', 'editTruckMoneyGroup', 'editShiftFraction');
+  document.getElementById('editShiftFraction').value = s.fraction || '';
+  document.getElementById('editShiftRoute').value = s.route || '';
+  document.getElementById('editShiftSection').value = s.section || '';
+  document.getElementById('editShiftPartner').value = s.partner || '';
+  document.getElementById('editTruckDowned').value = s.truckDowned || 0;
+  document.getElementById('editShiftNotes').value = s.notes || '';
+  if (s.chartDay) {
+    document.getElementById('editChartDayYes').checked = true;
+  } else {
+    document.getElementById('editChartDayNo').checked = true;
+  }
+
+  // Restore start time preset button
+  const start = s.start || '';
+  document.getElementById('editShiftStart').value = start;
+  document.querySelectorAll('#editStartTimePresets .time-preset-btn').forEach(b => {
+    b.classList.toggle('selected', b.textContent === start);
+  });
+
+  // Set end time note
+  const shiftEnd = start ? addHours(start, 8) : '';
+  document.getElementById('editEndTimeNote').textContent = start ? '→ ends ' + to2400(shiftEnd) : '';
+
+  // Determine if there's OT (end time differs from 8h after start)
+  const hasOT = s.end && shiftEnd && s.end !== shiftEnd;
+  document.getElementById('editOTStartGroup').style.display = start ? 'block' : 'none';
+  document.getElementById('editOTStartLabel').textContent = shiftEnd ? to2400(shiftEnd) : '';
+
+  if (start) renderEditOTPresets(shiftEnd);
+
+  if (hasOT) {
+    // Restore OT end selection
+    document.getElementById('editShiftOTEnd').value = s.end;
+    document.getElementById('editShiftEnd').value = s.end;
+    // Highlight matching OT button
+    setTimeout(() => {
+      document.querySelectorAll('#editOTEndPresets .time-preset-btn').forEach(b => {
+        b.classList.toggle('selected', b.textContent === to2400(s.end));
+      });
+    }, 0);
+  } else {
+    document.getElementById('editShiftOTEnd').value = '';
+    document.getElementById('editShiftEnd').value = shiftEnd || s.end || '';
+  }
+
+  document.getElementById('editShiftModal').classList.add('open');
+}
+
+function saveEditShift() {
+  const d = getUserData(currentUser.id);
+  const idx = d.shifts.findIndex(s => s.id === editingShiftId);
+  if (idx === -1) return;
+
+  const date = document.getElementById('editShiftDate').value;
+  const start = document.getElementById('editShiftStart').value;
+  const end = document.getElementById('editShiftEnd').value;
+  const type = document.getElementById('editShiftType').value;
+  const fraction = document.getElementById('editShiftFraction').value;
+  const chartDay = document.querySelector('input[name="editChartDay"]:checked').value === 'yes';
+  const route = document.getElementById('editShiftRoute').value;
+  const section = document.getElementById('editShiftSection').value;
+  const partner = document.getElementById('editShiftPartner').value.trim();
+  const truckDowned = parseInt(document.getElementById('editTruckDowned').value) || 0;
+  const notes = document.getElementById('editShiftNotes').value.trim();
+
+  if (!date) { showToast('Please enter a date'); return; }
+
+  const hours = calcHours(start, end);
+  const regHours = Math.min(hours, 8);
+  const otHours = Math.max(hours - 8, 0);
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
+  if (start && end && chartDay && type) pay = (currentUser.rate / 260) * (snowFunctions.indexOf(type) !== -1 ? 1.5 : 2);
+  const truckMoney = (start && end) ? calcTruckMoney(type, fraction) : 0;
+  pay += truckMoney;
+
+  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, truckDowned, notes, hours, regHours, otHours, pay, truckMoney };
+  saveUserData(currentUser.id, d);
+  closeModal('editShiftModal');
+  editingShiftId = null;
+  showToast('✅ Shift updated!');
+  refreshAll();
+  if (currentPage === 'shifts') renderCalendar();
 }
 
 function deleteShift(id) {
@@ -2541,6 +3563,7 @@ function deleteShift(id) {
   saveUserData(currentUser.id, d);
   showToast('Shift deleted');
   refreshAll();
+  if (currentPage === 'shifts') renderCalendar();
 }
 
 function typeLabel(type) {
@@ -2556,15 +3579,23 @@ function typeTagClass(type) {
 function renderShiftItem(s) {
   const d = new Date(s.date + 'T12:00:00');
   const dateStr = d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+  const basePay = s.truckMoney ? s.pay - s.truckMoney : s.pay;
+  const truckMoneyLine = s.truckMoney > 0
+    ? `<div style="font-size:11px;color:#ffd100;font-weight:700;">+$${s.truckMoney.toFixed(2)} truck money${s.fraction ? ' (' + s.fraction + ')' : ''}</div>`
+    : '';
   return `<div class="shift-item">
     <div class="shift-left">
       <div class="shift-date">${dateStr}</div>
       <div class="shift-type"><span class="tag ${typeTagClass(s.type)}">${typeLabel(s.type)}</span>${s.otHours > 0 ? ' <span class="tag" style="background:rgba(168,85,247,0.2);color:#a855f7;">OT</span>' : ''}${s.chartDay ? ' <span style="color:#388BFD;font-size:11px;font-weight:700;">$$ Chart</span>' : ''}${(s.start && (function(){ var p=s.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })()) ? ' <span class="tag" style="background:rgba(30,58,138,0.4);color:#93c5fd;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Night</span>' : ''}</div>
-      <div class="shift-hours">${s.start} – ${s.end} &nbsp;•&nbsp; ${s.hours}h ${s.route ? '&nbsp;•&nbsp; ' + s.route : ''}</div>
+      <div class="shift-hours">${s.start} – ${s.end} &nbsp;•&nbsp; ${s.hours}h ${(s.section || s.route) ? '&nbsp;•&nbsp; ' + [s.section, s.route].filter(Boolean).join(', ') : ''}</div>
+      ${truckMoneyLine}
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
       <div class="shift-pay">$${s.pay.toFixed(2)}</div>
-      <button class="delete-btn" onclick="deleteShift(${s.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      <div style="display:flex;gap:4px;">
+        <button class="delete-btn" onclick="openEditShift(${s.id})" style="color:var(--text3);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="delete-btn" onclick="deleteShift(${s.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      </div>
     </div>
   </div>`;
 }
@@ -2574,6 +3605,12 @@ let activeNoteFilter = 'general';
 
 function filterNotes(cat) {
   activeNoteFilter = cat;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('tasksPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
+  currentPage = 'tasks';
+  document.getElementById('fab').style.display = 'flex';
   document.querySelectorAll('.note-cat-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('cat-' + cat).classList.add('active');
   renderTasks();
@@ -2614,7 +3651,7 @@ function renderTasks() {
   const d = getUserData(currentUser.id);
   const el = document.getElementById('tasksList');
   document.getElementById('taskCount').textContent = d.tasks.length;
-  const filtered = activeNoteFilter === 'all' ? d.tasks : d.tasks.filter(t => t.priority && t.priority.toLowerCase().includes(activeNoteFilter));
+  const filtered = activeNoteFilter === 'all' ? d.tasks : d.tasks.filter(t => (t.priority || '📝 Notebook').toLowerCase().includes(activeNoteFilter));
   if (!filtered.length) {
     el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><p>No notes yet. Tap + to add one.</p></div>';
     return;
@@ -2622,7 +3659,7 @@ function renderTasks() {
   el.innerHTML = filtered.map(t => `
     <div class="task-item" style="align-items:flex-start;">
       <div style="flex:1">
-        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">${t.priority || '📝 General'}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">${t.priority || '📝 Notebook'}</div>
         <div class="task-text" style="white-space:pre-wrap;line-height:1.5;">${t.text}</div>
         ${t.due ? '<div style="font-size:12px;color:var(--text2);margin-top:6px;">📅 ' + new Date(t.due+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + '</div>' : ''}
       </div>
@@ -2631,6 +3668,31 @@ function renderTasks() {
 }
 
 // ── CALENDAR ──
+function getChipClass(type) {
+  const snowTypes = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  if (type === 'garbage' || type === 'paper_rear_loader' || type === 'metal_rear_loader') return 'chip-garbage';
+  if (type === 'recycling') return 'chip-recycling';
+  if (type === 'organics') return 'chip-organics';
+  if (type === 'holiday') return 'chip-holiday';
+  if (type === 'differential') return 'chip-differential';
+  if (snowTypes.indexOf(type) !== -1) return 'chip-snow';
+  return 'chip-default';
+}
+
+function getShiftLabel(type) {
+  const map = {
+    garbage: 'Garbage', recycling: 'Recycling', organics: 'Organics',
+    holiday: 'Holiday', differential: 'Night Diff',
+    paper_rear_loader: 'Paper RL', metal_rear_loader: 'Metal RL',
+    mechanical_broom: 'Mech Broom', relays: 'Relays', baskets: 'Baskets',
+    mlp: 'MLP', garage_utility: 'Garage Util', other: 'Other',
+    plow: 'Plow', salt_spreader: 'Salt', haulster: 'Haulster',
+    flow_dump: 'Flow & Dump', plow_chains: 'Plow+Chains', atv: 'ATV',
+    quality_of_life: 'QOL', other_snow: 'Snow'
+  };
+  return map[type] || type;
+}
+
 function renderCalendar() {
   const year = calDate.getFullYear();
   const month = calDate.getMonth();
@@ -2638,8 +3700,12 @@ function renderCalendar() {
   document.getElementById('calMonth').textContent = monthNames[month] + ' ' + year;
 
   const d = getUserData(currentUser.id);
-  const shiftDates = {};
-  d.shifts.forEach(s => { shiftDates[s.date] = s.type; });
+  // Build a map of date -> array of shifts
+  const shiftMap = {};
+  d.shifts.forEach(s => {
+    if (!shiftMap[s.date]) shiftMap[s.date] = [];
+    shiftMap[s.date].push(s);
+  });
 
   const grid = document.getElementById('calGrid');
   const days = ['Su','Mo','Tu','We','Th','Fr','Sa'];
@@ -2649,20 +3715,80 @@ function renderCalendar() {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const today = new Date();
 
-  for (let i = 0; i < firstDay; i++) html += '<div class="cal-day empty"></div>';
+  // Track week totals: weekRow -> {hrs, pay}
+  let weekRows = []; // array of arrays of day data
+  let currentWeek = [];
+  let weekHrs = 0, weekPay = 0;
+
+  // pad start
+  for (let i = 0; i < firstDay; i++) currentWeek.push(null);
+
   for (let day = 1; day <= daysInMonth; day++) {
     const dateStr = year + '-' + String(month+1).padStart(2,'0') + '-' + String(day).padStart(2,'0');
     const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
-    const shiftType = shiftDates[dateStr];
-    const cls = [
-      'cal-day',
-      isToday ? 'today' : '',
-      shiftType ? 'has-shift' : '',
-      shiftType === 'overtime' ? 'ot' : '',
-      shiftType === 'holiday' ? 'holiday' : ''
-    ].filter(Boolean).join(' ');
-    html += `<div class="${cls}" onclick="showCalDay('${dateStr}')">${day}</div>`;
+    const dayShifts = shiftMap[dateStr] || [];
+    const dayHrs = dayShifts.reduce((a,s) => a + (s.hours||0), 0);
+    const dayPay = dayShifts.reduce((a,s) => a + (s.pay||0), 0);
+    weekHrs += dayHrs;
+    weekPay += dayPay;
+    currentWeek.push({ day, dateStr, isToday, dayShifts, dayHrs, dayPay });
+
+    // End of week (Saturday = index 6)
+    const dayOfWeek = (firstDay + day - 1) % 7;
+    if (dayOfWeek === 6 || day === daysInMonth) {
+      weekRows.push({ days: [...currentWeek], totalHrs: weekHrs, totalPay: weekPay });
+      currentWeek = [];
+      weekHrs = 0;
+      weekPay = 0;
+    }
   }
+
+  // Render
+  for (const week of weekRows) {
+    // Pad end of last week
+    while (week.days.length < 7) week.days.push(null);
+
+    for (const cell of week.days) {
+      if (!cell) {
+        html += '<div class="cal-day empty"></div>';
+        continue;
+      }
+      const { day, dateStr, isToday, dayShifts, dayHrs, dayPay } = cell;
+      const cls = ['cal-day', isToday ? 'today' : ''].filter(Boolean).join(' ');
+
+      let chipsHtml = '';
+      const maxChips = 2;
+      dayShifts.slice(0, maxChips).forEach(s => {
+        const chipCls = getChipClass(s.type);
+        const label = getShiftLabel(s.type);
+        const otBadge = s.otHours > 0 ? '<span class="chip-ot-badge">OT</span>' : '';
+        const chartBadge = s.chartDay ? '<span class="chip-ot-badge" style="background:rgba(56,139,253,0.5);color:#82b8ff;">$$</span>' : '';
+        chipsHtml += `<div class="cal-shift-chip ${chipCls}">
+          <span class="chip-type">${label}${otBadge}${chartBadge}</span>
+          <span class="chip-hours">${s.hours}h &nbsp;$${Math.round(s.pay)}</span>
+        </div>`;
+      });
+      if (dayShifts.length > maxChips) {
+        chipsHtml += `<div style="font-size:8px;color:var(--text3);padding-left:2px;">+${dayShifts.length - maxChips} more</div>`;
+      }
+
+      html += `<div class="${cls}" onclick="showCalDay('${dateStr}')">
+        <div class="cal-day-num">${day}</div>
+        ${chipsHtml}
+      </div>`;
+    }
+
+    // Week total row
+    if (week.totalHrs > 0) {
+      html += `<div class="cal-week-total">
+        <span class="wt-hrs">${week.totalHrs}h</span>
+        <span class="wt-pay">$${Math.round(week.totalPay).toLocaleString()}</span>
+      </div>`;
+    } else {
+      html += `<div class="cal-week-total" style="opacity:0;pointer-events:none;">&nbsp;</div>`;
+    }
+  }
+
   grid.innerHTML = html;
 }
 
@@ -2670,18 +3796,32 @@ function showCalDay(dateStr) {
   const d = getUserData(currentUser.id);
   const shifts = d.shifts.filter(s => s.date === dateStr);
   const detail = document.getElementById('calDayDetail');
+  const noSel = document.getElementById('calNoSelection');
   const dt = new Date(dateStr + 'T12:00:00');
   document.getElementById('calDayTitle').textContent = dt.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
   if (!shifts.length) {
-    document.getElementById('calDayShifts').innerHTML = '<div style="color:var(--text2);font-size:14px;padding:12px 0">No shifts on this day.</div>';
+    document.getElementById('calDayShifts').innerHTML = '<div style="color:var(--text2);font-size:14px;padding:12px 0;">No shifts logged on this day.</div>';
   } else {
     document.getElementById('calDayShifts').innerHTML = shifts.map(renderShiftItem).join('');
   }
   detail.style.display = 'block';
+  if (noSel) noSel.style.display = 'none';
 }
 
-function prevMonth() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); document.getElementById('calDayDetail').style.display = 'none'; }
-function nextMonth() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); document.getElementById('calDayDetail').style.display = 'none'; }
+function prevMonth() {
+  calDate.setMonth(calDate.getMonth() - 1);
+  renderCalendar();
+  document.getElementById('calDayDetail').style.display = 'none';
+  const noSel = document.getElementById('calNoSelection');
+  if (noSel) noSel.style.display = 'block';
+}
+function nextMonth() {
+  calDate.setMonth(calDate.getMonth() + 1);
+  renderCalendar();
+  document.getElementById('calDayDetail').style.display = 'none';
+  const noSel = document.getElementById('calNoSelection');
+  if (noSel) noSel.style.display = 'block';
+}
 
 // ── PAY ──
 function populateWeeklyOptions() {
@@ -2690,21 +3830,24 @@ function populateWeeklyOptions() {
   const now = new Date();
   const year = now.getFullYear();
   const jan1 = new Date(year, 0, 1);
-  let monday = new Date(jan1);
-  const day = jan1.getDay();
-  monday.setDate(jan1.getDate() + (day === 0 ? 1 : day === 1 ? 0 : 8 - day));
+  // Find the first Sunday of or before Jan 1
+  let sunday = new Date(jan1);
+  sunday.setDate(jan1.getDate() - jan1.getDay());
+  // If that Sunday is in the previous year, advance one week
+  if (sunday.getFullYear() < year) sunday.setDate(sunday.getDate() + 7);
   group.innerHTML = '';
-  while (monday.getFullYear() === year) {
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
+  while (sunday.getFullYear() <= year) {
+    const saturday = new Date(sunday);
+    saturday.setDate(sunday.getDate() + 6);
     const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
-    const val = monday.toISOString().split('T')[0];
-    const isCurrentWeek = now >= monday && now <= sunday;
+    const val = sunday.toISOString().split('T')[0];
+    const isCurrentWeek = now >= sunday && now <= saturday;
     const opt = document.createElement('option');
     opt.value = 'specific:' + val;
-    opt.textContent = fmt(monday) + ' – ' + fmt(sunday) + (isCurrentWeek ? ' (current)' : '');
+    opt.textContent = fmt(sunday) + ' – ' + fmt(saturday) + (isCurrentWeek ? ' (current)' : '');
     group.appendChild(opt);
-    monday.setDate(monday.getDate() + 7);
+    sunday.setDate(sunday.getDate() + 7);
+    if (saturday.getFullYear() > year) break;
   }
 }
 
@@ -2714,13 +3857,13 @@ function getPayPeriodShifts(period) {
   return d.shifts.filter(s => {
     const sd = new Date(s.date + 'T12:00:00');
     if (period === 'week') {
-      const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+      const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay()); weekStart.setHours(0,0,0,0);
       return sd >= weekStart;
     }
     if (period.startsWith('specific:')) {
-      const monday = new Date(period.replace('specific:', '') + 'T12:00:00');
-      const sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
-      return sd >= monday && sd <= sunday;
+      const sunday = new Date(period.replace('specific:', '') + 'T12:00:00');
+      const saturday = new Date(sunday); saturday.setDate(sunday.getDate() + 6);
+      return sd >= sunday && sd <= saturday;
     }
     if (period === 'month') return sd.getMonth() === now.getMonth() && sd.getFullYear() === now.getFullYear();
     if (period === 'year') return sd.getFullYear() === now.getFullYear();
@@ -2728,35 +3871,111 @@ function getPayPeriodShifts(period) {
   });
 }
 
+function toggleTruckBreakdown() {
+  const list = document.getElementById('truckBreakdownList');
+  const chevron = document.getElementById('truckChevron');
+  const open = list.style.display === 'none';
+  list.style.display = open ? 'block' : 'none';
+  chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function populateTruckBreakdown(shifts) {
+  const list = document.getElementById('truckBreakdownList');
+  // Deduplicate by shift ID first
+  const seen = new Set();
+  let truckShifts = shifts.filter(s => {
+    if (!s.truckMoney || s.truckMoney <= 0) return false;
+    if (seen.has(s.id)) return false;
+    seen.add(s.id);
+    return true;
+  });
+
+  // One entry per day max — fractional wins over full truck
+  const byDate = {};
+  truckShifts.forEach(s => {
+    const existing = byDate[s.date];
+    const isFractional = s.fraction && s.fraction.trim() !== '';
+    if (!existing) {
+      byDate[s.date] = s;
+    } else {
+      const existingIsFractional = existing.fraction && existing.fraction.trim() !== '';
+      // Fractional always beats full truck
+      if (isFractional && !existingIsFractional) byDate[s.date] = s;
+    }
+  });
+  truckShifts = Object.values(byDate);
+  if (!truckShifts.length) {
+    list.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:4px 0;">No truck money this period.</div>';
+    return;
+  }
+  list.innerHTML = truckShifts.map(s => {
+    const dt = new Date(s.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+    const label = s.fraction || 'Full Truck';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--dark3);font-size:12px;">
+      <span style="color:var(--text2);">${dt} &nbsp;—&nbsp; <span style="color:#FFD100;font-weight:700;">${label}</span></span>
+      <span style="color:#FFD100;font-weight:700;">+$${s.truckMoney.toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+
+
 function updatePayPage() {
   const period = document.getElementById('payPeriodSelect').value;
   const shifts = getPayPeriodShifts(period);
   const rate = parseFloat(currentUser.rate);
 
-  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0;
+  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0, truckP = 0;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   const weeklyBase = rate / 52;
   const regH = period === 'week' ? 40 : period === 'month' ? Math.round(40 * 4.33) : period === 'year' ? 2080 : 40;
-  const regP = period === 'week' ? weeklyBase : period === 'month' ? weeklyBase * 4.33 : period === 'year' ? rate : weeklyBase;
+  let regP = period === 'week' ? weeklyBase : period === 'month' ? weeklyBase * 4.33 : period === 'year' ? rate : weeklyBase;
 
+  // Enforce one truck money entry per day — fractional beats full truck
+  const truckByDate = {};
   shifts.forEach(s => {
+    if (!s.truckMoney || s.truckMoney <= 0) return;
+    const isFractional = s.fraction && s.fraction.trim() !== '';
+    const existing = truckByDate[s.date];
+    if (!existing) { truckByDate[s.date] = s; }
+    else {
+      const existingIsFractional = existing.fraction && existing.fraction.trim() !== '';
+      if (isFractional && !existingIsFractional) truckByDate[s.date] = s;
+    }
+  });
+
+  // Remove full truck pay on dates where a fractional truck was also logged
+  const fractionalTruckDates = new Set(shifts.filter(s => s.fraction && s.fraction.trim() !== '' && s.truckMoney > 0).map(s => s.date));
+  shifts.forEach(s => {
+    const isFull = !s.fraction || s.fraction.trim() === '';
+    if (isFull && fractionalTruckDates.has(s.date)) return; // skip full truck on fractional days
     const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
-    const calculatedPay = s.chartDay && s.type ? (rate / 260) * 2 : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+    const calculatedPay = s.chartDay && s.type ? (rate / 260) * (snowFunctions.indexOf(s.type) !== -1 ? 1.5 : 2) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
     if (s.chartDay && s.type) { chartP += calculatedPay; }
     else if (s.type === 'holiday') { holP += calculatedPay; }
-    else if (s.type === 'differential') { diffP += calculatedPay; }
+    else if (s.type === 'differential') {
+      const basePay = (s.hours || 0) * (rate / 2080);
+      diffP += basePay * 0.10; // only the 10% extra
+      regP += basePay;         // base goes into regular
+    }
     else if (isSunday) { sundayP += calculatedPay; }
     else {
       otH += (s.otHours || 0);
       otP += (s.otHours || 0) * (rate / 2080) * 1.5;
     }
   });
+  // Truck money: one per day, fractional beats full
+  truckP = Object.values(truckByDate).reduce((a, s) => a + (s.truckMoney || 0), 0);
 
-  const total = regP + otP + holP + diffP + chartP + sundayP;
+  const total = regP + otP + holP + diffP + chartP + sundayP + truckP;
 
   document.getElementById('payRegHours').textContent = regH.toFixed(1) + 'h';
   document.getElementById('payRegPay').textContent = '$' + regP.toFixed(2);
   document.getElementById('payChartPay').textContent = '$' + chartP.toFixed(2);
+  document.getElementById('payTruckMoney').textContent = '$' + truckP.toFixed(2);
+  // Reset truck dropdown on period change
+  document.getElementById('truckBreakdownList').style.display = 'none';
+  document.getElementById('truckChevron').style.transform = '';
+  populateTruckBreakdown(shifts);
   document.getElementById('payOTHours').textContent = otH.toFixed(1) + 'h';
   document.getElementById('payOTPay').textContent = '$' + otP.toFixed(2);
   document.getElementById('payHolidayPay').textContent = '$' + holP.toFixed(2);
@@ -2808,7 +4027,7 @@ function refreshAll() {
   const d = getUserData(currentUser.id);
   const now = new Date();
 
-  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+  const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay()); weekStart.setHours(0,0,0,0);
   const weekShifts = d.shifts.filter(s => new Date(s.date + 'T12:00:00') >= weekStart);
   const monthShifts = d.shifts.filter(s => {
     const sd = new Date(s.date + 'T12:00:00');
@@ -2816,20 +4035,56 @@ function refreshAll() {
   });
 
   const weekH = weekShifts.reduce((a, s) => a + s.hours, 0);
-  const weekOT = weekShifts.filter(s => s.type === 'overtime').reduce((a, s) => a + s.hours, 0);
-  const weekP = 1349.41; // TEST VALUE - remove before release
-  const monthH = 76; // TEST VALUE - remove before release
-  const monthP = 6745; // TEST VALUE - remove before release
+  const rate = parseFloat(currentUser.rate) || 0;
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  const taxRate = currentUser.taxRate ? parseFloat(currentUser.taxRate) / 100 : 0.343;
+  const health = 7.42, disability = 18.89, pension = 40.48, unionAssn = 21.00;
+  const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
+
+  function calcWeekPay(shifts) {
+    let regP = rate / 52;
+    let otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0, truckP = 0;
+    shifts.forEach(s => {
+      const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
+      const calculatedPay = s.chartDay && s.type ? (rate / 260) * (snowFunctions.indexOf(s.type) !== -1 ? 1.5 : 2) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+      if (s.chartDay && s.type) chartP += calculatedPay;
+      else if (s.type === 'holiday') holP += calculatedPay;
+      else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); diffP += bp*0.10; regP += bp; }
+      else if (isSunday) sundayP += calculatedPay;
+      else otP += (s.otHours||0) * (rate/2080) * 1.5;
+      truckP += (s.truckMoney || 0);
+    });
+    return regP + otP + holP + diffP + chartP + sundayP + truckP;
+  }
+
+  const weekP = calcWeekPay(weekShifts);
+  const monthP = calcWeekPay(monthShifts) + (rate / 52) * (monthShifts.length === 0 ? 0 : 0); // use same logic
+  // Recalculate monthP properly
+  let monthPay = rate / 52 * 4.33;
+  let monthOtP = 0, monthHolP = 0, monthDiffP = 0, monthChartP = 0, monthSundayP = 0, monthTruckP = 0;
+  monthShifts.forEach(s => {
+    const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
+    const calculatedPay = s.chartDay && s.type ? (rate / 260) * (snowFunctions.indexOf(s.type) !== -1 ? 1.5 : 2) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+    if (s.chartDay && s.type) monthChartP += calculatedPay;
+    else if (s.type === 'holiday') monthHolP += calculatedPay;
+    else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); monthDiffP += bp*0.10; monthPay += bp; }
+    else if (isSunday) monthSundayP += calculatedPay;
+    else monthOtP += (s.otHours||0) * (rate/2080) * 1.5;
+    monthTruckP += (s.truckMoney || 0);
+  });
+  const monthTotal = monthPay + monthOtP + monthHolP + monthDiffP + monthChartP + monthSundayP + monthTruckP;
+  const monthH = monthShifts.reduce((a, s) => a + s.hours, 0);
+
+  const totalDeductions = (weekP * (0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331)) + health + disability + pension + unionAssn + (weekP * contrib457Pct / 100);
+  const netPay = Math.round(weekP - totalDeductions);
 
   document.getElementById('weekOT').textContent = '';
   document.getElementById('weekPay').textContent = '$' + Math.round(weekP).toLocaleString();
-  const testTaxRate = 0.343; // TEST VALUE - remove before release
-  const netPay = Math.round(weekP * (1 - testTaxRate));
-  document.getElementById('weekPayNetSub').textContent = 'est. net: $' + netPay.toLocaleString();
-  // Update est. net subtitle
+  const weekPayNetSubEl = document.getElementById('weekPayNetSub');
+  if (weekPayNetSubEl) weekPayNetSubEl.textContent = 'net: $' + netPay.toLocaleString();
   const weekPayCard = document.getElementById('weekPay').parentElement;
   const subDivs = weekPayCard.querySelectorAll('.card-sub');
-  if (subDivs[1]) subDivs[1].textContent = 'est. net: $' + netPay.toLocaleString();
+  if (subDivs[1]) subDivs[1].textContent = 'net: $' + netPay.toLocaleString();
   const compEl = document.getElementById('monthHours');
   compEl.textContent = Math.round(monthH);
   if (monthH >= 250) {
@@ -2849,8 +4104,8 @@ function refreshAll() {
     compEl.style.backgroundClip = '';
     compEl.style.color = monthH < 52 ? 'var(--red)' : 'var(--yellow)';
   }
-  document.getElementById('monthPay').textContent = '$' + monthP.toLocaleString();
-  document.getElementById('monthPayNet').textContent = 'est. net: $' + Math.round(monthP * (1 - 0.343)).toLocaleString();
+  document.getElementById('monthPay').textContent = '$' + Math.round(monthTotal).toLocaleString();
+  document.getElementById('monthPayNet').textContent = 'net: $' + Math.round(monthTotal * (1 - (taxRate + 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331))).toLocaleString();
   const monthShiftsEl = document.getElementById('monthShifts');
   if (monthShiftsEl) monthShiftsEl.textContent = monthShifts.length;
 
@@ -2871,6 +4126,8 @@ function refreshAll() {
   if (profileShiftEl) profileShiftEl.textContent = d.shifts.length;
   renderWeeklyList();
   renderTasks();
+  // Keep pay breakdown in sync
+  if (document.getElementById('payPeriodSelect')) updatePayPage();
 }
 
 // ── UPDATE RATE ──
@@ -2945,6 +4202,7 @@ function updateProfile() {
   document.getElementById('update457').value = '';
   document.getElementById('updateProbation').value = '';
   showToast('✅ Profile updated!');
+  if (document.getElementById('payPeriodSelect')) updatePayPage();
 }
 
 // ── TOAST ──
@@ -2969,32 +4227,27 @@ window.addEventListener('click', e => {
   if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
 });
 
-// ⚠️ BYPASS HANDLED AT TOP OF SCRIPT ⚠️
-
 // ── BYPASS LOGIN ⚠️ REMOVE BEFORE SHARING ⚠️ ──
-var _T = { name: 'T. Developer', id: 'test@santrack.app', district: 'BKN1', title: 'Sanitation Worker', rate: 50321, pass: 'test123', probation: 'yes', hireDate: '2025-06-23', badge: '123456' };
+var _T = { name: 'T. Developer', id: 'test@santrack.app', district: 'BKN1', title: 'Sanitation Worker', rate: 50128, pass: 'test123', probation: 'yes', hireDate: '2025-06-23', badge: '123456' };
 var _u = getUsers(); _u[_T.id] = _T; saveUsers(_u);
 localStorage.setItem('santrack_welcomed', 'true');
+localStorage.setItem('dsny_session', _T.id);
 currentUser = _T;
 
-// Add test shifts for this week
-var _d = getUserData(_T.id);
-var _now = new Date();
-var _mon = new Date(_now); _mon.setDate(_now.getDate() - (_now.getDay() === 0 ? 6 : _now.getDay() - 1));
-function _ds(offset) { var d = new Date(_mon); d.setDate(_mon.getDate()+offset); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-if (true) {
-  _d.shifts = [
-    { id: 7, date: _ds(-1), type: 'garbage', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 290.31, fraction: '', chartDay: false, route: '', notes: '' },
-    { id: 1, date: _ds(0), type: 'recycling', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 193.54, fraction: '', chartDay: false, route: '', notes: '' },
-    { id: 2, date: _ds(1), type: 'recycling', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 387.08, fraction: '1/2 Recycling to MLP', chartDay: true, route: '', notes: '' },
-    { id: 3, date: _ds(2), type: 'organics', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 193.54, fraction: '', chartDay: false, route: '', notes: '' },
-    { id: 4, date: _ds(3), type: 'garbage', start: '06:00', end: '22:00', hours: 16, regHours: 8, otHours: 8, pay: 483.85, fraction: '', chartDay: false, route: '', notes: '' },
-    { id: 5, date: _ds(4), type: 'differential', start: '16:00', end: '00:00', hours: 8, regHours: 8, otHours: 0, pay: 212.88, fraction: '', chartDay: false, route: '', notes: '' },
-    { id: 6, date: _ds(5), type: 'holiday', start: '06:00', end: '14:00', hours: 8, regHours: 8, otHours: 0, pay: 387.08, fraction: '', chartDay: false, route: '', notes: '' },
-  ];
-  saveUserData(_T.id, _d);
-}
-startApp();
+// ── CLEAR TEST SHIFTS (one-time wipe) ──
+var _clearData = getUserData(_T.id);
+_clearData.shifts = [];
+saveUserData(_T.id, _clearData);
+
+// Force screen switch immediately
+document.getElementById('loginScreen').classList.remove('active');
+document.getElementById('appScreen').classList.add('active');
+
+// Run full app init after DOM settles
+window.addEventListener('load', function() {
+  currentUser = _T;
+  startApp();
+});
 
 </script>
 </body>
