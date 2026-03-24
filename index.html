@@ -184,7 +184,7 @@
   }
   .header-logo {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px;
+    font-size: 32px;
     font-weight: 800;
     letter-spacing: 1px;
     color: #FFFFFF;
@@ -354,66 +354,74 @@
     justify-content: space-between;
     margin-bottom: 12px;
   }
-  .cal-nav { background: var(--dark3); border: 1px solid var(--dark4); border-radius: 8px; color: var(--text); font-size: 18px; cursor: pointer; padding: 6px 12px; }
-  .cal-month { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; }
-  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+  .cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 4px 6px;
+  }
+  .cal-nav { background: var(--dark3); border: 1px solid var(--dark4); border-radius: 8px; color: var(--text); font-size: 18px; cursor: pointer; padding: 2px 10px; }
+  .cal-month { font-family: 'Barlow Condensed', sans-serif; font-size: 27px; font-weight: 800; }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; row-gap: 0; }
   .cal-day-name {
     text-align: center;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
-    color: var(--text3);
+    color: var(--text2);
     text-transform: uppercase;
-    padding: 4px 0 6px;
+    padding: 2px 0 4px;
     letter-spacing: 0.3px;
   }
   .cal-day {
-    min-height: 64px;
+    min-height: 0;
+    aspect-ratio: 1 / 1.6;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    border-radius: 8px;
+    border-radius: 0;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     transition: all 0.15s;
     position: relative;
     overflow: hidden;
-    padding: 5px 4px 4px;
+    padding: 4px 3px 3px;
     background: var(--dark3);
-    border: 1px solid transparent;
+    border: 1px solid var(--dark4);
+    margin: -0.5px;
   }
-  .cal-day:hover { border-color: var(--dark4); filter: brightness(1.15); }
-  .cal-day.empty { cursor: default; background: transparent; border-color: transparent; min-height: 64px; }
-  .cal-day.today { border-color: var(--green) !important; box-shadow: 0 0 0 1px var(--green); }
-  .cal-day.other-month { opacity: 0.4; }
+  .cal-day:hover { border-color: var(--green); filter: brightness(1.2); z-index: 1; }
+  .cal-day.empty { cursor: default; background: transparent; border-color: transparent; aspect-ratio: 1 / 1.6; margin: -0.5px; }
+  .cal-day.today { border-color: var(--green) !important; box-shadow: 0 0 0 1px var(--green); z-index: 1; }
+  .cal-day.other-month { opacity: 0.35; }
   .cal-day-num {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px;
-    font-weight: 800;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
     color: #fff;
     line-height: 1;
-    margin-bottom: 3px;
-    padding-left: 2px;
+    margin-bottom: 2px;
+    padding-left: 1px;
   }
   .cal-day.today .cal-day-num {
     color: var(--green);
   }
   .cal-shift-chip {
-    border-radius: 4px;
-    padding: 2px 3px;
-    font-size: 9px;
+    border-radius: 3px;
+    padding: 1px 2px;
+    font-size: 7px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     line-height: 1.3;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     display: flex;
     flex-direction: column;
-    gap: 0px;
+    gap: 0;
   }
-  .cal-shift-chip .chip-type { font-size: 9px; font-weight: 800; }
-  .cal-shift-chip .chip-hours { font-size: 8px; font-weight: 600; opacity: 0.85; }
-  .cal-shift-chip .chip-pay { font-size: 8px; font-weight: 700; opacity: 0.95; }
+  .cal-shift-chip .chip-type { font-size: 7px; font-weight: 800; }
+  .cal-shift-chip .chip-hours { font-size: 6px; font-weight: 600; opacity: 0.9; }
+  .cal-shift-chip .chip-pay { font-size: 6px; font-weight: 700; opacity: 1; }
 
   /* Shift type colors */
   .chip-garbage    { background: rgba(66,130,71,0.35);  color: #7dd87f; }
@@ -443,13 +451,14 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    font-size: 10px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
     font-weight: 700;
-    color: var(--text3);
-    padding: 2px 4px 4px;
-    gap: 8px;
-    border-bottom: 1px solid var(--dark3);
-    margin-bottom: 2px;
+    color: var(--text2);
+    padding: 0 6px;
+    gap: 10px;
+    border: none;
+    margin: -0.5px 0;
   }
   .cal-week-total .wt-hrs { color: var(--green); }
   .cal-week-total .wt-pay { color: #fff; }
@@ -904,10 +913,9 @@
 <!-- MAIN APP -->
 <div id="appScreen" class="screen">
   <div class="app-header">
-    <div class="header-logo">San<span>Track</span></div>
-    <div class="header-user">
-      <div class="avatar" id="headerAvatar">JD</div>
-      <button class="logout-btn" onclick="logout()" title="Sign out"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64A9 9 0 1 1 5.64 6.64"/><line x1="12" y1="2" x2="12" y2="12"/></svg></button>
+    <div style="display:flex;align-items:baseline;gap:8px;">
+      <div class="header-logo">San<span>Track</span></div>
+      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.4</div>
     </div>
   </div>
 
@@ -934,14 +942,16 @@
           <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="monthPay">$0</div>
           <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="monthPayNet">net: —</div>
         </div>
-        <div class="card" style="padding:8px 6px;text-align:center;">
+        <div class="card" style="padding:8px 6px;text-align:center;position:relative;overflow:hidden;">
           <div class="card-title" style="font-size:9px;text-align:center;margin-bottom:2px;">Comp Hours</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:40px;font-weight:700;text-align:center;line-height:1;" id="monthHours">0</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:40px;font-weight:700;text-align:center;line-height:1;opacity:0.3;" id="monthHours">0</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--green);padding:3px 0;font-family:'Barlow',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.3px;color:#ffffff;text-transform:uppercase;">Coming Soon</div>
         </div>
-        <div class="card" style="padding:8px 6px;text-align:center;">
+        <div class="card" style="padding:8px 6px;text-align:center;position:relative;overflow:hidden;">
           <div class="card-title" style="font-size:9px;text-align:center;">Next Chart</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:22px;font-weight:700;text-align:center;color:#388BFD;line-height:1.1;" id="weekHours">04/01</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:22px;font-weight:700;text-align:center;color:#388BFD;line-height:1.1;opacity:0.3;" id="weekHours">04/01</div>
           <div class="card-sub" id="weekOT" style="font-size:8px"></div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--green);padding:3px 0;font-family:'Barlow',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.3px;color:#ffffff;text-transform:uppercase;">Coming Soon</div>
         </div>
       </div>
 
@@ -960,11 +970,13 @@
     </div>
 
     <!-- SHIFTS PAGE -->
-    <div id="shiftsPage" class="page">
-      <div class="section-title">My Shifts <span class="badge" id="shiftCount">0</span></div>
+    <div id="shiftsPage" class="page" style="padding:6px 8px 0;">
+      <div style="text-align:center;margin-bottom:8px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffffff;display:inline-block;padding-bottom:4px;border-bottom:2px solid var(--green);">Shift Calendar</div>
+      </div>
 
       <!-- Calendar inside shifts -->
-      <div class="card" style="margin-bottom:16px;">
+      <div class="card" style="margin-bottom:8px;padding:4px 6px;">
         <div class="cal-header">
           <button class="cal-nav" onclick="prevMonth()">&#8249;</button>
           <div class="cal-month" id="calMonth">March 2026</div>
@@ -974,7 +986,10 @@
       </div>
 
       <div id="calDayDetail" style="display:none;margin-bottom:16px;">
-        <div class="section-title" id="calDayTitle" style="margin-bottom:12px;"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div class="section-title" id="calDayTitle" style="margin-bottom:0;font-size:15px;"></div>
+          <button id="calLogShiftBtn" onclick="openShiftForCalDay()" style="background:var(--green);border:none;border-radius:8px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:6px 14px;cursor:pointer;letter-spacing:0.5px;">+ Log Shift</button>
+        </div>
         <div id="calDayShifts"></div>
       </div>
 
@@ -1008,7 +1023,14 @@
         </div>
         <div class="pay-row"><span class="label">Regular Hours</span><span class="amount" id="payRegHours">0h</span></div>
         <div class="pay-row"><span class="label">Regular Pay</span><span class="amount" id="payRegPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Chart Day Pay (2x / 1.5x snow)</span><span class="amount" style="color:#388BFD" id="payChartPay">$0.00</span></div>
+        <div class="pay-row" id="payChartRow" style="cursor:pointer;user-select:none;" onclick="toggleChartBreakdown()">
+          <span class="label" style="display:flex;align-items:center;gap:6px;">
+            Chart Day Pay (2x / 1.5x snow)
+            <svg id="chartChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="amount" style="color:#388BFD" id="payChartPay">$0.00</span>
+        </div>
+        <div id="chartBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
         <div class="pay-row" id="payTruckMoneyRow" style="cursor:pointer;user-select:none;" onclick="toggleTruckBreakdown()">
           <span class="label" style="display:flex;align-items:center;gap:6px;">
             Truck Money
@@ -1018,10 +1040,17 @@
         </div>
         <div id="truckBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
         <div class="pay-row"><span class="label">Overtime Hours</span><span class="amount" style="color:#a855f7" id="payOTHours">0h</span></div>
-        <div class="pay-row"><span class="label">Overtime Pay (1.5x)</span><span class="amount" style="color:#a855f7" id="payOTPay">$0.00</span></div>
+        <div class="pay-row" id="payOTRow" style="cursor:pointer;user-select:none;" onclick="toggleOTBreakdown()">
+          <span class="label" style="display:flex;align-items:center;gap:6px;">
+            Overtime Pay
+            <svg id="otChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="amount" style="color:#a855f7" id="payOTPay">$0.00</span>
+        </div>
+        <div id="otBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
         <div class="pay-row"><span class="label">Holiday Pay (2x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay">$0.00</span></div>
         <div class="pay-row"><span class="label">Night Differential (+10%)</span><span class="amount" style="color:var(--orange)" id="payDiffPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Sunday Pay (1.5x / 2x snow)</span><span class="amount" style="color:var(--red)" id="paySundayPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Sunday Pay (2x)</span><span class="amount" style="color:var(--red)" id="paySundayPay">$0.00</span></div>
         <div class="pay-total">
           <span class="label">Gross Pay</span>
           <span class="amount" id="payTotal">$0.00</span>
@@ -1464,8 +1493,7 @@
   </nav>
 </div>
 
-<!-- FAB -->
-<button class="fab" id="fab" onclick="openFab()">+</button>
+<!-- FAB removed -->
 
 <!-- ADD SHIFT MODAL -->
 <div class="modal-overlay" id="shiftModal">
@@ -2000,7 +2028,8 @@ function startApp() {
   document.getElementById('appScreen').classList.add('active');
 
   const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
-  document.getElementById('headerAvatar').textContent = initials;
+  const avatarEl = document.getElementById('headerAvatar');
+  if (avatarEl) avatarEl.textContent = initials;
   document.getElementById('avatarGarage').textContent = currentUser.district || '—';
   document.getElementById('profileName').textContent = currentUser.name;
   document.getElementById('profileDistrict').textContent = currentUser.district;
@@ -2119,9 +2148,13 @@ function renderWeeklyList() {
     if (shift) {
       var detail = '';
       if (shift.start && shift.end) detail += shift.start + '–' + shift.end;
-      if (shift.type) detail += (detail ? ' • ' : '') + shift.type.replace(/_/g,' ');
+      if (shift.location) detail += (detail ? ' • ' : '') + shift.location;
+      else if (currentUser.district) detail += (detail ? ' • ' : '') + currentUser.district;
+      if (shift.type && !shift.fraction) detail += (detail ? ' • ' : '') + getShiftLabel(shift.type);
       if (shift.fraction) detail += (detail ? ' • ' : '') + shift.fraction;
-      if (detail) row += '<div style="font-size:10px;color:var(--text2);">' + detail + '</div>';
+      if (shift.partner) detail += ' • ' + shift.partner;
+      if (detail) row += '<div style="font-size:13px;color:var(--text2);">' + detail + '</div>';
+
       var tags = '';
       var _ns = shift.start ? (function(){ var p=shift.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })() : false;
       if (shift.otHours > 0) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(168,85,247,0.2);color:#a855f7;margin-right:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>OT</span>';
@@ -2131,7 +2164,7 @@ function renderWeeklyList() {
     }
     row += '</div></div>';
     if (shift && shift.pay > 0) {
-      row += '<div style="text-align:right;"><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:16px;font-weight:800;color:var(--green);">$' + shift.pay.toFixed(2) + '</div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div></div>';
+      row += '<div style="text-align:right;"><div style="font-family:\'Barlow\',sans-serif;font-size:16px;font-weight:700;"><span style="color:var(--green);">$</span><span style="color:#ffffff;">' + shift.pay.toFixed(2) + '</span></div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div></div>';
     } else if (!shift) {
       row += '<div style="font-size:10px;color:' + (isPast ? 'var(--text3)' : 'var(--text2)') + ';">' + (isPast ? 'No shift' : 'Tap to log') + '</div>';
     }
@@ -2158,7 +2191,7 @@ function showAchievements() {
   currentPage = 'achievements';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('achievementsPage').classList.add('active');
-  document.getElementById('fab').style.display = 'none';
+  
   renderAchievements();
 }
 
@@ -2723,7 +2756,7 @@ function showRoutesPage() {
   currentPage = 'routes';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('routesPage').classList.add('active');
-  document.getElementById('fab').style.display = 'flex';
+  
   renderRoutes();
 }
 
@@ -2733,7 +2766,7 @@ function showCareerStatsPage() {
   document.getElementById('careerStatsPage').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-tasks').classList.add('active');
-  document.getElementById('fab').style.display = 'none';
+  
   renderCareerStats();
 }
 
@@ -2842,7 +2875,7 @@ function showSeniorityPage() {
   currentPage = 'seniority';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('seniorityPage').classList.add('active');
-  document.getElementById('fab').style.display = 'none';
+  
   renderSeniorityList();
 }
 
@@ -3284,9 +3317,6 @@ function showPage(page) {
   const navEl = document.getElementById('nav-' + page);
   if (navEl) navEl.classList.add('active');
 
-  const fab = document.getElementById('fab');
-  fab.style.display = (page === 'profile' || page === 'pay') ? 'none' : 'flex';
-
   if (page === 'shifts') renderCalendar();
   if (page === 'pay') { populateWeeklyOptions(); updatePayPage(); }
 }
@@ -3337,12 +3367,10 @@ function calcShiftPay(shift, rate) {
   if (shift.type === 'holiday') return h * hourly * 2;
   if (shift.type === 'differential') return h * hourly * 1.10;
 
-  // Sunday premium
+  // Sunday premium — always 2x
   if (isSunday) {
-    const isSnow = snowFunctions.indexOf(shift.type) !== -1;
-    const multiplier = isSnow ? 2.0 : 1.5;
-    if (h > 8) return (8 * hourly * multiplier) + ((h - 8) * hourly * 1.5);
-    return h * hourly * multiplier;
+    if (h > 8) return (8 * hourly * 2) + ((h - 8) * hourly * 1.5);
+    return h * hourly * 2;
   }
 
   // OT starts at hour 9
@@ -3353,17 +3381,30 @@ function calcShiftPay(shift, rate) {
 const TRUCK_MONEY_ELIGIBLE = ['garbage','recycling','organics','paper_rear_loader','metal_rear_loader'];
 const TRUCK_MONEY_FULL = 81.00;
 
-function calcTruckMoney(type, fraction) {
+function calcChartDayPay(type, hours, rate) {
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  const isSnow = snowFunctions.indexOf(type) !== -1;
+  const chartMultiplier = isSnow ? 1.5 : 2;
+  const hourly = rate / 2080;
+  // All hours on a chart day pay at the chart multiplier rate
+  const otHours = Math.max((hours || 0) - 8, 0);
+  const chartBase = (rate / 260) * chartMultiplier;
+  const otPay = otHours * hourly * chartMultiplier;
+  return chartBase + otPay;
+}
+
+function calcTruckMoney(type, fraction, chartDay, isSnow) {
   if (!type || TRUCK_MONEY_ELIGIBLE.indexOf(type) === -1) return 0;
+  const multiplier = chartDay ? (isSnow ? 1.5 : 2) : 1;
   // If a fractional truck is selected, it OVERRIDES full truck — can't have both
   if (fraction) {
     const lower = fraction.toLowerCase();
-    if (lower.includes('1/4')) return TRUCK_MONEY_FULL * 0.25;
-    if (lower.includes('1/2') || lower.includes('2/4')) return TRUCK_MONEY_FULL * 0.50;
-    if (lower.includes('3/4')) return TRUCK_MONEY_FULL * 0.75;
+    if (lower.includes('1/4')) return TRUCK_MONEY_FULL * 0.25 * multiplier;
+    if (lower.includes('1/2') || lower.includes('2/4')) return TRUCK_MONEY_FULL * 0.50 * multiplier;
+    if (lower.includes('3/4')) return TRUCK_MONEY_FULL * 0.75 * multiplier;
   }
   // No fraction selected = full truck
-  return TRUCK_MONEY_FULL;
+  return TRUCK_MONEY_FULL * multiplier;
 }
 
 function addShift() {
@@ -3387,8 +3428,8 @@ function addShift() {
   const otHours = Math.max(hours - 8, 0);
   let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
-  if (start && end && chartDay && type) pay = (currentUser.rate / 260) * (snowFunctions.indexOf(type) !== -1 ? 1.5 : 2);
-  const truckMoney = (start && end) ? calcTruckMoney(type, fraction) : 0;
+  if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, currentUser.rate);
+  const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   pay += truckMoney;
 
   const d = getUserData(currentUser.id);
@@ -3397,9 +3438,8 @@ function addShift() {
   closeModal('shiftModal');
   showToast('✅ Shift logged!');
   refreshAll();
+  if (currentPage === 'shifts') { renderCalendar(); if (calSelectedDate) showCalDay(calSelectedDate); }
 }
-
-let editingShiftId = null;
 
 function editSelectStartTime(time) {
   document.getElementById('editShiftStart').value = time;
@@ -3544,8 +3584,8 @@ function saveEditShift() {
   const otHours = Math.max(hours - 8, 0);
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
-  if (start && end && chartDay && type) pay = (currentUser.rate / 260) * (snowFunctions.indexOf(type) !== -1 ? 1.5 : 2);
-  const truckMoney = (start && end) ? calcTruckMoney(type, fraction) : 0;
+  if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, currentUser.rate);
+  const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   pay += truckMoney;
 
   d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, truckDowned, notes, hours, regHours, otHours, pay, truckMoney };
@@ -3554,7 +3594,7 @@ function saveEditShift() {
   editingShiftId = null;
   showToast('✅ Shift updated!');
   refreshAll();
-  if (currentPage === 'shifts') renderCalendar();
+  if (currentPage === 'shifts') { renderCalendar(); if (calSelectedDate) showCalDay(calSelectedDate); }
 }
 
 function deleteShift(id) {
@@ -3563,7 +3603,7 @@ function deleteShift(id) {
   saveUserData(currentUser.id, d);
   showToast('Shift deleted');
   refreshAll();
-  if (currentPage === 'shifts') renderCalendar();
+  if (currentPage === 'shifts') { renderCalendar(); if (calSelectedDate) showCalDay(calSelectedDate); }
 }
 
 function typeLabel(type) {
@@ -3610,7 +3650,7 @@ function filterNotes(cat) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-tasks').classList.add('active');
   currentPage = 'tasks';
-  document.getElementById('fab').style.display = 'flex';
+  
   document.querySelectorAll('.note-cat-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('cat-' + cat).classList.add('active');
   renderTasks();
@@ -3754,9 +3794,16 @@ function renderCalendar() {
         continue;
       }
       const { day, dateStr, isToday, dayShifts, dayHrs, dayPay } = cell;
+      const isSundayCell = new Date(dateStr + 'T12:00:00').getDay() === 0;
+      const sundayStyle = isSundayCell ? ' style="background:rgba(248,81,73,0.12);"' : '';
       const cls = ['cal-day', isToday ? 'today' : ''].filter(Boolean).join(' ');
 
       let chipsHtml = '';
+      // Special annual dates
+      const mmdd = dateStr.slice(5); // MM-DD
+      if (mmdd === '03-29') {
+        chipsHtml += `<div style="font-size:7px;font-weight:600;color:#ffffff;line-height:1.2;padding:1px 2px;">Night Plow Ends</div>`;
+      }
       const maxChips = 2;
       dayShifts.slice(0, maxChips).forEach(s => {
         const chipCls = getChipClass(s.type);
@@ -3772,7 +3819,7 @@ function renderCalendar() {
         chipsHtml += `<div style="font-size:8px;color:var(--text3);padding-left:2px;">+${dayShifts.length - maxChips} more</div>`;
       }
 
-      html += `<div class="${cls}" onclick="showCalDay('${dateStr}')">
+      html += `<div class="${cls}"${sundayStyle} onclick="showCalDay('${dateStr}')">
         <div class="cal-day-num">${day}</div>
         ${chipsHtml}
       </div>`;
@@ -3792,7 +3839,10 @@ function renderCalendar() {
   grid.innerHTML = html;
 }
 
+let calSelectedDate = null;
+
 function showCalDay(dateStr) {
+  calSelectedDate = dateStr;
   const d = getUserData(currentUser.id);
   const shifts = d.shifts.filter(s => s.date === dateStr);
   const detail = document.getElementById('calDayDetail');
@@ -3800,12 +3850,17 @@ function showCalDay(dateStr) {
   const dt = new Date(dateStr + 'T12:00:00');
   document.getElementById('calDayTitle').textContent = dt.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
   if (!shifts.length) {
-    document.getElementById('calDayShifts').innerHTML = '<div style="color:var(--text2);font-size:14px;padding:12px 0;">No shifts logged on this day.</div>';
+    document.getElementById('calDayShifts').innerHTML = '<div style="color:var(--text2);font-size:14px;padding:8px 0;">No shifts logged on this day.</div>';
   } else {
     document.getElementById('calDayShifts').innerHTML = shifts.map(renderShiftItem).join('');
   }
   detail.style.display = 'block';
   if (noSel) noSel.style.display = 'none';
+}
+
+function openShiftForCalDay() {
+  if (!calSelectedDate) return;
+  openShiftForDay(calSelectedDate);
 }
 
 function prevMonth() {
@@ -3871,6 +3926,73 @@ function getPayPeriodShifts(period) {
   });
 }
 
+function toggleChartBreakdown() {
+  const list = document.getElementById('chartBreakdownList');
+  const chevron = document.getElementById('chartChevron');
+  const open = list.style.display === 'none';
+  list.style.display = open ? 'block' : 'none';
+  chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function populateChartBreakdown(shifts, period) {
+  const list = document.getElementById('chartBreakdownList');
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  const seen = new Set();
+  const chartShifts = shifts.filter(s => {
+    if (!s.chartDay || !s.type) return false;
+    if (seen.has(s.date)) return false;
+    seen.add(s.date);
+    return true;
+  });
+  if (!chartShifts.length) {
+    let msg = 'Chart was not worked this week.';
+    if (period === 'month') msg = 'Chart was not worked this month.';
+    else if (period === 'year') msg = 'Chart was not worked this year.';
+    else if (period === 'all') msg = 'Chart Day was never worked.';
+    list.innerHTML = `<div style="font-size:12px;color:var(--text3);padding:4px 0;">${msg}</div>`;
+    return;
+  }
+  list.innerHTML = chartShifts.map(s => {
+    const dt = new Date(s.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+    const isSnow = snowFunctions.indexOf(s.type) !== -1;
+    const label = isSnow ? '1.5x Snow Chart' : '2x Chart Day';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--dark3);font-size:12px;">
+      <span style="color:var(--text2);">${dt} &nbsp;—&nbsp; <span style="color:#388BFD;font-weight:700;">${label}</span></span>
+      <span style="color:#388BFD;font-weight:700;">+$${(s.basePay || 0).toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+
+function toggleOTBreakdown() {
+  const list = document.getElementById('otBreakdownList');
+  const chevron = document.getElementById('otChevron');
+  const open = list.style.display === 'none';
+  list.style.display = open ? 'block' : 'none';
+  chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function populateOTBreakdown(shifts, rate) {
+  const list = document.getElementById('otBreakdownList');
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  const otShifts = shifts.filter(s => (s.otHours || 0) > 0);
+  if (!otShifts.length) {
+    list.innerHTML = '<div style="font-size:12px;color:var(--text3);padding:4px 0;">No overtime this period.</div>';
+    return;
+  }
+  list.innerHTML = otShifts.map(s => {
+    const dt = new Date(s.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+    const isChart = s.chartDay;
+    const isSnow = snowFunctions.indexOf(s.type) !== -1;
+    const mult = isChart ? (isSnow ? 1.5 : 2) : 1.5;
+    const otPay = (s.otHours || 0) * (rate / 2080) * mult;
+    const label = isChart ? (isSnow ? '1.5x Chart OT' : '2x Chart OT') : '1.5x OT';
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--dark3);font-size:12px;">
+      <span style="color:var(--text2);">${dt} &nbsp;—&nbsp; <span style="color:#a855f7;font-weight:700;">${s.otHours}h ${label}</span></span>
+      <span style="color:#a855f7;font-weight:700;">+$${otPay.toFixed(2)}</span>
+    </div>`;
+  }).join('');
+}
+
 function toggleTruckBreakdown() {
   const list = document.getElementById('truckBreakdownList');
   const chevron = document.getElementById('truckChevron');
@@ -3910,7 +4032,7 @@ function populateTruckBreakdown(shifts) {
   }
   list.innerHTML = truckShifts.map(s => {
     const dt = new Date(s.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
-    const label = s.fraction || 'Full Truck';
+    const label = s.chartDay ? 'Chart Truck Money' : (s.fraction || 'Full Truck');
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--dark3);font-size:12px;">
       <span style="color:var(--text2);">${dt} &nbsp;—&nbsp; <span style="color:#FFD100;font-weight:700;">${label}</span></span>
       <span style="color:#FFD100;font-weight:700;">+$${s.truckMoney.toFixed(2)}</span>
@@ -3924,11 +4046,11 @@ function updatePayPage() {
   const shifts = getPayPeriodShifts(period);
   const rate = parseFloat(currentUser.rate);
 
-  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0, truckP = 0;
+  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, chartOtH = 0, chartOtP = 0, sundayP = 0, truckP = 0;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   const weeklyBase = rate / 52;
-  const regH = period === 'week' ? 40 : period === 'month' ? Math.round(40 * 4.33) : period === 'year' ? 2080 : 40;
-  let regP = period === 'week' ? weeklyBase : period === 'month' ? weeklyBase * 4.33 : period === 'year' ? rate : weeklyBase;
+  let regH = 0;
+  let regP = 0;
 
   // Enforce one truck money entry per day — fractional beats full truck
   const truckByDate = {};
@@ -3943,14 +4065,28 @@ function updatePayPage() {
     }
   });
 
+  // Deduplicate chart day shifts by date
+  const chartDayDates = new Set();
   // Remove full truck pay on dates where a fractional truck was also logged
   const fractionalTruckDates = new Set(shifts.filter(s => s.fraction && s.fraction.trim() !== '' && s.truckMoney > 0).map(s => s.date));
   shifts.forEach(s => {
     const isFull = !s.fraction || s.fraction.trim() === '';
     if (isFull && fractionalTruckDates.has(s.date)) return; // skip full truck on fractional days
     const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
-    const calculatedPay = s.chartDay && s.type ? (rate / 260) * (snowFunctions.indexOf(s.type) !== -1 ? 1.5 : 2) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
-    if (s.chartDay && s.type) { chartP += calculatedPay; }
+    const calculatedPay = s.chartDay && s.type ? (s.basePay || calcChartDayPay(s.type, s.hours, rate)) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+    if (s.chartDay && s.type) {
+      if (!chartDayDates.has(s.date)) {
+        const snowFunctions2 = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+        const chartMult = snowFunctions2.indexOf(s.type) !== -1 ? 1.5 : 2;
+        const sOtH = s.otHours || 0;
+        const sOtP = sOtH * (rate / 2080) * chartMult;
+        chartP += calculatedPay;
+        chartOtH += sOtH;
+        chartOtP += sOtP;
+        chartDayDates.add(s.date);
+        otH += sOtH;
+      }
+    }
     else if (s.type === 'holiday') { holP += calculatedPay; }
     else if (s.type === 'differential') {
       const basePay = (s.hours || 0) * (rate / 2080);
@@ -3959,6 +4095,9 @@ function updatePayPage() {
     }
     else if (isSunday) { sundayP += calculatedPay; }
     else {
+      const shiftRegHours = Math.min(s.hours || 0, 8);
+      regH += shiftRegHours;
+      regP += shiftRegHours * (rate / 2080);
       otH += (s.otHours || 0);
       otP += (s.otHours || 0) * (rate / 2080) * 1.5;
     }
@@ -3971,13 +4110,19 @@ function updatePayPage() {
   document.getElementById('payRegHours').textContent = regH.toFixed(1) + 'h';
   document.getElementById('payRegPay').textContent = '$' + regP.toFixed(2);
   document.getElementById('payChartPay').textContent = '$' + chartP.toFixed(2);
+  document.getElementById('chartBreakdownList').style.display = 'none';
+  document.getElementById('chartChevron').style.transform = '';
+  populateChartBreakdown(shifts, period);
   document.getElementById('payTruckMoney').textContent = '$' + truckP.toFixed(2);
   // Reset truck dropdown on period change
   document.getElementById('truckBreakdownList').style.display = 'none';
   document.getElementById('truckChevron').style.transform = '';
   populateTruckBreakdown(shifts);
   document.getElementById('payOTHours').textContent = otH.toFixed(1) + 'h';
-  document.getElementById('payOTPay').textContent = '$' + otP.toFixed(2);
+  document.getElementById('payOTPay').textContent = '$' + (otP + chartOtP).toFixed(2);
+  document.getElementById('otBreakdownList').style.display = 'none';
+  document.getElementById('otChevron').style.transform = '';
+  populateOTBreakdown(shifts, rate);
   document.getElementById('payHolidayPay').textContent = '$' + holP.toFixed(2);
   document.getElementById('payDiffPay').textContent = '$' + diffP.toFixed(2);
   document.getElementById('paySundayPay').textContent = '$' + sundayP.toFixed(2);
@@ -4023,7 +4168,30 @@ function updatePayPage() {
 }
 
 // ── DASHBOARD REFRESH ──
+function recalculateAllShiftPays() {
+  const d = getUserData(currentUser.id);
+  const rate = parseFloat(currentUser.rate) || 0;
+  const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
+  let changed = false;
+  d.shifts.forEach(s => {
+    const hours = (s.start && s.end) ? calcHours(s.start, s.end) : (s.hours || 0);
+    let pay = calcShiftPay({type: s.type, hours, date: s.date, start: s.start, end: s.end}, rate);
+    if (s.chartDay && s.type && s.start && s.end) pay = calcChartDayPay(s.type, s.hours, rate);
+    const truckMoney = calcTruckMoney(s.type, s.fraction, s.chartDay, snowFunctions.indexOf(s.type) !== -1);
+    const totalPay = pay + truckMoney;
+    s.hours = hours;
+    s.regHours = Math.min(hours, 8);
+    s.otHours = Math.max(hours - 8, 0);
+    s.pay = totalPay;
+    s.basePay = pay;
+    s.truckMoney = truckMoney;
+    changed = true;
+  });
+  if (changed) saveUserData(currentUser.id, d);
+}
+
 function refreshAll() {
+  recalculateAllShiftPays();
   const d = getUserData(currentUser.id);
   const now = new Date();
 
@@ -4042,34 +4210,39 @@ function refreshAll() {
   const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
 
   function calcWeekPay(shifts) {
-    let regP = rate / 52;
+    let regP = 0;
     let otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0, truckP = 0;
     shifts.forEach(s => {
       const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
-      const calculatedPay = s.chartDay && s.type ? (rate / 260) * (snowFunctions.indexOf(s.type) !== -1 ? 1.5 : 2) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+      const calculatedPay = s.chartDay && s.type ? calcChartDayPay(s.type, s.hours, rate) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
       if (s.chartDay && s.type) chartP += calculatedPay;
       else if (s.type === 'holiday') holP += calculatedPay;
       else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); diffP += bp*0.10; regP += bp; }
       else if (isSunday) sundayP += calculatedPay;
-      else otP += (s.otHours||0) * (rate/2080) * 1.5;
+      else {
+        regP += Math.min(s.hours||0, 8) * (rate/2080);
+        otP += (s.otHours||0) * (rate/2080) * 1.5;
+      }
       truckP += (s.truckMoney || 0);
     });
     return regP + otP + holP + diffP + chartP + sundayP + truckP;
   }
 
   const weekP = calcWeekPay(weekShifts);
-  const monthP = calcWeekPay(monthShifts) + (rate / 52) * (monthShifts.length === 0 ? 0 : 0); // use same logic
   // Recalculate monthP properly
-  let monthPay = rate / 52 * 4.33;
+  let monthPay = 0;
   let monthOtP = 0, monthHolP = 0, monthDiffP = 0, monthChartP = 0, monthSundayP = 0, monthTruckP = 0;
   monthShifts.forEach(s => {
     const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
-    const calculatedPay = s.chartDay && s.type ? (rate / 260) * (snowFunctions.indexOf(s.type) !== -1 ? 1.5 : 2) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
+    const calculatedPay = s.chartDay && s.type ? calcChartDayPay(s.type, s.hours, rate) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
     if (s.chartDay && s.type) monthChartP += calculatedPay;
     else if (s.type === 'holiday') monthHolP += calculatedPay;
     else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); monthDiffP += bp*0.10; monthPay += bp; }
     else if (isSunday) monthSundayP += calculatedPay;
-    else monthOtP += (s.otHours||0) * (rate/2080) * 1.5;
+    else {
+      monthPay += Math.min(s.hours||0, 8) * (rate/2080);
+      monthOtP += (s.otHours||0) * (rate/2080) * 1.5;
+    }
     monthTruckP += (s.truckMoney || 0);
   });
   const monthTotal = monthPay + monthOtP + monthHolP + monthDiffP + monthChartP + monthSundayP + monthTruckP;
@@ -4117,7 +4290,8 @@ function refreshAll() {
     : '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div><p>No shifts logged yet.</p></div>';
 
   // All shifts
-  document.getElementById('shiftCount').textContent = d.shifts.length;
+  const shiftCountEl = document.getElementById('shiftCount');
+  if (shiftCountEl) shiftCountEl.textContent = d.shifts.length;
   document.getElementById('shiftsList').innerHTML = d.shifts.length
     ? d.shifts.map(renderShiftItem).join('')
     : '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><p>No shifts yet. Tap + to log a shift.</p></div>';
