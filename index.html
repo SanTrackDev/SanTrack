@@ -2685,11 +2685,11 @@ function renderWeeklyList() {
     var monthKey2 = dateStr.slice(0,7);
     var savedChartDays2 = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
     var savedVacationDays2 = JSON.parse(localStorage.getItem('vacation_days_' + currentUser.id) || '{}');
-    var isManualChartDay2 = !(shift && shift.chartDay) && (savedChartDays2[monthKey2] || []).includes(dy);
+    var isManualChartDay2 = !(shift && shift.chartDay !== undefined) && (savedChartDays2[monthKey2] || []).includes(dy);
     var isVacationDay2 = (savedVacationDays2[monthKey2] || []).includes(dy);
     if (isHolidayRow) { bg = 'rgba(248,81,73,0.25)'; border = 'rgba(248,81,73,0.35)'; barColor = 'rgba(248,81,73,0.5)'; }
     if (days[i] === 'Sunday') { bg = 'rgba(248,81,73,0.25)'; border = 'rgba(248,81,73,0.35)'; barColor = shift ? 'var(--red)' : 'rgba(248,81,73,0.3)'; }
-    if (isManualChartDay2) { bg = 'rgba(56,139,253,0.25)'; border = 'rgba(56,139,253,0.35)'; barColor = '#388BFD'; }
+    if (isManualChartDay2 || (shift && shift.chartDay !== undefined)) { bg = 'rgba(56,139,253,0.25)'; border = 'rgba(56,139,253,0.35)'; barColor = '#388BFD'; }
     if (isVacationDay2) { bg = 'rgba(50,205,50,0.25)'; border = 'rgba(50,205,50,0.35)'; barColor = '#32cd32'; }
     var row = '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:' + bg + ';border:1px solid ' + border + ';border-radius:5px;margin-bottom:3px;cursor:pointer;" onclick="openShiftForDay(\'' + dateStr + '\')">';
     row += '<div style="display:flex;align-items:center;gap:5px;">';
@@ -2713,7 +2713,6 @@ function renderWeeklyList() {
       var tags = '';
       var _ns = shift.start ? (function(){ var p=shift.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })() : false;
       if (shift.otHours > 0) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(168,85,247,0.2);color:#a855f7;margin-right:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>OT</span>';
-      if (shift.chartDay || isManualChartDay2) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(56,139,253,0.2);color:#388BFD;margin-right:4px;">Chart Day</span>';
       if (isVacationDay2) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(50,205,50,0.2);color:#32cd32;margin-right:4px;">Vacation</span>';
       if (days[i] === 'Sunday') tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(248,81,73,0.2);color:#ff9d9a;margin-right:4px;">Sunday</span>';
       if (isHolidayRow) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(248,81,73,0.2);color:#ff9d9a;margin-right:4px;">Holiday</span>';
@@ -5382,16 +5381,7 @@ initBiometricButton();
     document.getElementById('rememberMe').checked = true;
   }
 })();
-// ── BYPASS LOGIN ⚠️ REMOVE BEFORE SHARING ⚠️ ──
-var _T = { name: 'T. Developer', id: 'test@santrack.app', district: 'BK1', title: 'Sanitation Worker', rate: 50128, pass: 'test123', probation: 'yes', hireDate: '2025-06-23', badge: '123456' };
-var _u = getUsers(); _u[_T.id] = _T; saveUsers(_u);
-localStorage.setItem('santrack_welcomed', 'true');
-localStorage.setItem('dsny_session', _T.id);
-localStorage.setItem('dsny_session_expiry', Date.now() + 24 * 60 * 60 * 1000);
-currentUser = _T;
-document.getElementById('loginScreen').classList.remove('active');
-document.getElementById('appScreen').classList.add('active');
-window.addEventListener('load', function() { currentUser = _T; startApp(); });
+// ── BYPASS LOGIN DISABLED ──
 
 </script>
 </body>
