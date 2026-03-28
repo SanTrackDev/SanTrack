@@ -1043,7 +1043,7 @@ document.currentScript.parentNode.appendChild(_link);
         <div style="display:flex;align-items:center;gap:10px;">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:25px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffffff;padding-bottom:4px;border-bottom:5px solid var(--green);white-space:nowrap;">Shift Calendar</div>
           <div style="position:relative;">
-            <button onclick="toggleCalDropdown('chartDayDropdown')" style="background:rgba(56,139,253,0.15);border:1px solid rgba(56,139,253,0.4);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">
+            <button onclick="toggleCalDropdown('chartDayDropdown',event)" style="background:rgba(56,139,253,0.15);border:1px solid rgba(56,139,253,0.4);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
               Chart Days <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
@@ -1067,13 +1067,13 @@ document.currentScript.parentNode.appendChild(_link);
       </div>
 
       <!-- XWP/XWOP Button below calendar -->
-      <div style="position:relative;margin-bottom:8px;display:flex;justify-content:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;">
-        <button onclick="toggleCalDropdown('vacWeekDropdown')" style="background:rgba(84,165,90,0.25);border:1px solid rgba(84,165,90,0.7);border-radius:8px;color:#ffffff;font-family:'Roboto',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">V <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <button onclick="toggleCalDropdown('vacationDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">XWP/XWOP <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <button onclick="toggleCalDropdown('fmlaDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">FMLA <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <button onclick="toggleCalDropdown('sickDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">SICK <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <button onclick="toggleCalDropdown('lodiDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">LODI <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
-        <button onclick="toggleCalDropdown('paternityDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">PATERNITY <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div style="position:relative;margin-bottom:8px;display:flex;justify-content:center;gap:4px;flex-wrap:wrap;z-index:10;">
+        <button onclick="toggleCalDropdown('vacWeekDropdown',event)" style="background:rgba(84,165,90,0.25);border:1px solid rgba(84,165,90,0.7);border-radius:8px;color:#ffffff;font-family:'Roboto',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">V <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('vacationDropdown',event)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">XWP/XWOP <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('fmlaDropdown',event)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">FMLA <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('sickDropdown',event)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">SICK <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('lodiDropdown',event)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">LODI <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('paternityDropdown',event)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">PATERNITY <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
         <!-- All dropdowns at the end -->
         <div id="vacWeekDropdown" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:#1e1e1e;border:1px solid var(--dark4);border-radius:12px;padding:12px;z-index:200;width:260px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
@@ -4842,7 +4842,8 @@ function getShiftLabel(type) {
   return map[type] || type;
 }
 
-function toggleCalDropdown(id) {
+function toggleCalDropdown(id, e) {
+  if (e) e.stopPropagation();
   const dropdowns = ['chartDayDropdown', 'vacationDropdown', 'sickDropdown', 'lodiDropdown', 'paternityDropdown', 'fmlaDropdown', 'vacWeekDropdown'];
   dropdowns.forEach(d => {
     if (d !== id) { const el = document.getElementById(d); if (el) el.style.display = 'none'; }
@@ -4951,11 +4952,12 @@ function saveVacWeek() {
 }
 
 document.addEventListener('click', function(e) {
+  const clickedToggleBtn = e.target.closest('button[onclick*="toggleCalDropdown"]');
   if (!e.target.closest('#chartDayDropdown') && !e.target.closest('#vacationDropdown') &&
       !e.target.closest('#sickDropdown') && !e.target.closest('#lodiDropdown') &&
       !e.target.closest('#paternityDropdown') && !e.target.closest('#fmlaDropdown') &&
       !e.target.closest('#vacWeekDropdown') &&
-      !e.target.closest('button[onclick*="toggleCalDropdown"]')) {
+      !clickedToggleBtn) {
     ['chartDayDropdown','vacationDropdown','sickDropdown','lodiDropdown','paternityDropdown','fmlaDropdown','vacWeekDropdown'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
@@ -6478,7 +6480,21 @@ initBiometricButton();
     document.getElementById('rememberMe').checked = true;
   }
 })();
-// ── BYPASS LOGIN DISABLED ──
+// ── BYPASS LOGIN ENABLED ──
+(function() {
+  const users = getUsers();
+  const ids = Object.keys(users);
+  if (ids.length > 0) {
+    currentUser = users[ids[0]];
+  } else {
+    currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
+    const u = getUsers();
+    u['guest'] = currentUser;
+    saveUsers(u);
+    saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
+  }
+  startApp();
+})();
 
 </script>
 </body>
