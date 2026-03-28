@@ -39,7 +39,7 @@ const _link = document.createElement('link');
 _link.rel = 'manifest'; _link.href = _url;
 document.currentScript.parentNode.appendChild(_link);
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=Permanent+Marker&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --green: #428247;
@@ -399,7 +399,7 @@ document.currentScript.parentNode.appendChild(_link);
     justify-content: space-between;
     padding: 6px 4px 6px;
   }
-  .cal-nav { background: var(--dark3); border: 1px solid var(--dark4); border-radius: 8px; color: var(--text); font-size: 18px; cursor: pointer; padding: 2px 10px; }
+  .cal-nav { background: var(--green); border: 1px solid var(--green-dark); border-radius: 8px; color: #fff; font-size: 18px; cursor: pointer; padding: 2px 10px; }
   .cal-month { font-family: 'Barlow Condensed', sans-serif; font-size: 27px; font-weight: 800; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; row-gap: 0; }
   .cal-day-name {
@@ -413,7 +413,7 @@ document.currentScript.parentNode.appendChild(_link);
   }
   .cal-day {
     min-height: 0;
-    aspect-ratio: 1 / 1.6;
+    aspect-ratio: 1 / 1.92;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -430,7 +430,7 @@ document.currentScript.parentNode.appendChild(_link);
     margin: -0.5px;
   }
   .cal-day:hover { border-color: var(--green); filter: brightness(1.2); z-index: 1; }
-  .cal-day.empty { cursor: default; background: transparent; border-color: transparent; aspect-ratio: 1 / 1.6; margin: -0.5px; }
+  .cal-day.empty { cursor: default; background: transparent; border-color: transparent; aspect-ratio: 1 / 1.92; margin: -0.5px; }
   .cal-day.today { border-color: var(--green) !important; box-shadow: 0 0 0 1px var(--green); z-index: 1; }
   .cal-day.other-month { opacity: 0.35; }
   .cal-day-num {
@@ -684,6 +684,14 @@ document.currentScript.parentNode.appendChild(_link);
 
   .pay-rate-info { font-size: 12px; color: var(--text3); margin-top: 4px; }
 
+  .loc-slider { position:relative;width:100%;appearance:none;-webkit-appearance:none;background:transparent !important;height:8px;cursor:pointer;z-index:2; }
+  .loc-slider::-webkit-slider-thumb { -webkit-appearance:none;width:10px;height:28px;border-radius:3px;background:#ffffff;border:2px solid #2e2e2e;box-shadow:0 0 0 1.5px #ffffff;cursor:pointer;margin-top:-10px; }
+  .loc-slider::-webkit-slider-runnable-track { background:transparent !important;height:8px; }
+  .loc-slider::-moz-range-track { background:transparent !important;height:8px; }
+  .loc-slider::-moz-range-thumb { width:10px;height:28px;border-radius:3px;background:#ffffff;border:2px solid #2e2e2e;box-shadow:0 0 0 1.5px #ffffff;cursor:pointer;margin-top:-10px; }
+
+  .tilde { font-family: 'Roboto', sans-serif; }
+
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .page.active { animation: fadeIn 0.25s ease; }
 
@@ -768,7 +776,7 @@ document.currentScript.parentNode.appendChild(_link);
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box" style="position:relative;">
-    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.5</div>
+    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.6</div>
     <div class="logo">
       <h1>San<span>Track</span></h1>
       <p>Track your pay, shifts, seniority, routes and more!</p>
@@ -873,7 +881,7 @@ document.currentScript.parentNode.appendChild(_link);
             <option>BK13</option>
             <option>BK14</option>
             <option>BK15</option>
-            <option>BK15A</option>
+            <option>BK16</option>
             <option>BK18</option>
           </optgroup>
           <optgroup label="Manhattan">
@@ -966,7 +974,7 @@ document.currentScript.parentNode.appendChild(_link);
   <div class="app-header">
     <div style="display:flex;align-items:baseline;gap:8px;">
       <div class="header-logo">San<span>Track</span></div>
-      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.5</div>
+      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.6</div>
     </div>
   </div>
 
@@ -988,12 +996,12 @@ document.currentScript.parentNode.appendChild(_link);
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
         <div class="card" style="padding:8px 6px;text-align:center;">
           <div class="card-title" style="font-size:9px;text-align:center;">This Week Pay</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="weekPay">$0</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="weekPay"><span class="tilde">~</span>$0</div>
           <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="weekPayNetSub">net: —</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;">
           <div class="card-title" style="font-size:9px;text-align:center;">Month Pay</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="monthPay">$0</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="monthPay"><span class="tilde">~</span>$0</div>
           <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="monthPayNet">net: —</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;position:relative;overflow:hidden;">
@@ -1028,49 +1036,76 @@ document.currentScript.parentNode.appendChild(_link);
     </div>
 
     <!-- SHIFTS PAGE -->
-    <div id="shiftsPage" class="page" style="padding:6px 8px 0;">
+    <div id="shiftsPage" class="page" style="padding:6px 2px 0;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;gap:6px;">
 
-        <!-- Title -->
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:25px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffffff;padding-bottom:4px;border-bottom:5px solid var(--green);white-space:nowrap;">Shift Calendar</div>
-
-        <div style="display:flex;align-items:center;gap:6px;">
-          <!-- Chart Days Button -->
+        <!-- Title + Chart Days -->
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:25px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#ffffff;padding-bottom:4px;border-bottom:5px solid var(--green);white-space:nowrap;">Shift Calendar</div>
           <div style="position:relative;">
             <button onclick="toggleCalDropdown('chartDayDropdown')" style="background:rgba(56,139,253,0.15);border:1px solid rgba(56,139,253,0.4);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
               Chart Days <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div id="chartDayDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+            <div id="chartDayDropdown" style="display:none;position:absolute;left:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
               <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT CHART DAYS</div>
               <div id="chartDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
               <button onclick="saveChartDays()" style="width:100%;margin-top:10px;background:#388BFD;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
             </div>
           </div>
-
-          <!-- Vacation Days Button -->
-          <div style="position:relative;">
-            <button onclick="toggleCalDropdown('vacationDropdown')" style="background:rgba(50,205,50,0.15);border:1px solid rgba(50,205,50,0.4);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4"/><path d="M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3"/><path d="M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7.7-4.24 4.25c1.96 1.95 5.28 1.8 7.43-.35 2.15-2.15 2.3-5.47.35-7.43l-4.24 4.25-.7-.7 4.24-4.25c-1.96-1.95-5.28-1.8-7.43.35z"/><path d="M14 18.55V22"/></svg>
-              Vacation Days <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
-            <div id="vacationDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT VACATION DAYS</div>
-              <div id="vacationDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
-              <button onclick="saveVacationDays()" style="width:100%;margin-top:10px;background:#428247;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
-            </div>
-          </div>
         </div>
+
       </div>
 
-      <!-- Calendar inside shifts -->
-      <div class="card" style="margin-bottom:8px;padding:4px 6px;">
-        <div class="cal-header">
+      <div class="card" style="margin-bottom:8px;padding:8px 4px;">
+        <div class="cal-nav-bar" style="display:flex;align-items:center;justify-content:space-between;padding:6px 4px;">
           <button class="cal-nav" onclick="prevMonth()">&#8249;</button>
-          <div class="cal-month" id="calMonth">March 2026</div>
+          <span id="calMonth" style="font-family:'Barlow',sans-serif;font-size:16px;font-weight:900;letter-spacing:1px;text-align:center;flex:1;"></span>
           <button class="cal-nav" onclick="nextMonth()">&#8250;</button>
         </div>
         <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <!-- XWP/XWOP Button below calendar -->
+      <div style="position:relative;margin-bottom:8px;display:flex;justify-content:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;">
+        <button onclick="toggleCalDropdown('vacWeekDropdown')" style="background:rgba(84,165,90,0.25);border:1px solid rgba(84,165,90,0.7);border-radius:8px;color:#ffffff;font-family:'Roboto',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">V <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('vacationDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">XWP/XWOP <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('fmlaDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">FMLA <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('sickDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">SICK <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('lodiDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">LODI <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button onclick="toggleCalDropdown('paternityDropdown')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">PATERNITY <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+
+        <!-- All dropdowns at the end -->
+        <div id="vacWeekDropdown" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:#1e1e1e;border:1px solid var(--dark4);border-radius:12px;padding:12px;z-index:200;width:260px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;text-align:center;">SELECT VACATION WEEK</div>
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;" id="vacWeekGrid"></div>
+          <button onclick="saveVacWeek()" style="width:100%;margin-top:10px;background:var(--green);border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+        </div>
+        <div id="vacationDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT XWP/XWOP DAYS</div>
+          <div id="vacationDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+          <button onclick="saveVacationDays()" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+        </div>
+        <div id="fmlaDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT FMLA DAYS</div>
+          <div id="fmlaDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+          <button onclick="saveDayType('fmla')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+        </div>
+        <div id="sickDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT SICK DAYS</div>
+          <div id="sickDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+          <button onclick="saveDayType('sick')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+        </div>
+        <div id="lodiDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT LODI DAYS</div>
+          <div id="lodiDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+          <button onclick="saveDayType('lodi')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+        </div>
+        <div id="paternityDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT PATERNITY DAYS</div>
+          <div id="paternityDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+          <button onclick="saveDayType('paternity')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+        </div>
       </div>
 
       <div id="calDayDetail" style="display:none;margin-bottom:16px;">
@@ -1117,18 +1152,18 @@ document.currentScript.parentNode.appendChild(_link);
           <div style="font-size:10px;color:var(--text3);font-style:italic;">This feature is still in development. Totals may not be 100% accurate.</div>
         </div>
         <div class="pay-row"><span class="label">Regular Hours</span><span class="amount" id="payRegHours">0h</span></div>
-        <div class="pay-row"><span class="label">Regular Pay</span><span class="amount" id="payRegPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Regular Pay</span><span class="amount" id="payRegPay"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-row" id="payChartRow" style="cursor:pointer;user-select:none;" onclick="toggleChartBreakdown()">
           <span class="label" style="display:flex;align-items:center;gap:6px;">
             Chart Day Pay (2x / 1.5x snow)
             <svg id="chartChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
           </span>
-          <span class="amount" style="color:#388BFD" id="payChartPay">$0.00</span>
+          <span class="amount" style="color:#388BFD" id="payChartPay"><span class="tilde">~</span>$0.00</span>
         </div>
         <div id="chartBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
         <div class="pay-row" id="payTruckMoneyRow" style="cursor:pointer;user-select:none;" onclick="toggleTruckBreakdown()">
           <span class="label" style="display:flex;align-items:center;gap:6px;">
-            Truck Money
+            Truck Money + Differential
             <svg id="truckChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
           </span>
           <span class="amount" style="color:#FFD100" id="payTruckMoney">$0.00</span>
@@ -1140,15 +1175,16 @@ document.currentScript.parentNode.appendChild(_link);
             Overtime Pay
             <svg id="otChevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
           </span>
-          <span class="amount" style="color:#a855f7" id="payOTPay">$0.00</span>
+          <span class="amount" style="color:#a855f7" id="payOTPay"><span class="tilde">~</span>$0.00</span>
         </div>
         <div id="otBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
-        <div class="pay-row"><span class="label">Holiday Pay (2x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Night Differential (+10%)</span><span class="amount" style="color:#4A7FD4" id="payDiffPay">$0.00</span></div>
-        <div class="pay-row"><span class="label">Sunday Pay (2x)</span><span class="amount" style="color:var(--red)" id="paySundayPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Holiday Pay (2x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">Night Differential (+10%)</span><span class="amount" style="color:#4A7FD4" id="payDiffPay"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">Saturday Pay <span style="font-size:10px;color:var(--text3);font-weight:400;font-style:italic;">Premium hours worked on Saturday, truck diff, route ext.</span></span><span class="amount" style="color:#ffffff" id="paySaturdayPay">$0.00</span></div>
+        <div class="pay-row"><span class="label">Sunday Pay (2x)</span><span class="amount" style="color:var(--red)" id="paySundayPay"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-row" style="opacity:0.4;">
           <span class="label" style="color:#FF8C00;">Snow Pay <em style="font-size:10px;color:var(--text3);font-weight:400;">(Releasing November 2026)</em></span>
-          <span class="amount" style="color:#FF8C00;">$0.00</span>
+          <span class="amount" style="color:#FF8C00;"><span class="tilde">~</span>$0.00</span>
         </div>
         <div class="pay-row" style="opacity:0.4;">
           <span class="label" style="color:#FF8C00;">Snow Hours <em style="font-size:10px;color:var(--text3);font-weight:400;">(Releasing November 2026)</em></span>
@@ -1156,7 +1192,7 @@ document.currentScript.parentNode.appendChild(_link);
         </div>
         <div class="pay-total">
           <span class="label">Gross Pay</span>
-          <span class="amount" id="payTotal">$0.00</span>
+          <span class="amount" id="payTotal"><span class="tilde">~</span>$0.00</span>
         </div>
       </div>
 
@@ -1165,14 +1201,14 @@ document.currentScript.parentNode.appendChild(_link);
           <div class="card-title" style="margin-bottom:0;">Tax Deductions</div>
           <div style="font-size:10px;color:var(--text3);font-style:italic;">This feature is still in development</div>
         </div>
-        <div class="pay-row"><span class="label">FICA (6.2%)</span><span class="amount" style="color:var(--red)" id="payFICA">$0.00</span></div>
-        <div class="pay-row"><span class="label">Medicare (1.45%)</span><span class="amount" style="color:var(--red)" id="payMedicare">$0.00</span></div>
-        <div class="pay-row"><span class="label">Federal Withholding (7.8%)</span><span class="amount" style="color:var(--red)" id="payFederal">$0.00</span></div>
-        <div class="pay-row"><span class="label">State Withholding (4.35%)</span><span class="amount" style="color:var(--red)" id="payState">$0.00</span></div>
-        <div class="pay-row"><span class="label">NYC Withholding (3.31%)</span><span class="amount" style="color:var(--red)" id="payNYC">$0.00</span></div>
+        <div class="pay-row"><span class="label">FICA (6.2%)</span><span class="amount" style="color:var(--red)" id="payFICA"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">Medicare (1.45%)</span><span class="amount" style="color:var(--red)" id="payMedicare"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">Federal Withholding (7.8%)</span><span class="amount" style="color:var(--red)" id="payFederal"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">State Withholding (4.35%)</span><span class="amount" style="color:var(--red)" id="payState"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">NYC Withholding (3.31%)</span><span class="amount" style="color:var(--red)" id="payNYC"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-total" style="border-top:1px solid var(--dark4);margin-top:4px;">
           <span class="label">Total Tax</span>
-          <span class="amount" style="color:var(--red)" id="payTotalTax">$0.00</span>
+          <span class="amount" style="color:var(--red)" id="payTotalTax"><span class="tilde">~</span>$0.00</span>
         </div>
       </div>
 
@@ -1182,14 +1218,14 @@ document.currentScript.parentNode.appendChild(_link);
           <div style="font-size:10px;color:var(--text3);font-style:italic;">This feature is still in development</div>
         </div>
         <div class="pay-row"><span class="label">Health Ins (20yr)</span><span class="amount" style="color:var(--text2)" id="payHealth">$7.42</span></div>
-        <div class="pay-row"><span class="label">NYCE PPO Basic</span><span class="amount" style="color:var(--text2)" id="payPPO">$0.00</span></div>
+        <div class="pay-row"><span class="label">NYCE PPO Basic</span><span class="amount" style="color:var(--text2)" id="payPPO"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-row"><span class="label">414H Disability</span><span class="amount" style="color:var(--text2)" id="payDisability">$18.89</span></div>
         <div class="pay-row"><span class="label">NYCERS Pension</span><span class="amount" style="color:var(--text2)" id="payPension">$40.48</span></div>
         <div class="pay-row"><span class="label">Uniform Sanitationmen Assn</span><span class="amount" style="color:var(--text2)" id="payUnionAssn">$21.00</span></div>
-        <div class="pay-row"><span class="label"><div id="pay457Label">457 Savings Plan</div><div style="font-size:10px;color:var(--text2);font-weight:400;">Go to profile to edit percentage</div></span><span class="amount" style="color:var(--text2)" id="pay457">$0.00</span></div>
+        <div class="pay-row"><span class="label"><div id="pay457Label">457 Savings Plan</div><div style="font-size:10px;color:var(--text2);font-weight:400;">Go to profile to edit percentage</div></span><span class="amount" style="color:var(--text2)" id="pay457"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-total" style="border-top:1px solid var(--dark4);margin-top:4px;">
           <span class="label">Total Deductions</span>
-          <span class="amount" style="color:var(--red)" id="payTotalDeductions">$0.00</span>
+          <span class="amount" style="color:var(--red)" id="payTotalDeductions"><span class="tilde">~</span>$0.00</span>
         </div>
       </div>
 
@@ -1199,14 +1235,14 @@ document.currentScript.parentNode.appendChild(_link);
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;">Net Pay</div>
             <div style="font-size:10px;color:rgba(255,255,255,0.5);font-style:italic;">This feature is still in development</div>
           </div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green)" id="payNet">$0.00</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green)" id="payNet"><span class="tilde">~</span>$0.00</div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-title">Your Base Salary</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800" id="baseRateDisplay">$0.00/yr</div>
-        <div class="pay-rate-info">Weekly: <span id="otRateDisplay">$0.00</span> &nbsp;|&nbsp; Daily: <span id="holidayRateDisplay">$0.00</span></div>
+        <div class="pay-rate-info">Weekly: <span id="otRateDisplay"><span class="tilde">~</span>$0.00</span> &nbsp;|&nbsp; Daily: <span id="holidayRateDisplay"><span class="tilde">~</span>$0.00</span></div>
       </div>
     </div>
 
@@ -1239,10 +1275,9 @@ document.currentScript.parentNode.appendChild(_link);
           <div>Social <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
           <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
         </button>
-        <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;" disabled>
+        <button class="note-cat-btn" onclick="showLocationsPage()" id="cat-locations">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
           <div>Locations <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
-          <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
         </button>
         <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;grid-column:1/-1;" disabled>
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="5" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="3" y="11" width="8" height="5" rx="1"/><rect x="13" y="11" width="8" height="5" rx="1"/><rect x="3" y="19" width="8" height="2" rx="1"/><rect x="13" y="19" width="8" height="2" rx="1"/></svg></span>
@@ -1315,6 +1350,212 @@ document.currentScript.parentNode.appendChild(_link);
       </div>
     </div>
 
+    <!-- LOCATIONS PAGE -->
+    <div id="locationsPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">‹</button>
+        <div class="section-title" style="margin-bottom:0;">Locations <span class="badge">BETA</span></div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button onclick="switchLocTab('garages')" id="locTab-garages" style="flex:1;padding:8px 4px;border-radius:8px;border:1px solid var(--green);background:var(--green);color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.3px;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="22" height="22" rx="1"/><line x1="1" y1="9" x2="23" y2="9"/><line x1="1" y1="15" x2="23" y2="15"/><rect x="2.5" y="3" width="5.5" height="4.5" rx="0.5"/><rect x="9.3" y="3" width="5.5" height="4.5" rx="0.5"/><rect x="16" y="3" width="5.5" height="4.5" rx="0.5"/></svg>
+          GARAGES
+        </button>
+        <button onclick="switchLocTab('delis')" id="locTab-delis" style="flex:1;padding:8px 4px;border-radius:8px;border:1px solid var(--dark4);background:var(--dark3);color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.3px;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Fork -->
+            <line x1="7" y1="2" x2="7" y2="22"/>
+            <line x1="5" y1="2" x2="5" y2="8"/>
+            <line x1="9" y1="2" x2="9" y2="8"/>
+            <path d="M5 8 Q5 11 7 11 Q9 11 9 8"/>
+            <!-- Knife -->
+            <line x1="15" y1="12" x2="15" y2="22"/>
+            <path d="M15 2 L19 8 L15 12"/>
+          </svg>
+          FOOD
+        </button>
+        <button onclick="switchLocTab('coffee')" id="locTab-coffee" style="flex:1;padding:8px 4px;border-radius:8px;border:1px solid var(--dark4);background:var(--dark3);color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.3px;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+          COFFEE
+        </button>
+        <button onclick="switchLocTab('bathrooms')" id="locTab-bathrooms" style="flex:1;padding:8px 4px;border-radius:8px;border:1px solid var(--dark4);background:var(--dark3);color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.3px;display:flex;flex-direction:column;align-items:center;gap:2px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="2" width="10" height="5" rx="1"/>
+            <path d="M5 7h14v2a7 4 0 0 1-14 0V7z"/>
+            <path d="M10 13v4"/>
+            <path d="M14 13v4"/>
+            <line x1="8" y1="17" x2="16" y2="17"/>
+            <line x1="8" y1="17" x2="7" y2="21"/>
+            <line x1="16" y1="17" x2="17" y2="21"/>
+            <line x1="7" y1="21" x2="17" y2="21"/>
+          </svg>
+          BATHROOMS
+        </button>
+      </div>
+
+      <!-- Clear Ratings Buttons -->
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <button onclick="confirmClearAll()" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(248,81,73,0.3);background:rgba(248,81,73,0.08);color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">Clear All My Ratings</button>
+        <button onclick="openClearPerLocation()" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(248,81,73,0.3);background:rgba(248,81,73,0.08);color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">Clear Rating Per Location</button>
+      </div>
+
+      <!-- Search Bar -->
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input type="text" id="locSearchInput" placeholder="Search by name or neighborhood..." style="flex:1;padding:10px 14px;font-size:14px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;outline:none;">
+        <button onclick="locSearchByText()" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;padding:10px 14px;color:var(--text2);cursor:pointer;font-size:16px;">🔍</button>
+        <button onclick="showFavorites()" id="favBtn" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;padding:10px 14px;color:var(--text2);cursor:pointer;" title="Favorites">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+
+      <!-- Add Location Button -->
+      <button onclick="openAddLocationModal()" id="addLocationBtn" style="width:100%;margin-bottom:16px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:10px;padding:11px;color:var(--green);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.5px;">+ ADD A LOCATION</button>
+
+      <!-- Locations List -->
+      <div id="locationsList"></div>
+    </div>
+
+    <!-- ADD LOCATION MODAL -->
+    <div class="modal-overlay" id="addLocationModal">
+      <div class="modal">
+        <div class="modal-title">Add Location <button class="close-btn" onclick="closeModal('addLocationModal')">✕</button></div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="locCategory" onchange="onLocCategoryChange()">
+            <option value="garages">Garage</option>
+            <option value="delis">Food</option>
+            <option value="coffee">Coffee / Dunkin</option>
+            <option value="bathrooms">Public Bathroom</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="locName" placeholder="e.g. Tony's Deli">
+        </div>
+        <div class="form-group">
+          <label>Address / Neighborhood</label>
+          <input type="text" id="locAddress" placeholder="e.g. 123 Main St, Brooklyn">
+        </div>
+        <div class="form-group">
+          <label>Your Rating</label>
+          <div style="display:flex;gap:8px;margin-top:4px;" id="locStarRating">
+            <button type="button" onclick="setLocStar(1)" class="star-btn" data-star="1" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setLocStar(2)" class="star-btn" data-star="2" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setLocStar(3)" class="star-btn" data-star="3" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setLocStar(4)" class="star-btn" data-star="4" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setLocStar(5)" class="star-btn" data-star="5" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+          </div>
+          <input type="hidden" id="locStarValue" value="0">
+        </div>
+        <div class="form-group" id="locNotesGroup">
+          <label>Notes <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
+          <textarea id="locNotes" rows="2" placeholder="e.g. Best bacon egg & cheese in Brooklyn, clean bathroom..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="submitLocation()">Submit</button>
+      </div>
+    </div>
+
+    <!-- RATE LOCATION MODAL -->
+    <div class="modal-overlay" id="rateLocationModal">
+      <div class="modal">
+        <div class="modal-title" id="rateModalTitle">Rate This Spot <button class="close-btn" onclick="closeModal('rateLocationModal')">✕</button></div>
+        <input type="hidden" id="rateLocId">
+        <input type="hidden" id="rateLocCategory">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;margin-bottom:16px;" id="rateLocName"></div>
+
+        <!-- Star rating (non-garage) -->
+        <div id="rateStarSection" class="form-group">
+          <label>Your Rating</label>
+          <div style="display:flex;gap:8px;margin-top:4px;" id="rateStarRating">
+            <button type="button" onclick="setRateStar(1)" class="rate-star-btn" data-star="1" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(2)" class="rate-star-btn" data-star="2" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(3)" class="rate-star-btn" data-star="3" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(4)" class="rate-star-btn" data-star="4" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(5)" class="rate-star-btn" data-star="5" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(6)" class="rate-star-btn" data-star="6" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(7)" class="rate-star-btn" data-star="7" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(8)" class="rate-star-btn" data-star="8" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(9)" class="rate-star-btn" data-star="9" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+            <button type="button" onclick="setRateStar(10)" class="rate-star-btn" data-star="10" style="font-size:22px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
+          </div>
+          <input type="hidden" id="rateStarValue" value="0">
+        </div>
+
+        <!-- Slider rating (garages) -->
+        <div id="rateSliderSection" style="display:none;">
+          <div class="form-group">
+            <label style="display:flex;justify-content:space-between;"><span>Garbage Quality</span><span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Dirty → Clean</span></label>
+            <div style="position:relative;height:32px;display:flex;align-items:center;margin-top:6px;">
+              <div style="position:absolute;left:0;right:0;height:8px;border-radius:100px;background:linear-gradient(to right,#F85149,#FFD100,#54a55a);pointer-events:none;"></div>
+              <input type="range" class="loc-slider" id="sliderGarbageQuality" min="1" max="10" value="5" step="1" style="position:relative;width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:8px;cursor:pointer;z-index:2;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;justify-content:space-between;"><span>Car Parking</span><span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Street → Parking Lot</span></label>
+            <div style="position:relative;height:32px;display:flex;align-items:center;margin-top:6px;">
+              <div style="position:absolute;left:0;right:0;height:8px;border-radius:100px;background:linear-gradient(to right,#F85149,#FFD100,#54a55a);pointer-events:none;"></div>
+              <input type="range" class="loc-slider" id="sliderCarParking" min="1" max="10" value="5" step="1" style="position:relative;width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:8px;cursor:pointer;z-index:2;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;justify-content:space-between;"><span>Street Quality</span><span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Tight → Wide</span></label>
+            <div style="position:relative;height:32px;display:flex;align-items:center;margin-top:6px;">
+              <div style="position:absolute;left:0;right:0;height:8px;border-radius:100px;background:linear-gradient(to right,#F85149,#FFD100,#54a55a);pointer-events:none;"></div>
+              <input type="range" class="loc-slider" id="sliderStreetQuality" min="1" max="10" value="5" step="1" style="position:relative;width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:8px;cursor:pointer;z-index:2;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;justify-content:space-between;"><span>Garbage Weight</span><span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Heavy → Light</span></label>
+            <div style="position:relative;height:32px;display:flex;align-items:center;margin-top:6px;">
+              <div style="position:absolute;left:0;right:0;height:8px;border-radius:100px;background:linear-gradient(to right,#F85149,#FFD100,#54a55a);pointer-events:none;"></div>
+              <input type="range" class="loc-slider" id="sliderGarbageWeight" min="1" max="10" value="5" step="1" style="position:relative;width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:8px;cursor:pointer;z-index:2;">
+            </div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;justify-content:space-between;"><span>Neighborhood</span><span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Bad → Good</span></label>
+            <div style="position:relative;height:32px;display:flex;align-items:center;margin-top:6px;">
+              <div style="position:absolute;left:0;right:0;height:8px;border-radius:100px;background:linear-gradient(to right,#F85149,#FFD100,#54a55a);pointer-events:none;"></div>
+              <input type="range" class="loc-slider" id="sliderNeighborhood" min="1" max="10" value="5" step="1" style="position:relative;width:100%;-webkit-appearance:none;appearance:none;background:transparent;height:8px;cursor:pointer;z-index:2;">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" onclick="submitRating()">Submit Rating</button>
+      </div>
+    </div>
+
+    <!-- FAVORITES MODAL -->
+    <div class="modal-overlay" id="favoritesModal">
+      <div class="modal">
+        <div class="modal-title">Favorites <button class="close-btn" onclick="closeModal('favoritesModal')">✕</button></div>
+        <div id="favoritesList"></div>
+      </div>
+    </div>
+
+    <!-- CLEAR ALL RATINGS CONFIRM MODAL -->
+    <div class="modal-overlay" id="clearAllConfirmModal" style="align-items:center;">
+      <div class="modal" style="border-radius:20px;max-width:340px;margin:20px;">
+        <div style="text-align:center;margin-bottom:16px;">
+          <div style="font-size:32px;margin-bottom:8px;">⚠️</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:800;color:#fff;">Are you sure?</div>
+          <p style="font-size:13px;color:var(--text2);margin-top:8px;line-height:1.6;">This will remove all your ratings from every location. This cannot be undone.</p>
+        </div>
+        <button class="btn btn-danger" onclick="clearMyRatings()" style="margin-bottom:8px;">Yes, Clear All My Ratings</button>
+        <button class="btn btn-secondary" onclick="closeModal('clearAllConfirmModal')">Cancel</button>
+      </div>
+    </div>
+
+    <!-- CLEAR PER LOCATION MODAL -->
+    <div class="modal-overlay" id="clearPerLocModal">
+      <div class="modal">
+        <div class="modal-title">Clear a Rating <button class="close-btn" onclick="closeModal('clearPerLocModal')">✕</button></div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Select a location to remove your rating from:</div>
+        <div id="clearPerLocList"></div>
+      </div>
+    </div>
+
     <!-- DONATE PAGE -->
     <div id="donatePage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
@@ -1356,7 +1597,21 @@ document.currentScript.parentNode.appendChild(_link);
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:0.5px;margin-bottom:10px;">📋 Changelog</div>
 
         <div style="margin-bottom:12px;">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.5 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 2026</span></div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.6 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 29, 2026</span></div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+            • Saturday Pay added — $24.10 show-up bonus + $7.77 full truck bonus (scales with chart day &amp; fraction)<br>
+            • Truck Differential added — ~$18.17 per full truck, fractional trucks get proportional amount<br>
+            • Truck Differential shown as sub-item inside Truck Money dropdown<br>
+            • Vacation Week picker (V button) added to calendar — select V1–V52, shows VACATION chip Mon–Sun<br>
+            • Saturday Pay row added to pay breakdown above Sunday Pay<br>
+            • Major Calendar improvements: Chart Day button, Vacation Days button, XWP/XWOP button, FMLA button, Sick button, LODI button, Paternity Leave button, Vacation Numbers implemented every Monday V1–V52, several font and size changes, box size increased 15–20%, weekly pay under weeks now shows approximate net pay rather than gross pay<br>
+            • Locations Feature Opened: Added coffee shops, public bathrooms, and places to get food. Added a garage review feature based on the quality of garages and the district. Ratings for all are shared citywide.<br>
+            • Integrated code with Xcode to get ready for iOS app release when all features are added
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.5 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 25, 2026</span></div>
           <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
             • Tap calendar day to log or edit shifts<br>
             • Chart Day now supports overtime<br>
@@ -1692,7 +1947,7 @@ document.currentScript.parentNode.appendChild(_link);
                 <option value="">Select garage</option>
                 <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
                 <optgroup label="Brooklyn North"><option>BK1</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
-                <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15A</option><option>BK18</option></optgroup>
+                <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK16</option><option>BK18</option></optgroup>
                 <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option></optgroup>
                 <optgroup label="Queens East"><option>Q7</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q14</option></optgroup>
                 <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
@@ -1762,7 +2017,19 @@ document.currentScript.parentNode.appendChild(_link);
 
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="showPage('dash')" id="nav-dash">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Square outer frame -->
+        <rect x="1" y="1" width="22" height="22" rx="1"/>
+        <!-- Horizontal slats -->
+        <line x1="1" y1="9" x2="23" y2="9"/>
+        <line x1="1" y1="15" x2="23" y2="15"/>
+        <!-- 3 wide rectangular windows in top section -->
+        <rect x="2.5" y="3" width="5.5" height="4.5" rx="0.5"/>
+        <rect x="9.3" y="3" width="5.5" height="4.5" rx="0.5"/>
+        <rect x="16" y="3" width="5.5" height="4.5" rx="0.5"/>
+        <!-- Handle -->
+        <line x1="10" y1="19.5" x2="14" y2="19.5" stroke-width="2.5"/>
+      </svg>
       <p>Home</p>
     </button>
     <button class="nav-item" onclick="showPage('shifts')" id="nav-shifts">
@@ -1798,24 +2065,38 @@ document.currentScript.parentNode.appendChild(_link);
   </div>
 </div>
 
-<!-- ADD SHIFT MODAL -->
+<!-- FRIDAY BACKUP REMINDER MODAL -->
+<div class="modal-overlay" id="fridayReminderModal" style="align-items:center;">
+  <div class="modal" style="border-radius:20px;max-width:380px;margin:20px;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <div style="font-size:32px;margin-bottom:8px;">💾</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;color:#fff;">Back Up Your Data!</div>
+      <div style="font-size:12px;color:var(--green);font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:0.5px;">Weekly Reminder</div>
+    </div>
+    <div style="background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.3);border-radius:12px;padding:14px;margin-bottom:14px;">
+      <p style="font-size:13px;color:#fff;line-height:1.6;">⚠️ <strong>SanTrack is still in development.</strong> Every time the app is updated, your data may be lost unless you export it first.</p>
+    </div>
+    <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px;">This is a temporary situation — once the <strong style="color:#fff;">iOS app is created and approved</strong> by the App Store, your data will be saved permanently and this won't be an issue anymore.</p>
+    <div style="background:rgba(66,130,71,0.1);border:1px solid rgba(66,130,71,0.3);border-radius:12px;padding:14px;margin-bottom:20px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:var(--green);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">How to export your data:</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        1. Tap <strong style="color:#fff;">Profile</strong> tab (bottom right)<br>
+        2. Scroll down to <strong style="color:#fff;">Backup &amp; Restore</strong><br>
+        3. Tap <strong style="color:#fff;">⬇ Export My Data</strong><br>
+        4. Save the file somewhere safe<br>
+        5. When updating, tap <strong style="color:#fff;">⬆ Import / Restore Data</strong>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="closeFridayReminder()">Got It — I'll Back Up Now</button>
+    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:10px;">You'll see this reminder every Friday</p>
+  </div>
+</div>
 <div class="modal-overlay" id="shiftModal">
   <div class="modal">
     <div class="modal-title">Log Shift <button class="close-btn" onclick="closeModal('shiftModal')">✕</button></div>
     <div class="form-group">
       <label>Date</label>
       <input type="date" id="shiftDate">
-    </div>
-    <div class="form-group">
-      <label>Chart Day?</label>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="chartDay" id="chartDayYes" value="yes" style="width:auto;"> Yes — Chart Day (2x / 1.5x snow)
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="chartDay" id="chartDayNo" value="no" checked style="width:auto;"> No
-        </label>
-      </div>
     </div>
     <div class="form-group">
       <label>Start Time</label>
@@ -1929,7 +2210,7 @@ document.currentScript.parentNode.appendChild(_link);
           <option>BK1</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option>
         </optgroup>
         <optgroup label="Brooklyn South">
-          <option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15A</option><option>BK18</option>
+          <option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK16</option><option>BK18</option>
         </optgroup>
         <optgroup label="Manhattan">
           <option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option>
@@ -2026,13 +2307,6 @@ document.currentScript.parentNode.appendChild(_link);
       <label>Overtime <span style="font-size:10px;color:var(--text2);text-transform:none;">starts at <span id="editOTStartLabel" style="color:#a855f7;font-weight:700;"></span> — pick end time</span></label>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px;" id="editOTEndPresets"></div>
       <input type="time" id="editShiftOTEnd" step="60" oninput="onEditOTEndInput()">
-    </div>
-    <div class="form-group">
-      <label>Chart Day?</label>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;"><input type="radio" name="editChartDay" id="editChartDayYes" value="yes" style="width:auto;"> Yes (2x / 1.5x snow)</label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;"><input type="radio" name="editChartDay" id="editChartDayNo" value="no" checked style="width:auto;"> No</label>
-      </div>
     </div>
     <div class="form-group">
       <label>Function</label>
@@ -2152,7 +2426,7 @@ document.currentScript.parentNode.appendChild(_link);
         <option value="">Select garage</option>
         <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
         <optgroup label="Brooklyn North"><option>BK1</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
-        <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15A</option><option>BK18</option></optgroup>
+        <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK16</option><option>BK18</option></optgroup>
         <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option></optgroup>
         <optgroup label="Queens East"><option>Q7</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q14</option></optgroup>
         <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
@@ -2496,7 +2770,7 @@ function exportData() {
   const users = getUsers();
   const userData = getUserData(currentUser.id);
   const exportObj = {
-    version: '0.0.4',
+    version: '0.0.6',
     exportedAt: new Date().toISOString(),
     user: users[currentUser.id],
     data: userData
@@ -2564,6 +2838,21 @@ function showError(msg) {
 function startApp() {
   document.getElementById('loginScreen').classList.remove('active');
   document.getElementById('appScreen').classList.add('active');
+  checkFridayReminder();
+
+  // Migrate: sync chartDay on all shifts with calendar-selected chart days
+  (function migrateChartDays() {
+    const d = getUserData(currentUser.id);
+    const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
+    let changed = false;
+    d.shifts.forEach(s => {
+      const mk = s.date ? s.date.slice(0,7) : '';
+      const day = s.date ? parseInt(s.date.slice(8)) : 0;
+      const isCalChartDay = (saved[mk] || []).includes(day);
+      if (s.chartDay !== isCalChartDay) { s.chartDay = isCalChartDay; changed = true; }
+    });
+    if (changed) saveUserData(currentUser.id, d);
+  })();
 
   const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0,2);
   const avatarEl = document.getElementById('headerAvatar');
@@ -2576,13 +2865,13 @@ function startApp() {
   document.getElementById('profileGarage').textContent = currentUser.district;
   document.getElementById('profileTitleRow').textContent = currentUser.title;
   document.getElementById('profile457').textContent = currentUser.contrib457 ? parseFloat(currentUser.contrib457).toFixed(2) + '%' : 'Not set';
-  document.getElementById('profileRate').textContent = '$' + parseFloat(currentUser.rate).toFixed(0) + '/yr';
+  document.getElementById('profileRate').innerHTML = '$' + parseFloat(currentUser.rate).toFixed(0) + '/yr';
   document.getElementById('profileProbation').textContent = currentUser.probation === 'yes' ? '✅ Yes' : '❌ No';
   document.getElementById('profileHireDate').textContent = currentUser.hireDate ? new Date(currentUser.hireDate + 'T12:00:00').toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}) : 'Not set';
   updateProbationDisplay();
-  document.getElementById('baseRateDisplay').textContent = '$' + parseFloat(currentUser.rate).toFixed(0) + '/yr';
-  document.getElementById('otRateDisplay').textContent = '$' + (currentUser.rate / 52).toFixed(2);
-  document.getElementById('holidayRateDisplay').textContent = '$' + (currentUser.rate / 260).toFixed(2);
+  document.getElementById('baseRateDisplay').innerHTML = '$' + parseFloat(currentUser.rate).toFixed(0) + '/yr';
+  document.getElementById('otRateDisplay').innerHTML = '<span class="tilde">~</span>$' + (currentUser.rate / 52).toFixed(2);
+  document.getElementById('holidayRateDisplay').innerHTML = '<span class="tilde">~</span>$' + (currentUser.rate / 260).toFixed(2);
 
   document.getElementById('dashName').textContent = currentUser.name;
   document.getElementById('dashBadge').textContent = currentUser.badge ? 'Badge #' + currentUser.badge : 'Badge #123456';
@@ -2685,12 +2974,13 @@ function renderWeeklyList() {
     var monthKey2 = dateStr.slice(0,7);
     var savedChartDays2 = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
     var savedVacationDays2 = JSON.parse(localStorage.getItem('vacation_days_' + currentUser.id) || '{}');
-    var isManualChartDay2 = !(shift && shift.chartDay !== undefined) && (savedChartDays2[monthKey2] || []).includes(dy);
+    var isAnyChartDay = shift && shift.chartDay === true;
+    var isManualChartDay2 = !isAnyChartDay && (savedChartDays2[monthKey2] || []).includes(dy);
     var isVacationDay2 = (savedVacationDays2[monthKey2] || []).includes(dy);
     if (isHolidayRow) { bg = 'rgba(248,81,73,0.25)'; border = 'rgba(248,81,73,0.35)'; barColor = 'rgba(248,81,73,0.5)'; }
     if (days[i] === 'Sunday') { bg = 'rgba(248,81,73,0.25)'; border = 'rgba(248,81,73,0.35)'; barColor = shift ? 'var(--red)' : 'rgba(248,81,73,0.3)'; }
-    if (isManualChartDay2 || (shift && shift.chartDay !== undefined)) { bg = 'rgba(56,139,253,0.25)'; border = 'rgba(56,139,253,0.35)'; barColor = '#388BFD'; }
-    if (isVacationDay2) { bg = 'rgba(50,205,50,0.25)'; border = 'rgba(50,205,50,0.35)'; barColor = '#32cd32'; }
+    if (isManualChartDay2 || isAnyChartDay) { bg = 'rgba(56,139,253,0.25)'; border = 'rgba(56,139,253,0.35)'; barColor = '#388BFD'; }
+    if (isVacationDay2) { bg = 'rgba(255,140,0,0.25)'; border = 'rgba(255,140,0,0.35)'; barColor = '#FF8C00'; }
     var row = '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:' + bg + ';border:1px solid ' + border + ';border-radius:5px;margin-bottom:3px;cursor:pointer;" onclick="openShiftForDay(\'' + dateStr + '\')">';
     row += '<div style="display:flex;align-items:center;gap:5px;">';
     row += '<div style="width:3px;min-height:30px;border-radius:2px;background:' + barColor + ';flex-shrink:0;"></div>';
@@ -2713,7 +3003,7 @@ function renderWeeklyList() {
       var tags = '';
       var _ns = shift.start ? (function(){ var p=shift.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })() : false;
       if (shift.otHours > 0) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(168,85,247,0.2);color:#a855f7;margin-right:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>OT</span>';
-      if (isVacationDay2) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(50,205,50,0.2);color:#32cd32;margin-right:4px;">Vacation</span>';
+      if (isVacationDay2) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(255,140,0,0.2);color:#FF8C00;margin-right:4px;">XWP/XWOP</span>';
       if (days[i] === 'Sunday') tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(248,81,73,0.2);color:#ff9d9a;margin-right:4px;">Sunday</span>';
       if (isHolidayRow) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(248,81,73,0.2);color:#ff9d9a;margin-right:4px;">Holiday</span>';
       if (_ns) tags += '<span style="display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;background:rgba(30,58,138,0.4);color:#93c5fd;margin-right:4px;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Night</span>';
@@ -2721,9 +3011,9 @@ function renderWeeklyList() {
     }
     row += '</div></div>';
     if (shift && shift.pay > 0) {
-      row += '<div style="text-align:right;"><div style="font-family:\'Barlow\',sans-serif;font-size:16px;font-weight:700;"><span style="color:var(--green);">$</span><span style="color:#ffffff;">' + shift.pay.toFixed(2) + '</span></div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div></div>';
+      row += '<div style="text-align:right;"><div style="font-family:\'Barlow\',sans-serif;font-size:16px;font-weight:700;"><span style="color:var(--green);">' + (shift.truckMoney > 0 ? '' : '<span class="tilde">~</span>') + '$</span><span style="color:#ffffff;">' + shift.pay.toFixed(2) + '</span></div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div></div>';
     } else if (!shift) {
-      var noShiftLabel = isManualChartDay2 ? '<span style="color:#388BFD;font-weight:700;">Chart Day</span>' : isVacationDay2 ? '<span style="color:#32cd32;font-weight:700;">Vacation</span>' : isHolidayRow ? '<span style="color:#ff9d9a;font-weight:700;">Holiday</span>' : days[i] === 'Sunday' ? '<span style="color:#ff9d9a;font-weight:700;">Sunday</span>' : (isPast ? 'No shift' : 'Tap to log');
+      var noShiftLabel = isManualChartDay2 ? '<span style="color:#388BFD;font-weight:700;">Chart Day</span>' : isVacationDay2 ? '<span style="color:#FF8C00;font-weight:700;">XWP/XWOP</span>' : isHolidayRow ? '<span style="color:#ff9d9a;font-weight:700;">Holiday</span>' : days[i] === 'Sunday' ? '<span style="color:#ff9d9a;font-weight:700;">Sunday</span>' : (isPast ? 'No shift' : 'Tap to log');
       row += '<div style="font-size:10px;color:' + (isPast ? 'var(--text3)' : 'var(--text2)') + ';">' + noShiftLabel + '</div>';
     }
     row += '</div>';
@@ -2733,8 +3023,14 @@ function renderWeeklyList() {
 }
 
 function openShiftForDay(dateStr) {
-  document.getElementById('shiftDate').value = dateStr;
-  document.getElementById('shiftModal').classList.add('open');
+  const d = getUserData(currentUser.id);
+  const existing = d.shifts.find(s => s.date === dateStr);
+  if (existing) {
+    openEditShift(existing.id);
+  } else {
+    document.getElementById('shiftDate').value = dateStr;
+    document.getElementById('shiftModal').classList.add('open');
+  }
 }
 
 function toggleAchievementCat(cat) {
@@ -4168,13 +4464,53 @@ function calcTruckMoney(type, fraction, chartDay, isSnow) {
   return TRUCK_MONEY_FULL * multiplier;
 }
 
+const SAT_SHOW_UP = 24.10;
+const SAT_TRUCK   = 7.77;
+const TRUCK_DIFF_FULL = 18.17;
+
+function calcSaturdayPay(date, type, fraction, chartDay) {
+  if (!date) return 0;
+  const isSat = new Date(date + 'T12:00:00').getDay() === 6;
+  if (!isSat) return 0;
+  let total = SAT_SHOW_UP;
+  // Truck bonus only on eligible types
+  if (type && TRUCK_MONEY_ELIGIBLE.indexOf(type) !== -1) {
+    const multiplier = chartDay ? 2 : 1;
+    if (fraction) {
+      const lower = fraction.toLowerCase();
+      if (lower.includes('1/4')) total += SAT_TRUCK * 0.25 * multiplier;
+      else if (lower.includes('1/2') || lower.includes('2/4')) total += SAT_TRUCK * 0.50 * multiplier;
+      else if (lower.includes('3/4')) total += SAT_TRUCK * 0.75 * multiplier;
+    } else {
+      total += SAT_TRUCK * multiplier;
+    }
+  }
+  return total;
+}
+
+function calcTruckDifferential(type, fraction, chartDay, isSnow) {
+  if (!type || TRUCK_MONEY_ELIGIBLE.indexOf(type) === -1) return 0;
+  const multiplier = chartDay ? (isSnow ? 1.5 : 2) : 1;
+  if (fraction) {
+    const lower = fraction.toLowerCase();
+    if (lower.includes('1/4')) return TRUCK_DIFF_FULL * 0.25 * multiplier;
+    if (lower.includes('1/2') || lower.includes('2/4')) return TRUCK_DIFF_FULL * 0.50 * multiplier;
+    if (lower.includes('3/4')) return TRUCK_DIFF_FULL * 0.75 * multiplier;
+  }
+  return TRUCK_DIFF_FULL * multiplier;
+}
+
 function addShift() {
   const date = document.getElementById('shiftDate').value;
   const type = document.getElementById('shiftType').value;
   const start = document.getElementById('shiftStart').value;
   const end = document.getElementById('shiftEnd').value;
   const fraction = document.getElementById('shiftFraction').value;
-  const chartDay = document.querySelector('input[name="chartDay"]:checked').value === 'yes';
+  const chartDay = (function() {
+    const mk = date.slice(0,7);
+    const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
+    return (saved[mk] || []).includes(parseInt(date.slice(8)));
+  })();
   const tons = parseFloat(document.getElementById('shiftTons').value) || null;
   const partner = document.getElementById('shiftPartner').value.trim();
   const location = document.getElementById('shiftLocation').value;
@@ -4191,10 +4527,12 @@ function addShift() {
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, currentUser.rate);
   const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
-  pay += truckMoney;
+  const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
+  const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
+  pay += truckMoney + saturdayPay + truckDifferential;
 
   const d = getUserData(currentUser.id);
-  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney });
+  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential });
   saveUserData(currentUser.id, d);
   closeModal('shiftModal');
   showToast('✅ Shift logged!');
@@ -4279,12 +4617,6 @@ function openEditShift(id) {
   document.getElementById('editShiftPartner').value = s.partner || '';
   document.getElementById('editTruckDowned').value = s.truckDowned || 0;
   document.getElementById('editShiftNotes').value = s.notes || '';
-  if (s.chartDay) {
-    document.getElementById('editChartDayYes').checked = true;
-  } else {
-    document.getElementById('editChartDayNo').checked = true;
-  }
-
   // Restore start time preset button
   const start = s.start || '';
   document.getElementById('editShiftStart').value = start;
@@ -4331,7 +4663,11 @@ function saveEditShift() {
   const end = document.getElementById('editShiftEnd').value;
   const type = document.getElementById('editShiftType').value;
   const fraction = document.getElementById('editShiftFraction').value;
-  const chartDay = document.querySelector('input[name="editChartDay"]:checked').value === 'yes';
+  const chartDay = (function() {
+    const mk = date.slice(0,7);
+    const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
+    return (saved[mk] || []).includes(parseInt(date.slice(8)));
+  })();
   const route = document.getElementById('editShiftRoute').value;
   const section = document.getElementById('editShiftSection').value;
   const partner = document.getElementById('editShiftPartner').value.trim();
@@ -4347,9 +4683,11 @@ function saveEditShift() {
   let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
   if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, currentUser.rate);
   const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
-  pay += truckMoney;
+  const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
+  const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
+  pay += truckMoney + saturdayPay + truckDifferential;
 
-  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, truckDowned, notes, hours, regHours, otHours, pay, truckMoney };
+  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential };
   saveUserData(currentUser.id, d);
   closeModal('editShiftModal');
   editingShiftId = null;
@@ -4384,15 +4722,24 @@ function renderShiftItem(s) {
   const truckMoneyLine = s.truckMoney > 0
     ? `<div style="font-size:11px;color:#ffd100;font-weight:700;">+$${s.truckMoney.toFixed(2)} truck money${s.fraction ? ' (' + s.fraction + ')' : ''}</div>`
     : '';
+  const saturdayPayLine = s.saturdayPay > 0
+    ? `<div style="font-size:11px;color:#ffd100;font-weight:700;">+$${s.saturdayPay.toFixed(2)} saturday pay</div>`
+    : '';
+  const truckDiffLine = s.truckDifferential > 0
+    ? `<div style="font-size:11px;color:#ffd100;font-weight:700;"><span class="tilde">~</span>+$${s.truckDifferential.toFixed(2)} truck differential</div>`
+    : '';
+  const hasExact = s.truckMoney > 0 || s.saturdayPay > 0 || s.truckDifferential > 0;
   return `<div class="shift-item">
     <div class="shift-left">
       <div class="shift-date">${dateStr}</div>
       <div class="shift-type"><span class="tag ${typeTagClass(s.type)}">${typeLabel(s.type)}</span>${s.otHours > 0 ? ' <span class="tag" style="background:rgba(168,85,247,0.2);color:#a855f7;">OT</span>' : ''}${s.chartDay ? ' <span style="color:#388BFD;font-size:11px;font-weight:700;">$$ Chart</span>' : ''}${(s.start && (function(){ var p=s.start.split(':'),mins=parseInt(p[0])*60+parseInt(p[1]); return mins > 11*60 && mins <= 23*60+59; })()) ? ' <span class="tag" style="background:rgba(30,58,138,0.4);color:#93c5fd;"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Night</span>' : ''}</div>
       <div class="shift-hours">${s.start} – ${s.end} &nbsp;•&nbsp; ${s.hours}h ${(s.section || s.route) ? '&nbsp;•&nbsp; ' + [s.section, s.route].filter(Boolean).join(', ') : ''}</div>
       ${truckMoneyLine}
+      ${saturdayPayLine}
+      ${truckDiffLine}
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-      <div class="shift-pay">$${s.pay.toFixed(2)}</div>
+      <div class="shift-pay">${hasExact ? '' : '<span class="tilde">~</span>'}$${s.pay.toFixed(2)}</div>
       <div style="display:flex;gap:4px;">
         <button class="delete-btn" onclick="openEditShift(${s.id})" style="color:var(--text3);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
         <button class="delete-btn" onclick="deleteShift(${s.id})"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
@@ -4496,9 +4843,9 @@ function getShiftLabel(type) {
 }
 
 function toggleCalDropdown(id) {
-  const dropdowns = ['chartDayDropdown', 'vacationDropdown'];
+  const dropdowns = ['chartDayDropdown', 'vacationDropdown', 'sickDropdown', 'lodiDropdown', 'paternityDropdown', 'fmlaDropdown', 'vacWeekDropdown'];
   dropdowns.forEach(d => {
-    if (d !== id) document.getElementById(d).style.display = 'none';
+    if (d !== id) { const el = document.getElementById(d); if (el) el.style.display = 'none'; }
   });
   const el = document.getElementById(id);
   const isOpen = el.style.display !== 'none';
@@ -4506,6 +4853,11 @@ function toggleCalDropdown(id) {
   if (!isOpen) {
     if (id === 'chartDayDropdown') renderCalDayPicker('chartDayGrid', 'chart_days');
     if (id === 'vacationDropdown') renderCalDayPicker('vacationDayGrid', 'vacation_days');
+    if (id === 'sickDropdown') renderCalDayPicker('sickDayGrid', 'sick_days');
+    if (id === 'lodiDropdown') renderCalDayPicker('lodiDayGrid', 'lodi_days');
+    if (id === 'paternityDropdown') renderCalDayPicker('paternityDayGrid', 'paternity_days');
+    if (id === 'fmlaDropdown') renderCalDayPicker('fmlaDayGrid', 'fmla_days');
+    if (id === 'vacWeekDropdown') renderVacWeekGrid();
   }
 }
 
@@ -4517,18 +4869,20 @@ function renderCalDayPicker(gridId, storageKey) {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const saved = JSON.parse(localStorage.getItem(storageKey + '_' + currentUser.id) || '{}');
   const monthKey = year + '-' + String(month + 1).padStart(2, '0');
-  const selected = saved[monthKey] || [];
+  if (!saved[monthKey]) saved[monthKey] = [];
+  const selected = saved[monthKey];
   grid.innerHTML = '';
   for (let d = 1; d <= daysInMonth; d++) {
     const isSelected = selected.includes(d);
     const btn = document.createElement('button');
     btn.textContent = d;
     btn.dataset.day = d;
-    btn.style.cssText = `background:${isSelected ? (storageKey === 'chart_days' ? '#388BFD' : '#428247') : 'var(--dark3)'};border:1px solid ${isSelected ? 'transparent' : 'var(--dark4)'};border-radius:4px;color:${isSelected ? '#fff' : 'var(--text2)'};font-size:10px;font-weight:700;padding:4px 2px;cursor:pointer;`;
+    const color = storageKey === 'chart_days' ? '#388BFD' : storageKey === 'vacation_days' ? '#FF8C00' : '#888';
+    btn.style.cssText = `background:${isSelected ? color : 'var(--dark3)'};border:1px solid ${isSelected ? 'transparent' : 'var(--dark4)'};border-radius:4px;color:${isSelected ? '#fff' : 'var(--text2)'};font-size:10px;font-weight:700;padding:4px 2px;cursor:pointer;`;
     btn.onclick = function() {
       const idx = selected.indexOf(d);
       if (idx > -1) { selected.splice(idx, 1); btn.style.background = 'var(--dark3)'; btn.style.color = 'var(--text2)'; btn.style.border = '1px solid var(--dark4)'; }
-      else { selected.push(d); btn.style.background = storageKey === 'chart_days' ? '#388BFD' : '#428247'; btn.style.color = '#fff'; btn.style.border = '1px solid transparent'; }
+      else { selected.push(d); btn.style.background = color; btn.style.color = '#fff'; btn.style.border = '1px solid transparent'; }
       saved[monthKey] = selected;
       localStorage.setItem(storageKey + '_' + currentUser.id, JSON.stringify(saved));
     };
@@ -4536,33 +4890,92 @@ function renderCalDayPicker(gridId, storageKey) {
   }
 }
 
+function saveDayType(type) {
+  const el = document.getElementById(type + 'Dropdown');
+  if (el) el.style.display = 'none';
+  refreshAll();
+  renderCalendar();
+  showToast(type.charAt(0).toUpperCase() + type.slice(1) + ' days saved!');
+}
+
 function saveChartDays() {
   document.getElementById('chartDayDropdown').style.display = 'none';
+  refreshAll();
   renderCalendar();
   showToast('Chart days saved!');
 }
 
 function saveVacationDays() {
   document.getElementById('vacationDropdown').style.display = 'none';
+  refreshAll();
   renderCalendar();
   showToast('Vacation days saved!');
 }
 
+function renderVacWeekGrid() {
+  const grid = document.getElementById('vacWeekGrid');
+  if (!grid) return;
+  const saved = JSON.parse(localStorage.getItem('vac_weeks_' + currentUser.id) || '[]');
+  grid.innerHTML = '';
+  for (let i = 1; i <= 52; i++) {
+    const isSelected = saved.includes(i);
+    const btn = document.createElement('button');
+    btn.textContent = 'V' + i;
+    btn.dataset.week = i;
+    btn.style.cssText = 'background:' + (isSelected ? 'var(--green)' : 'var(--dark3)') + ';border:1px solid ' + (isSelected ? 'transparent' : 'var(--dark4)') + ';border-radius:5px;color:' + (isSelected ? '#fff' : 'var(--text2)') + ';font-size:10px;font-weight:700;padding:5px 2px;cursor:pointer;font-family:"Roboto",sans-serif;';
+    btn.onclick = function() {
+      const current = JSON.parse(localStorage.getItem('vac_weeks_' + currentUser.id) || '[]');
+      const idx = current.indexOf(i);
+      if (idx > -1) {
+        current.splice(idx, 1);
+        btn.style.background = 'var(--dark3)';
+        btn.style.color = 'var(--text2)';
+        btn.style.border = '1px solid var(--dark4)';
+      } else {
+        current.push(i);
+        btn.style.background = 'var(--green)';
+        btn.style.color = '#fff';
+        btn.style.border = '1px solid transparent';
+      }
+      localStorage.setItem('vac_weeks_' + currentUser.id, JSON.stringify(current));
+    };
+    grid.appendChild(btn);
+  }
+}
+
+function saveVacWeek() {
+  document.getElementById('vacWeekDropdown').style.display = 'none';
+  renderCalendar();
+  const saved = JSON.parse(localStorage.getItem('vac_weeks_' + currentUser.id) || '[]');
+  showToast(saved.length ? '✅ Vacation weeks saved!' : '✅ Vacation weeks cleared!');
+}
+
 document.addEventListener('click', function(e) {
   if (!e.target.closest('#chartDayDropdown') && !e.target.closest('#vacationDropdown') &&
+      !e.target.closest('#sickDropdown') && !e.target.closest('#lodiDropdown') &&
+      !e.target.closest('#paternityDropdown') && !e.target.closest('#fmlaDropdown') &&
+      !e.target.closest('#vacWeekDropdown') &&
       !e.target.closest('button[onclick*="toggleCalDropdown"]')) {
-    ['chartDayDropdown','vacationDropdown'].forEach(id => {
+    ['chartDayDropdown','vacationDropdown','sickDropdown','lodiDropdown','paternityDropdown','fmlaDropdown','vacWeekDropdown'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = 'none';
     });
   }
 });
 
+function getISOWeek(d) {
+  const date = new Date(d.getTime());
+  date.setHours(0,0,0,0);
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  const week1 = new Date(date.getFullYear(), 0, 4);
+  return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+}
+
 function renderCalendar() {
   const year = calDate.getFullYear();
   const month = calDate.getMonth();
   const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calMonth').textContent = monthNames[month] + ' ' + year;
+  document.getElementById('calMonth').innerHTML = `<span style="font-family:'Permanent Marker',cursive;background:linear-gradient(90deg,#54a55a,#428247);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;font-size:35px;">${monthNames[month]}</span> <span style="font-family:'Permanent Marker',cursive;-webkit-text-fill-color:#ffffff;color:#ffffff;font-size:25px;">'${String(year).slice(2)}</span>`;
 
   const d = getUserData(currentUser.id);
   // Build a map of date -> array of shifts
@@ -4620,8 +5033,8 @@ function renderCalendar() {
       }
       const { day, dateStr, isToday, dayShifts, dayHrs, dayPay } = cell;
       const isSundayCell = new Date(dateStr + 'T12:00:00').getDay() === 0;
-      const calDate = new Date(dateStr + 'T12:00:00');
-      const calYear = calDate.getFullYear();
+      const cellDate = new Date(dateStr + 'T12:00:00');
+      const calYear = cellDate.getFullYear();
 
       // Holiday detection
       function nthWeekday(year, month, weekday, n) {
@@ -4651,7 +5064,7 @@ function renderCalendar() {
       const isOutOfGarageDay = dayShifts.some(s => s.start && s.location && s.location !== currentUser.district);
       const holidayStyle = holiday ? 'background:rgba(248,81,73,0.25);' : '';
       const sundayStyle2 = isSundayCell ? 'background:rgba(248,81,73,0.25);' : '';
-      const isChartDay = dayShifts.some(s => s.chartDay);
+      const isChartDay = dayShifts.some(s => s.chartDay === true);
       // Check manually saved chart days
       const monthKey = dateStr.slice(0,7);
       const savedChartDays = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
@@ -4659,10 +5072,27 @@ function renderCalendar() {
       // Check manually saved vacation days
       const savedVacationDays = JSON.parse(localStorage.getItem('vacation_days_' + currentUser.id) || '{}');
       const isVacationDay = (savedVacationDays[monthKey] || []).includes(parseInt(dateStr.slice(8)));
+      // Check sick, lodi, paternity
+      const savedSickDays = JSON.parse(localStorage.getItem('sick_days_' + currentUser.id) || '{}');
+      const isSickDay = (savedSickDays[monthKey] || []).includes(parseInt(dateStr.slice(8)));
+      const savedLodiDays = JSON.parse(localStorage.getItem('lodi_days_' + currentUser.id) || '{}');
+      const isLodiDay = (savedLodiDays[monthKey] || []).includes(parseInt(dateStr.slice(8)));
+      const savedPaternityDays = JSON.parse(localStorage.getItem('paternity_days_' + currentUser.id) || '{}');
+      const isPaternityDay = (savedPaternityDays[monthKey] || []).includes(parseInt(dateStr.slice(8)));
+      const savedFmlaDays = JSON.parse(localStorage.getItem('fmla_days_' + currentUser.id) || '{}');
+      const isFmlaDay = (savedFmlaDays[monthKey] || []).includes(parseInt(dateStr.slice(8)));
       const outOfGarageStyle = isOutOfGarageDay ? 'background:rgba(255,209,0,0.25);' : '';
       const chartDayStyle = (isChartDay || isManualChartDay) ? 'background:rgba(56,139,253,0.25);' : '';
-      const vacationStyle = isVacationDay ? 'background:rgba(50,205,50,0.25);' : '';
-      const bgStyle = ` style="${sundayStyle2 || holidayStyle || outOfGarageStyle || chartDayStyle || vacationStyle}"`;
+      const vacationStyle = isVacationDay ? 'background:rgba(60,60,60,0.9);' : '';
+      const sickStyle = isSickDay ? 'background:rgba(60,60,60,0.9);' : '';
+      const lodiStyle = isLodiDay ? 'background:rgba(60,60,60,0.9);' : '';
+      const paternityStyle = isPaternityDay ? 'background:rgba(60,60,60,0.9);' : '';
+      const fmlaStyle = isFmlaDay ? 'background:rgba(60,60,60,0.9);' : '';
+      // Check vacation weeks
+      const savedVacWeeks = JSON.parse(localStorage.getItem('vac_weeks_' + currentUser.id) || '[]');
+      const isVacWeekDay = savedVacWeeks.includes(getISOWeek(cellDate));
+      const vacWeekStyle = isVacWeekDay ? 'background:rgba(66,130,71,0.2);' : '';
+      const bgStyle = ` style="${vacWeekStyle || sundayStyle2 || holidayStyle || outOfGarageStyle || chartDayStyle || vacationStyle || sickStyle || lodiStyle || paternityStyle || fmlaStyle}"`;
       const cls = ['cal-day', isToday ? 'today' : ''].filter(Boolean).join(' ');
 
       let chipsHtml = '';
@@ -4676,7 +5106,13 @@ function renderCalendar() {
       }
       const hasShifts = dayShifts.length > 0;
       if (!hasShifts) {
-        if (isManualChartDay) {
+        if (isVacWeekDay) {
+          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
+            <div class="cal-shift-chip" style="background:rgba(66,130,71,0.3);color:#54a55a;margin:0;">
+              <span class="chip-type">VACATION</span>
+            </div>
+          </div>`;
+        } else if (isManualChartDay) {
           chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
             <div class="cal-shift-chip" style="background:rgba(56,139,253,0.3);color:#82b8ff;margin:0;">
               <span class="chip-type">CHART DAY</span>
@@ -4684,8 +5120,32 @@ function renderCalendar() {
           </div>`;
         } else if (isVacationDay) {
           chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
-            <div class="cal-shift-chip" style="background:rgba(50,205,50,0.3);color:#32cd32;margin:0;">
-              <span class="chip-type">VACATION</span>
+            <div class="cal-shift-chip" style="background:rgba(255,140,0,0.3);color:#FF8C00;margin:0;">
+              <span class="chip-type">XWP/XWOP</span>
+            </div>
+          </div>`;
+        } else if (isSickDay) {
+          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
+            <div class="cal-shift-chip" style="background:rgba(255,255,255,0.1);color:#fff;margin:0;">
+              <span class="chip-type">SICK</span>
+            </div>
+          </div>`;
+        } else if (isLodiDay) {
+          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
+            <div class="cal-shift-chip" style="background:rgba(255,255,255,0.1);color:#fff;margin:0;">
+              <span class="chip-type">LODI</span>
+            </div>
+          </div>`;
+        } else if (isPaternityDay) {
+          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
+            <div class="cal-shift-chip" style="background:rgba(255,255,255,0.1);color:#fff;margin:0;">
+              <span class="chip-type">PATERNITY LEAVE</span>
+            </div>
+          </div>`;
+        } else if (isFmlaDay) {
+          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
+            <div class="cal-shift-chip" style="background:rgba(255,255,255,0.1);color:#fff;margin:0;">
+              <span class="chip-type">FMLA</span>
             </div>
           </div>`;
         } else if (holiday) {
@@ -4751,17 +5211,59 @@ function renderCalendar() {
         chipsHtml += `<div style="font-size:8px;color:var(--text3);padding-left:2px;">+${dayShifts.length - maxChips} more</div>`;
       }
 
-      html += `<div class="${cls}"${bgStyle} onclick="showCalDay('${dateStr}')">
-        <div class="cal-day-num">${day}</div>
+      // Calculate V number for Mondays (52-week cycle, resets yearly)
+      const dayOfWeek = new Date(dateStr + 'T12:00:00').getDay();
+      let vLabel = '';
+      if (dayOfWeek === 1) {
+        const [yr, mo, dy2] = dateStr.split('-').map(Number);
+        const toJD = (y, m, d) => {
+          const a = Math.floor((14 - m) / 12);
+          const yy = y + 4800 - a, mm = m + 12 * a - 3;
+          return d + Math.floor((153 * mm + 2) / 5) + 365 * yy + Math.floor(yy / 4) - Math.floor(yy / 100) + Math.floor(yy / 400) - 32045;
+        };
+        // Find V1 start for this cycle year (Monday on/before Dec 29 of previous year)
+        const getV1JD = (cycleYear) => {
+          // Dec 29 of cycleYear-1, go back to Monday
+          const dec29 = new Date(cycleYear - 1, 11, 29);
+          const dow = dec29.getDay();
+          const monday = new Date(dec29);
+          monday.setDate(dec29.getDate() - (dow === 0 ? 6 : dow - 1));
+          return toJD(monday.getFullYear(), monday.getMonth() + 1, monday.getDate());
+        };
+        // Determine which cycle year this date belongs to
+        // If before V1 of current year, use previous year's cycle
+        const v1ThisYear = getV1JD(yr);
+        const v1NextYear = getV1JD(yr + 1);
+        const cellJD = toJD(yr, mo, dy2);
+        let v1JD;
+        if (cellJD >= v1NextYear) v1JD = v1NextYear;
+        else if (cellJD >= v1ThisYear) v1JD = v1ThisYear;
+        else v1JD = getV1JD(yr - 1 + 1); // fallback
+        const diffDays = cellJD - v1JD;
+        const weekNum = (Math.floor(diffDays / 7) % 52) + 1;
+        vLabel = 'V' + weekNum;
+      }
+
+      const bgStyleInner = bgStyle.replace(' style="', '').replace('"', '');
+      html += `<div class="${cls}" style="${bgStyleInner}position:relative;" onclick="showCalDay('${dateStr}')">
+        <div class="cal-day-num" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>${day}</span>
+          ${vLabel ? `<span style="font-family:'Barlow',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);line-height:1;">${vLabel}</span>` : ''}
+        </div>
         ${chipsHtml}
       </div>`;
     }
 
     // Week total row
+    const taxRate = 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331;
+    const fixedDeductions = 7.42 + 18.89 + 40.48 + 21.00; // health + disability + pension + union
+    const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
+    const contrib457 = week.totalPay * contrib457Pct / 100;
+    const weekNetPay = Math.round(week.totalPay * (1 - taxRate) - fixedDeductions - contrib457);
     if (week.totalHrs > 0) {
       html += `<div class="cal-week-total">
         <span class="wt-hrs">${week.totalHrs}h</span>
-        <span class="wt-pay">$${Math.round(week.totalPay).toLocaleString()}</span>
+        <span class="wt-pay"><span class="tilde">~</span>$${weekNetPay.toLocaleString()}</span>
       </div>`;
     } else {
       html += `<div class="cal-week-total" style="opacity:0;pointer-events:none;">&nbsp;</div>`;
@@ -4968,10 +5470,16 @@ function populateTruckBreakdown(shifts) {
   list.innerHTML = truckShifts.map(s => {
     const dt = new Date(s.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
     const label = s.chartDay ? 'Chart Truck Money' : (s.fraction || 'Full Truck');
+    const diffLine = s.truckDifferential > 0
+      ? `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0 4px 12px;font-size:11px;">
+          <span style="color:var(--text3);">↳ Truck Differential</span>
+          <span style="color:#FFD100;font-weight:700;"><span class="tilde">~</span>+$${s.truckDifferential.toFixed(2)}</span>
+        </div>`
+      : '';
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--dark3);font-size:12px;">
       <span style="color:var(--text2);">${dt} &nbsp;—&nbsp; <span style="color:#FFD100;font-weight:700;">${label}</span></span>
       <span style="color:#FFD100;font-weight:700;">+$${s.truckMoney.toFixed(2)}</span>
-    </div>`;
+    </div>${diffLine}`;
   }).join('');
 }
 
@@ -4981,7 +5489,7 @@ function updatePayPage() {
   const shifts = getPayPeriodShifts(period);
   const rate = parseFloat(currentUser.rate);
 
-  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, chartOtH = 0, chartOtP = 0, sundayP = 0, truckP = 0;
+  let otH = 0, otP = 0, holP = 0, diffP = 0, chartP = 0, chartOtH = 0, chartOtP = 0, sundayP = 0, truckP = 0, satP = 0, truckDiffP = 0;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   const weeklyBase = rate / 52;
   let regH = 0;
@@ -5039,30 +5547,34 @@ function updatePayPage() {
   });
   // Truck money: one per day, fractional beats full
   truckP = Object.values(truckByDate).reduce((a, s) => a + (s.truckMoney || 0), 0);
+  satP = shifts.reduce((a, s) => a + (s.saturdayPay || 0), 0);
+  truckDiffP = shifts.reduce((a, s) => a + (s.truckDifferential || 0), 0);
 
-  const total = regP + otP + holP + diffP + chartP + sundayP + truckP;
+  const total = regP + otP + holP + diffP + chartP + sundayP + truckP + satP + truckDiffP;
 
-  document.getElementById('payRegHours').textContent = regH.toFixed(1) + 'h';
-  document.getElementById('payRegPay').textContent = '$' + regP.toFixed(2);
-  document.getElementById('payChartPay').textContent = '$' + chartP.toFixed(2);
+  const hoursTarget = (period === 'month') ? '~173' : (period === 'year') ? '~2080' : (period === 'all') ? '~46800' : 40;
+  document.getElementById('payRegHours').textContent = Math.round(regH) + '/' + hoursTarget;
+  document.getElementById('payRegPay').innerHTML = '<span class="tilde">~</span>$' + regP.toFixed(2);
+  document.getElementById('payChartPay').innerHTML = '<span class="tilde">~</span>$' + chartP.toFixed(2);
   document.getElementById('chartBreakdownList').style.display = 'none';
   document.getElementById('chartChevron').style.transform = '';
   populateChartBreakdown(shifts, period);
-  document.getElementById('payTruckMoney').textContent = '$' + truckP.toFixed(2);
+  document.getElementById('payTruckMoney').textContent = '$' + (truckP + truckDiffP).toFixed(2);
   // Reset truck dropdown on period change
   document.getElementById('truckBreakdownList').style.display = 'none';
   document.getElementById('truckChevron').style.transform = '';
   populateTruckBreakdown(shifts);
+  document.getElementById('paySaturdayPay').textContent = '$' + satP.toFixed(2);
   const payOTHoursEl = document.getElementById('payOTHours');
   if (payOTHoursEl) payOTHoursEl.textContent = otH.toFixed(1) + 'h';
-  document.getElementById('payOTPay').textContent = '$' + (otP + chartOtP).toFixed(2);
+  document.getElementById('payOTPay').innerHTML = '<span class="tilde">~</span>$' + (otP + chartOtP).toFixed(2);
   document.getElementById('otBreakdownList').style.display = 'none';
   document.getElementById('otChevron').style.transform = '';
   populateOTBreakdown(shifts, rate);
-  document.getElementById('payHolidayPay').textContent = '$' + holP.toFixed(2);
-  document.getElementById('payDiffPay').textContent = '$' + diffP.toFixed(2);
-  document.getElementById('paySundayPay').textContent = '$' + sundayP.toFixed(2);
-  document.getElementById('payTotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('payHolidayPay').innerHTML = '<span class="tilde">~</span>$' + holP.toFixed(2);
+  document.getElementById('payDiffPay').innerHTML = '<span class="tilde">~</span>$' + diffP.toFixed(2);
+  document.getElementById('paySundayPay').innerHTML = '<span class="tilde">~</span>$' + sundayP.toFixed(2);
+  document.getElementById('payTotal').innerHTML = '<span class="tilde">~</span>$' + total.toFixed(2);
 
   // Tax deductions
   const fica = total * 0.062;
@@ -5072,12 +5584,12 @@ function updatePayPage() {
   const nyc = total * 0.0331;
   const totalTax = fica + medicare + federal + state + nyc;
 
-  document.getElementById('payFICA').textContent = '$' + fica.toFixed(2);
-  document.getElementById('payMedicare').textContent = '$' + medicare.toFixed(2);
-  document.getElementById('payFederal').textContent = '$' + federal.toFixed(2);
-  document.getElementById('payState').textContent = '$' + state.toFixed(2);
-  document.getElementById('payNYC').textContent = '$' + nyc.toFixed(2);
-  document.getElementById('payTotalTax').textContent = '$' + totalTax.toFixed(2);
+  document.getElementById('payFICA').innerHTML = '<span class="tilde">~</span>$' + fica.toFixed(2);
+  document.getElementById('payMedicare').innerHTML = '<span class="tilde">~</span>$' + medicare.toFixed(2);
+  document.getElementById('payFederal').innerHTML = '<span class="tilde">~</span>$' + federal.toFixed(2);
+  document.getElementById('payState').innerHTML = '<span class="tilde">~</span>$' + state.toFixed(2);
+  document.getElementById('payNYC').innerHTML = '<span class="tilde">~</span>$' + nyc.toFixed(2);
+  document.getElementById('payTotalTax').innerHTML = '<span class="tilde">~</span>$' + totalTax.toFixed(2);
 
   // Other deductions (fixed from stub + user's 457)
   const health = 7.42;
@@ -5090,17 +5602,17 @@ function updatePayPage() {
   document.getElementById('pay457Label').textContent = '457 Savings Plan' + (contrib457Pct ? ' (' + contrib457Pct.toFixed(2) + '%)' : ' (not set)');
   const totalOther = health + ppo + disability + pension + unionAssn + contrib457;
 
-  document.getElementById('payHealth').textContent = '$' + health.toFixed(2);
-  document.getElementById('payPPO').textContent = '$' + ppo.toFixed(2);
-  document.getElementById('payDisability').textContent = '$' + disability.toFixed(2);
-  document.getElementById('payPension').textContent = '$' + pension.toFixed(2);
-  document.getElementById('payUnionAssn').textContent = '$' + unionAssn.toFixed(2);
-  document.getElementById('pay457').textContent = '$' + contrib457.toFixed(2);
-  document.getElementById('payTotalDeductions').textContent = '$' + (totalTax + totalOther).toFixed(2);
+  document.getElementById('payHealth').innerHTML = '<span class="tilde">~</span>$' + health.toFixed(2);
+  document.getElementById('payPPO').innerHTML = '<span class="tilde">~</span>$' + ppo.toFixed(2);
+  document.getElementById('payDisability').innerHTML = '<span class="tilde">~</span>$' + disability.toFixed(2);
+  document.getElementById('payPension').innerHTML = '<span class="tilde">~</span>$' + pension.toFixed(2);
+  document.getElementById('payUnionAssn').innerHTML = '<span class="tilde">~</span>$' + unionAssn.toFixed(2);
+  document.getElementById('pay457').innerHTML = '<span class="tilde">~</span>$' + contrib457.toFixed(2);
+  document.getElementById('payTotalDeductions').innerHTML = '<span class="tilde">~</span>$' + (totalTax + totalOther).toFixed(2);
 
   // Net Pay
   const netPay = total - totalTax - totalOther;
-  document.getElementById('payNet').textContent = '$' + netPay.toFixed(2);
+  document.getElementById('payNet').innerHTML = '<span class="tilde">~</span>$' + netPay.toFixed(2);
 }
 
 // ── DASHBOARD REFRESH ──
@@ -5114,13 +5626,17 @@ function recalculateAllShiftPays() {
     let pay = calcShiftPay({type: s.type, hours, date: s.date, start: s.start, end: s.end}, rate);
     if (s.chartDay && s.type && s.start && s.end) pay = calcChartDayPay(s.type, s.hours, rate);
     const truckMoney = calcTruckMoney(s.type, s.fraction, s.chartDay, snowFunctions.indexOf(s.type) !== -1);
-    const totalPay = pay + truckMoney;
+    const saturdayPay = calcSaturdayPay(s.date, s.type, s.fraction, s.chartDay);
+    const truckDifferential = calcTruckDifferential(s.type, s.fraction, s.chartDay, snowFunctions.indexOf(s.type) !== -1);
+    const totalPay = pay + truckMoney + saturdayPay + truckDifferential;
     s.hours = hours;
     s.regHours = Math.min(hours, 8);
     s.otHours = Math.max(hours - 8, 0);
     s.pay = totalPay;
     s.basePay = pay;
     s.truckMoney = truckMoney;
+    s.saturdayPay = saturdayPay;
+    s.truckDifferential = truckDifferential;
     changed = true;
   });
   if (changed) saveUserData(currentUser.id, d);
@@ -5155,7 +5671,7 @@ function refreshAll() {
 
   function calcWeekPay(shifts) {
     let regP = 0;
-    let otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0, truckP = 0;
+    let otP = 0, holP = 0, diffP = 0, chartP = 0, sundayP = 0, truckP = 0, satP = 0, truckDiffP = 0;
     shifts.forEach(s => {
       const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
       const calculatedPay = s.chartDay && s.type ? calcChartDayPay(s.type, s.hours, rate) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
@@ -5168,14 +5684,16 @@ function refreshAll() {
         otP += (s.otHours||0) * (rate/2080) * 1.5;
       }
       truckP += (s.truckMoney || 0);
+      satP += (s.saturdayPay || 0);
+      truckDiffP += (s.truckDifferential || 0);
     });
-    return regP + otP + holP + diffP + chartP + sundayP + truckP;
+    return regP + otP + holP + diffP + chartP + sundayP + truckP + satP + truckDiffP;
   }
 
   const weekP = calcWeekPay(weekShifts);
   // Recalculate monthP properly
   let monthPay = 0;
-  let monthOtP = 0, monthHolP = 0, monthDiffP = 0, monthChartP = 0, monthSundayP = 0, monthTruckP = 0;
+  let monthOtP = 0, monthHolP = 0, monthDiffP = 0, monthChartP = 0, monthSundayP = 0, monthTruckP = 0, monthSatP = 0, monthTruckDiffP = 0;
   monthShifts.forEach(s => {
     const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
     const calculatedPay = s.chartDay && s.type ? calcChartDayPay(s.type, s.hours, rate) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
@@ -5188,22 +5706,24 @@ function refreshAll() {
       monthOtP += (s.otHours||0) * (rate/2080) * 1.5;
     }
     monthTruckP += (s.truckMoney || 0);
+    monthSatP += (s.saturdayPay || 0);
+    monthTruckDiffP += (s.truckDifferential || 0);
   });
-  const monthTotal = monthPay + monthOtP + monthHolP + monthDiffP + monthChartP + monthSundayP + monthTruckP;
+  const monthTotal = monthPay + monthOtP + monthHolP + monthDiffP + monthChartP + monthSundayP + monthTruckP + monthSatP + monthTruckDiffP;
   const monthH = monthShifts.reduce((a, s) => a + s.hours, 0);
 
   const totalDeductions = (weekP * (0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331)) + health + disability + pension + unionAssn + (weekP * contrib457Pct / 100);
   const netPay = Math.round(weekP - totalDeductions);
 
   document.getElementById('weekOT').textContent = '';
-  document.getElementById('weekPay').textContent = '$' + Math.round(weekP).toLocaleString();
+  document.getElementById('weekPay').innerHTML = '<span class="tilde">~</span>$' + Math.round(weekP).toLocaleString();
   const weekPayNetSubEl = document.getElementById('weekPayNetSub');
-  if (weekPayNetSubEl) weekPayNetSubEl.textContent = 'net: $' + netPay.toLocaleString();
+  if (weekPayNetSubEl) weekPayNetSubEl.innerHTML = 'net: <span class="tilde">~</span>$' + netPay.toLocaleString();
   const weekPayCard = document.getElementById('weekPay').parentElement;
   const subDivs = weekPayCard.querySelectorAll('.card-sub');
-  if (subDivs[1]) subDivs[1].textContent = 'net: $' + netPay.toLocaleString();
+  if (subDivs[1]) subDivs[1].innerHTML = 'net: <span class="tilde">~</span>$' + netPay.toLocaleString();
   const compEl = document.getElementById('monthHours');
-  compEl.textContent = Math.round(monthH);
+  compEl.textContent = Math.round(monthH) + '/173';
   if (monthH >= 250) {
     compEl.style.background = 'linear-gradient(135deg, #a855f7, #6366f1)';
     compEl.style.webkitBackgroundClip = 'text';
@@ -5221,8 +5741,8 @@ function refreshAll() {
     compEl.style.backgroundClip = '';
     compEl.style.color = monthH < 52 ? 'var(--red)' : 'var(--yellow)';
   }
-  document.getElementById('monthPay').textContent = '$' + Math.round(monthTotal).toLocaleString();
-  document.getElementById('monthPayNet').textContent = 'net: $' + Math.round(monthTotal * (1 - (taxRate + 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331))).toLocaleString();
+  document.getElementById('monthPay').innerHTML = '<span class="tilde">~</span>$' + Math.round(monthTotal).toLocaleString();
+  document.getElementById('monthPayNet').innerHTML = 'net: <span class="tilde">~</span>$' + Math.round(monthTotal * (1 - (taxRate + 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331))).toLocaleString();
   const monthShiftsEl = document.getElementById('monthShifts');
   if (monthShiftsEl) monthShiftsEl.textContent = monthShifts.length;
 
@@ -5293,7 +5813,7 @@ function updateProfile() {
 
   if (name) { u.name = name; currentUser.name = name; document.getElementById('profileName').textContent = name; document.getElementById('dashName').textContent = name; }
   if (badge) { u.badge = badge; currentUser.badge = badge; document.getElementById('profileBadge').textContent = badge; document.getElementById('dashBadge').textContent = 'Badge #' + badge; }
-  if (r && r > 0) { u.rate = r; currentUser.rate = r; document.getElementById('profileRate').textContent = '$' + r.toFixed(0) + '/yr'; document.getElementById('baseRateDisplay').textContent = '$' + r.toFixed(0) + '/yr'; document.getElementById('otRateDisplay').textContent = '$' + (r/52).toFixed(2); document.getElementById('holidayRateDisplay').textContent = '$' + (r/260).toFixed(2); }
+  if (r && r > 0) { u.rate = r; currentUser.rate = r; document.getElementById('profileRate').innerHTML = '$' + r.toFixed(0) + '/yr'; document.getElementById('baseRateDisplay').innerHTML = '$' + r.toFixed(0) + '/yr'; document.getElementById('otRateDisplay').innerHTML = '<span class="tilde">~</span>$' + (r/52).toFixed(2); document.getElementById('holidayRateDisplay').innerHTML = '<span class="tilde">~</span>$' + (r/260).toFixed(2); }
   if (garage) { u.district = garage; currentUser.district = garage; document.getElementById('profileGarage').textContent = garage; document.getElementById('profileDistrict').textContent = garage; document.getElementById('avatarGarage').textContent = garage; document.getElementById('dashGarage').textContent = garage; }
   if (title) { u.title = title; currentUser.title = title; document.getElementById('profileTitleRow').textContent = title; document.getElementById('profileTitle').textContent = title; }
   if (hireDate) { u.hireDate = hireDate; currentUser.hireDate = hireDate; document.getElementById('profileHireDate').textContent = new Date(hireDate+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); }
@@ -5323,6 +5843,583 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 }
+
+function closeFridayReminder() {
+  document.getElementById('fridayReminderModal').classList.remove('open');
+  // Mark as seen this week (store the week start date)
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay());
+  weekStart.setHours(0,0,0,0);
+  localStorage.setItem('santrack_backup_reminder', weekStart.toISOString());
+}
+
+function checkFridayReminder() {
+  const now = new Date();
+  const isFriday = now.getDay() === 5;
+  const isAfter5am = now.getHours() >= 5;
+  if (!isFriday || !isAfter5am) return;
+
+  // Check if already shown this week
+  const lastShown = localStorage.getItem('santrack_backup_reminder');
+  if (lastShown) {
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay());
+    weekStart.setHours(0,0,0,0);
+    if (new Date(lastShown) >= weekStart) return;
+  }
+  // Show the modal
+  setTimeout(() => {
+    document.getElementById('fridayReminderModal').classList.add('open');
+  }, 1500);
+}
+
+function goToLocation(id) {
+  const locs = getLocations();
+  const loc = locs.find(l => l.id === id);
+  if (!loc) return;
+  closeModal('favoritesModal');
+  // Switch to the right tab
+  switchLocTab(loc.category);
+  // Wait for render then scroll to the card
+  setTimeout(() => {
+    const cards = document.querySelectorAll('#locationsList .card');
+    const allLocs = getLocations().filter(l => l.category === loc.category);
+    allLocs.sort((a, b) => getAvgRating(b) - getAvgRating(a));
+    const idx = allLocs.findIndex(l => l.id === id);
+    if (cards[idx]) {
+      cards[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      cards[idx].style.transition = 'box-shadow 0.3s';
+      cards[idx].style.boxShadow = '0 0 0 2px var(--green)';
+      setTimeout(() => { cards[idx].style.boxShadow = ''; }, 2000);
+    }
+  }, 100);
+}
+
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem('santrack_favlocs_' + currentUser.id) || '[]'); } catch(e) { return []; }
+}
+function saveFavorites(favs) {
+  localStorage.setItem('santrack_favlocs_' + currentUser.id, JSON.stringify(favs));
+}
+function isFav(id) {
+  return getFavorites().includes(id);
+}
+function toggleFavorite(e, id) {
+  e.stopPropagation();
+  const favs = getFavorites();
+  const idx = favs.indexOf(id);
+  if (idx > -1) favs.splice(idx, 1);
+  else favs.push(id);
+  saveFavorites(favs);
+  renderLocations();
+  const favBtn = document.getElementById('favBtn');
+  if (favBtn) favBtn.style.color = favs.length > 0 ? '#F85149' : 'var(--text2)';
+}
+function showFavorites() {
+  const favs = getFavorites();
+  const locs = getLocations().filter(l => favs.includes(l.id));
+  const el = document.getElementById('favoritesList');
+  if (!locs.length) {
+    el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><p>No favorites yet. Tap the heart on a location to save it!</p></div>';
+  } else {
+    el.innerHTML = locs.map(loc => {
+      const avg = getAvgRating(loc);
+      const ratingCount = (loc.ratings || []).length;
+      return `<div class="card" style="margin-bottom:10px;padding:14px;cursor:pointer;" onclick="goToLocation('${loc.id}')">
+        <div style="font-family:'Barlow',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">${loc.name}</div>
+        <div style="font-size:12px;color:var(--text3);margin-bottom:6px;">${loc.address}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>${starsHtml(avg, 13)} <span style="font-size:10px;color:var(--text3);">${ratingCount} rating${ratingCount !== 1 ? 's' : ''}</span></div>
+          <button onclick="toggleFavorite(event,'${loc.id}');showFavorites();" style="background:none;border:none;padding:0;cursor:pointer;color:#F85149;font-size:18px;">♥</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('favoritesModal').classList.add('open');
+}
+
+// ── LOCATIONS ──
+let currentLocTab = 'garages';
+let currentLocRating = 0;
+let currentRateRating = 0;
+
+function showLocationsPage() {
+  currentPage = 'locations';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('locationsPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
+  const addBtn = document.getElementById('addLocationBtn');
+  if (addBtn) addBtn.style.display = currentLocTab === 'garages' ? 'none' : 'block';
+  renderLocations();
+}
+
+function switchLocTab(tab) {
+  currentLocTab = tab;
+  ['delis','coffee','bathrooms','garages'].forEach(t => {
+    const btn = document.getElementById('locTab-' + t);
+    if (t === tab) {
+      btn.style.background = 'var(--green)';
+      btn.style.borderColor = 'var(--green)';
+      btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'var(--dark3)';
+      btn.style.borderColor = 'var(--dark4)';
+      btn.style.color = 'var(--text2)';
+    }
+  });
+  const addBtn = document.getElementById('addLocationBtn');
+  if (addBtn) addBtn.style.display = tab === 'garages' ? 'none' : 'block';
+  renderLocations();
+}
+
+function getLocations() {
+  try {
+    const raw = localStorage.getItem('santrack_locations');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function saveLocations(locs) {
+  localStorage.setItem('santrack_locations', JSON.stringify(locs));
+}
+
+function getAvgRating(loc) {
+  if (!loc.ratings || !loc.ratings.length) return loc.rating || 0;
+  const sum = loc.ratings.reduce((a, r) => a + r.stars, 0);
+  return sum / loc.ratings.length;
+}
+
+function starsHtml(avg, size) {
+  const sz = size || 14;
+  let html = '';
+  for (let i = 1; i <= 10; i++) {
+    const col = i <= Math.round(avg) ? '#FFD100' : 'var(--dark4)';
+    html += `<span style="color:${col};font-size:${sz}px;">★</span>`;
+  }
+  return html;
+}
+
+function renderLocCard(loc) {
+  const avg = getAvgRating(loc);
+  const ratingCount = (loc.ratings || []).length;
+  const isGarage = loc.category === 'garages';
+
+  // Calculate per-slider averages for garages
+  let sliderBreakdown = '';
+  if (isGarage && ratingCount > 0) {
+    const sliders = [
+      { key: 'garbageQuality', label: 'Garbage Quality', left: 'Dirty', right: 'Clean' },
+      { key: 'carParking',     label: 'Car Parking',     left: 'Street', right: 'Parking Lot' },
+      { key: 'streetQuality',  label: 'Street Quality',  left: 'Tight', right: 'Wide' },
+      { key: 'garbageWeight',  label: 'Garbage Weight',  left: 'Heavy', right: 'Light' },
+      { key: 'neighborhood',   label: 'Neighborhood',    left: 'Bad',   right: 'Good' },
+    ];
+    const ratingsWithSliders = loc.ratings.filter(r => r.sliderData);
+    if (ratingsWithSliders.length > 0) {
+      sliderBreakdown = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--dark3);">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Rating Breakdown <span style="color:var(--text3);font-weight:400;">(${ratingsWithSliders.length} rating${ratingsWithSliders.length !== 1 ? 's' : ''})</span></div>
+        ${sliders.map(s => {
+          const vals = ratingsWithSliders.map(r => r.sliderData && r.sliderData[s.key]).filter(v => v != null);
+          if (!vals.length) return '';
+          const avgVal = vals.reduce((a, b) => a + b, 0) / vals.length;
+          const pct = ((avgVal - 1) / 9) * 100;
+          return `<div style="margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-size:12px;color:#fff;font-weight:600;">${s.label}</span>
+              <span style="font-size:11px;color:var(--text3);">${s.left} → ${s.right}</span>
+            </div>
+            <div style="position:relative;height:8px;border-radius:100px;background:linear-gradient(to right,#F85149,#FFD100,#54a55a);">
+              <div style="position:absolute;top:50%;left:${pct}%;transform:translate(-50%,-50%);width:10px;height:20px;border-radius:3px;background:#fff;border:2px solid #2e2e2e;box-shadow:0 0 0 1.5px #fff;"></div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+    }
+  }
+
+  return `<div class="card" style="margin-bottom:12px;padding:16px;cursor:${isGarage ? 'pointer' : 'default'};" ${isGarage ? `onclick="toggleLocDetail('${loc.id}')"` : ''}>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+      <div style="flex:1;">
+        <div style="font-family:'Barlow',sans-serif;font-size:17px;font-weight:700;color:#fff;">${loc.name}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${loc.address}</div>
+        <button onclick="toggleFavorite(event,'${loc.id}')" style="margin-top:6px;background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:'Barlow',sans-serif;font-size:12px;color:${isFav(loc.id) ? '#F85149' : 'var(--text3)'};"><svg width="14" height="14" viewBox="0 0 24 24" fill="${isFav(loc.id) ? '#F85149' : 'none'}" stroke="${isFav(loc.id) ? '#F85149' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>${isFav(loc.id) ? 'Saved' : 'Save'}</button>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:6px;"><span style="font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;color:#ffffff;">${avg > 0 ? avg.toFixed(1) : ''}</span>${starsHtml(avg, 14)}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;">${ratingCount} rating${ratingCount !== 1 ? 's' : ''}</div>
+        <button onclick="event.stopPropagation();openRateLocation('${loc.id}')" style="margin-top:6px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:8px;padding:5px 12px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">★ Rate</button>
+      </div>
+    </div>
+    ${loc.notes ? `<div style="font-size:12px;color:var(--text2);font-style:italic;margin-bottom:8px;">"${loc.notes}"</div>` : ''}
+    <div id="locdetail-${loc.id}" style="display:none;">${sliderBreakdown}</div>
+  </div>`;
+}
+
+function confirmClearAll() {
+  document.getElementById('clearAllConfirmModal').classList.add('open');
+}
+
+function clearMyRatings() {
+  closeModal('clearAllConfirmModal');
+  const locs = getLocations();
+  const name = currentUser.name || 'San Worker';
+  locs.forEach(loc => {
+    if (loc.ratings) loc.ratings = loc.ratings.filter(r => r.by !== name);
+  });
+  saveLocations(locs);
+  renderLocations();
+  showToast('✅ All your ratings cleared!');
+}
+
+function openClearPerLocation() {
+  const locs = getLocations();
+  const name = currentUser.name || 'San Worker';
+  const rated = locs.filter(loc => loc.ratings && loc.ratings.some(r => r.by === name));
+  const el = document.getElementById('clearPerLocList');
+  if (!rated.length) {
+    el.innerHTML = '<div style="text-align:center;color:var(--text3);padding:20px;">You haven\'t rated any locations yet.</div>';
+  } else {
+    el.innerHTML = rated.map(loc => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--dark3);">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#fff;">${loc.name}</div>
+          <div style="font-size:11px;color:var(--text3);">${loc.address}</div>
+        </div>
+        <button onclick="clearOneRating('${loc.id}')" style="background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:5px 12px;color:var(--red);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Remove</button>
+      </div>`).join('');
+  }
+  document.getElementById('clearPerLocModal').classList.add('open');
+}
+
+function clearOneRating(id) {
+  const locs = getLocations();
+  const loc = locs.find(l => l.id === id);
+  const name = currentUser.name || 'San Worker';
+  if (loc && loc.ratings) loc.ratings = loc.ratings.filter(r => r.by !== name);
+  saveLocations(locs);
+  openClearPerLocation(); // refresh the list
+  renderLocations();
+  showToast('✅ Rating removed!');
+}
+
+function toggleLocDetail(id) {
+  const el = document.getElementById('locdetail-' + id);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleBorough(id) {
+  const el = document.getElementById('borough-' + id);
+  const chevron = document.getElementById('chevron-' + id);
+  if (!el) return;
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+}
+
+function renderLocations(filter) {
+  const el = document.getElementById('locationsList');
+  if (!el) return;
+  let locs = getLocations().filter(l => l.category === currentLocTab);
+  if (filter) {
+    const f = filter.toLowerCase();
+    locs = locs.filter(l => l.name.toLowerCase().includes(f) || l.address.toLowerCase().includes(f));
+  }
+
+  if (!locs.length) {
+    el.innerHTML = `<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:0;"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><p>No ${currentLocTab} added yet.<br>Be the first to add one!</p></div>`;
+    return;
+  }
+
+  // For garages — group by borough
+  if (currentLocTab === 'garages') {
+    const boroughOrder = ['Staten Island','Brooklyn North','Brooklyn South','Queens East','Queens West','Manhattan','Bronx'];
+    const grouped = {};
+    boroughOrder.forEach(b => grouped[b] = []);
+    locs.forEach(loc => {
+      const b = loc.address.replace(', NYC','').trim();
+      if (grouped[b]) grouped[b].push(loc);
+    });
+    el.innerHTML = boroughOrder.map(borough => {
+      const items = grouped[borough] || [];
+      if (!items.length) return '';
+      items.sort((a, b) => getAvgRating(b) - getAvgRating(a));
+      const boroughId = borough.replace(/\s+/g, '_');
+      return `<div style="margin-bottom:8px;">
+        <button onclick="toggleBorough('${boroughId}')" style="width:100%;background:var(--dark2);border:1px solid var(--dark3);border-radius:10px;padding:12px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;">
+          <span>${borough} <span style="font-size:11px;color:var(--text3);font-weight:400;text-transform:none;">${items.length} garage${items.length !== 1 ? 's' : ''}</span></span>
+          <svg id="chevron-${boroughId}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div id="borough-${boroughId}" style="display:none;padding-top:8px;">
+          ${items.map(renderLocCard).join('')}
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    // Non-garage — flat sorted list
+    locs.sort((a, b) => getAvgRating(b) - getAvgRating(a));
+    el.innerHTML = locs.map(renderLocCard).join('');
+  }
+}
+
+function locSearchByText() {
+  const q = document.getElementById('locSearchInput').value.trim();
+  renderLocations(q || null);
+}
+
+function locSearchByGPS() {
+  if (!navigator.geolocation) { showToast('GPS not supported'); return; }
+  showToast('Getting your location...');
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude, longitude } = pos.coords;
+    const locs = getLocations().filter(l => l.category === currentLocTab && l.lat && l.lng);
+    if (!locs.length) { showToast('No locations with GPS data yet'); return; }
+    // Sort by distance
+    function dist(a, b, c, d) {
+      return Math.sqrt(Math.pow(a - c, 2) + Math.pow(b - d, 2));
+    }
+    locs.sort((a, b) => dist(latitude, longitude, a.lat, a.lng) - dist(latitude, longitude, b.lat, b.lng));
+    renderLocationsArray(locs);
+    showToast('Sorted by distance!');
+  }, () => showToast('Location access denied'));
+}
+
+function renderLocationsArray(locs) {
+  const el = document.getElementById('locationsList');
+  if (!locs.length) { el.innerHTML = '<div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:0;"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><p>No nearby locations found.</p></div>'; return; }
+  el.innerHTML = locs.map(loc => {
+    const avg = getAvgRating(loc);
+    const ratingCount = (loc.ratings || []).length;
+    return `<div class="card" style="margin-bottom:12px;padding:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+        <div style="flex:1;">
+          <div style="font-family:'Barlow',sans-serif;font-size:17px;font-weight:700;color:#fff;">${loc.name}</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px;"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${loc.address}</div>
+          <button onclick="toggleFavorite(event,'${loc.id}')" style="margin-top:6px;background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:'Barlow',sans-serif;font-size:12px;color:${isFav(loc.id) ? '#F85149' : 'var(--text3)'};"><svg width="14" height="14" viewBox="0 0 24 24" fill="${isFav(loc.id) ? '#F85149' : 'none'}" stroke="${isFav(loc.id) ? '#F85149' : 'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>${isFav(loc.id) ? 'Saved' : 'Save'}</button>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="display:flex;align-items:center;gap:6px;"><span style="font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;color:#ffffff;">${avg > 0 ? avg.toFixed(1) : ''}</span>${starsHtml(avg, 14)}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:2px;">${ratingCount} rating${ratingCount !== 1 ? 's' : ''}</div>
+          <button onclick="openRateLocation('${loc.id}')" style="margin-top:6px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:8px;padding:5px 12px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">★ Rate</button>
+        </div>
+      </div>
+      ${loc.notes ? `<div style="font-size:12px;color:var(--text2);font-style:italic;margin-bottom:8px;">"${loc.notes}"</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function onLocCategoryChange() {
+  const cat = document.getElementById('locCategory').value;
+  document.getElementById('locNotesGroup').style.display = cat === 'garages' ? 'none' : 'block';
+}
+
+function openAddLocationModal() {
+  currentLocRating = 0;
+  document.getElementById('locName').value = '';
+  document.getElementById('locAddress').value = '';
+  document.getElementById('locNotes').value = '';
+  document.getElementById('locStarValue').value = '0';
+  document.getElementById('locCategory').value = currentLocTab;
+  document.querySelectorAll('.star-btn').forEach(b => { b.style.opacity = '0.3'; b.style.color = '#FFD100'; });
+  document.getElementById('locNotesGroup').style.display = currentLocTab === 'garages' ? 'none' : 'block';
+  document.getElementById('addLocationModal').classList.add('open');
+}
+
+function setLocStar(n) {
+  currentLocRating = n;
+  document.getElementById('locStarValue').value = n;
+  document.querySelectorAll('.star-btn').forEach(b => {
+    b.style.opacity = parseInt(b.dataset.star) <= n ? '1' : '0.3';
+  });
+}
+
+function submitLocation() {
+  const name = document.getElementById('locName').value.trim();
+  const address = document.getElementById('locAddress').value.trim();
+  const category = document.getElementById('locCategory').value;
+  const notes = document.getElementById('locNotes').value.trim();
+  const stars = parseInt(document.getElementById('locStarValue').value) || 0;
+  if (!name) { showToast('Please enter a name'); return; }
+  if (!address) { showToast('Please enter an address'); return; }
+  if (!stars) { showToast('Please give a rating'); return; }
+
+  const loc = {
+    id: Date.now().toString(),
+    name, address, category, notes,
+    addedBy: currentUser.name || 'San Worker',
+    addedAt: new Date().toISOString(),
+    rating: stars,
+    ratings: [{ stars, comment: notes, by: currentUser.name || 'San Worker', at: new Date().toISOString() }],
+    lat: null, lng: null
+  };
+
+  // Try to get GPS coords for this location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      loc.lat = pos.coords.latitude;
+      loc.lng = pos.coords.longitude;
+      const locs = getLocations();
+      locs.push(loc);
+      saveLocations(locs);
+    }, () => {
+      const locs = getLocations();
+      locs.push(loc);
+      saveLocations(locs);
+    });
+  } else {
+    const locs = getLocations();
+    locs.push(loc);
+    saveLocations(locs);
+  }
+
+  closeModal('addLocationModal');
+  showToast('✅ Location added!');
+  setTimeout(() => renderLocations(), 300);
+}
+
+function openRateLocation(id) {
+  const locs = getLocations();
+  const loc = locs.find(l => l.id === id);
+  if (!loc) return;
+  currentRateRating = 0;
+  document.getElementById('rateLocId').value = id;
+  document.getElementById('rateLocCategory').value = loc.category;
+  document.getElementById('rateLocName').textContent = loc.name;
+  document.getElementById('rateStarValue').value = '0';
+  document.querySelectorAll('.rate-star-btn').forEach(b => { b.style.opacity = '0.3'; });
+
+  const isGarage = loc.category === 'garages';
+  document.getElementById('rateModalTitle').childNodes[0].textContent = isGarage ? 'Garage Quality ' : 'Rate This Spot ';
+  document.getElementById('rateStarSection').style.display = isGarage ? 'none' : 'block';
+  document.getElementById('rateSliderSection').style.display = isGarage ? 'block' : 'none';
+
+  // Reset sliders
+  if (isGarage) {
+    document.getElementById('sliderGarbageQuality').value = 5;
+    document.getElementById('sliderCarParking').value = 5;
+    document.getElementById('sliderStreetQuality').value = 5;
+    document.getElementById('sliderGarbageWeight').value = 5;
+    document.getElementById('sliderNeighborhood').value = 5;
+  }
+
+  document.getElementById('rateLocationModal').classList.add('open');
+}
+
+function setRateStar(n) {
+  currentRateRating = n;
+  document.getElementById('rateStarValue').value = n;
+  document.querySelectorAll('.rate-star-btn').forEach(b => {
+    b.style.opacity = parseInt(b.dataset.star) <= n ? '1' : '0.3';
+  });
+}
+
+function submitRating() {
+  const id = document.getElementById('rateLocId').value;
+  const category = document.getElementById('rateLocCategory').value;
+  const locs = getLocations();
+  const loc = locs.find(l => l.id === id);
+  if (!loc) return;
+  if (!loc.ratings) loc.ratings = [];
+  // Remove any existing rating from this user
+  loc.ratings = loc.ratings.filter(r => r.by !== (currentUser.name || 'San Worker'));
+
+  let stars, sliderData;
+  if (category === 'garages') {
+    const garbageQuality = parseInt(document.getElementById('sliderGarbageQuality').value);
+    const carParking = parseInt(document.getElementById('sliderCarParking').value);
+    const streetQuality = parseInt(document.getElementById('sliderStreetQuality').value);
+    const garbageWeight = parseInt(document.getElementById('sliderGarbageWeight').value);
+    const neighborhood = parseInt(document.getElementById('sliderNeighborhood').value);
+    // Average all sliders for star rating (weight is inverted — heavy = bad)
+    const avg = (garbageQuality + carParking + streetQuality + garbageWeight + neighborhood) / 5;
+    stars = Math.round((avg / 10) * 10); // out of 10
+    sliderData = { garbageQuality, carParking, streetQuality, garbageWeight, neighborhood };
+  } else {
+    stars = parseInt(document.getElementById('rateStarValue').value) || 0;
+    if (!stars) { showToast('Please select a rating'); return; }
+  }
+
+  loc.ratings.push({ stars, sliderData, by: currentUser.name || 'San Worker', at: new Date().toISOString() });
+  saveLocations(locs);
+  closeModal('rateLocationModal');
+  showToast('✅ Rating submitted!');
+  renderLocations();
+}
+
+const PRESET_GARAGES = [
+  {id:"garage_BX1",name:"BX1",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX2",name:"BX2",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX3",name:"BX3",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX4",name:"BX4",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX5",name:"BX5",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX6",name:"BX6",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX7",name:"BX7",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX8",name:"BX8",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX9",name:"BX9",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX10",name:"BX10",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX11",name:"BX11",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX12",name:"BX12",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK1",name:"BK1",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK3",name:"BK3",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK4",name:"BK4",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK5",name:"BK5",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK8",name:"BK8",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK9",name:"BK9",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK16",name:"BK16",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK17",name:"BK17",address:"Brooklyn North, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK2",name:"BK2",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK6",name:"BK6",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK7",name:"BK7",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK10",name:"BK10",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK11",name:"BK11",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK12",name:"BK12",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK13",name:"BK13",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK14",name:"BK14",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK15",name:"BK15",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK16",name:"BK16",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK18",name:"BK18",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M1",name:"M1",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M2",name:"M2",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M3",name:"M3",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M4",name:"M4",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M5",name:"M5",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M6",name:"M6",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M7",name:"M7",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M8",name:"M8",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M9",name:"M9",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M10",name:"M10",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M11",name:"M11",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M12",name:"M12",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q7",name:"Q7",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q8",name:"Q8",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q10",name:"Q10",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q11",name:"Q11",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q12",name:"Q12",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q13A",name:"Q13A",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q14",name:"Q14",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q1",name:"Q1",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q2",name:"Q2",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q3",name:"Q3",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q4",name:"Q4",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q5",name:"Q5",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q6",name:"Q6",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q9",name:"Q9",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_SI1",name:"SI1",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_SI2",name:"SI2",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_SI3",name:"SI3",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null}
+];
+function seedGarages() {
+  const existing = JSON.parse(localStorage.getItem('santrack_locations') || '[]');
+  const existingIds = new Set(existing.map(l => l.id));
+  let added = false;
+  PRESET_GARAGES.forEach(g => {
+    if (!existingIds.has(g.id)) { existing.push(g); added = true; }
+  });
+  if (added) localStorage.setItem('santrack_locations', JSON.stringify(existing));
+}
+seedGarages();
 
 // ── WELCOME POPUP ──
 function closeWelcome() {
