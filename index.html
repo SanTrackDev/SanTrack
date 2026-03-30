@@ -3876,6 +3876,8 @@ function loadWeather() {
   const sundayStr = sundayOfWeek.toISOString().split('T')[0];
   // Fetch from Sunday of current week, 21 days forward (plus past days of this week)
   const totalDays = 21 + startDayIndex;
+  const forecastDays = Math.min(16, 21 - startDayIndex + 1);
+  const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=${forecastDays}&past_days=${startDayIndex}`;
   el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">⛅ Loading weather...</div>';
   if (!navigator.geolocation) {
     el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Geolocation not supported.</div>';
@@ -3884,9 +3886,32 @@ function loadWeather() {
   navigator.geolocation.getCurrentPosition(function(pos) {
     const lat = pos.coords.latitude.toFixed(4);
     const lon = pos.coords.longitude.toFixed(4);
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=16&start_date=${sundayStr}`)
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=${forecastDays}&past_days=${startDayIndex}`;
+    fetch(url)
       .then(r => r.json())
-      .then(data => {
+      .then(data => renderWeather(data, el, startDayIndex))
+      .catch(() => {
+        el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
+      });
+  }, function() {
+    // Location denied — fall back to NYC coordinates
+    const lat = 40.7128, lon = -74.0060;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=${forecastDays}&past_days=${startDayIndex}`;
+    fetch(url)
+      .then(r => r.json())
+      .then(data => renderWeather(data, el, startDayIndex))
+      .catch(() => {
+        el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
+      });
+  });
+}
+
+function renderWeather(data, el, startDayIndex) {
+        if (!data || !data.daily || !data.daily.time) {
+          el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather data. Please try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
+          return;
+        }
+        try {
         const c = data.current;
         const daily = data.daily;
         const wmoIcon = (code) => {
@@ -3915,12 +3940,12 @@ function loadWeather() {
         };
         const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-        const dayHeaders = daily.time.slice(0, 21 + startDayIndex).map((date) => {
+        const dayHeaders = daily.time.slice(0, 21).map((date) => {
           const d = new Date(date + 'T12:00:00');
           return `<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;padding:6px 0;">${days[d.getDay()]}</div>`;
         });
 
-        const calGridCells = daily.time.slice(0, 21 + startDayIndex).map((date, i) => {
+        const calGridCells = daily.time.slice(0, 21).map((date, i) => {
           const d = new Date(date + 'T12:00:00');
           const isToday = i === startDayIndex;
           const isSun = d.getDay() === 0;
@@ -4015,13 +4040,9 @@ function loadWeather() {
           <div style="text-align:center;margin-top:12px;">
             <button onclick="loadWeather()" style="background:none;border:1px solid var(--dark4);border-radius:8px;color:var(--text3);font-size:12px;padding:6px 16px;cursor:pointer;">↻ Refresh</button>
           </div>`;
-      })
-      .catch(() => {
-        el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
-      });
-  }, function() {
-    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Location access denied. Please allow location access and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
-  });
+        } catch(e) {
+          el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Please try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
+        }
 }
 
 function showDonatePage() {
