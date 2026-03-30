@@ -135,8 +135,10 @@ document.currentScript.parentNode.appendChild(_link);
     letter-spacing: 1px;
     color: var(--text);
     text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+    -webkit-text-stroke: 1.1px #000;
+    paint-order: stroke fill;
   }
-  .logo span { color: var(--green); }
+  .logo span { color: var(--green); -webkit-text-stroke: 2px #000; paint-order: stroke fill; }
   .logo p { color: var(--text2); font-size: 13px; margin-top: 4px; text-shadow: 0 1px 6px rgba(0,0,0,0.4); }
 
   .form-group { margin-bottom: 16px; }
@@ -227,8 +229,10 @@ document.currentScript.parentNode.appendChild(_link);
     font-weight: 800;
     letter-spacing: 1px;
     color: #FFFFFF;
+    -webkit-text-stroke: 2px #000;
+    paint-order: stroke fill;
   }
-  .header-logo span { color: var(--green); }
+  .header-logo span { color: var(--green); -webkit-text-stroke: 2px #000; paint-order: stroke fill; }
   .header-user {
     display: flex;
     align-items: center;
@@ -769,14 +773,14 @@ document.currentScript.parentNode.appendChild(_link);
     </div>
     <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:24px;">This app is in its very early stages and will be updated throughout the coming months to perfect it. An <strong style="color:var(--text)">iOS app is expected to release by mid-late 2026</strong> followed by an Android app in 2027.</p>
     <button class="btn btn-primary" onclick="closeWelcome()">Get Started</button>
-    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:12px;">Prototype Test – not affiliated with DSNY</p>
+    <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:12px;">PROTOTYPE TEST – NOT AFFILIATED WITH DSNY</p>
   </div>
 </div>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box" style="position:relative;">
-    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.6</div>
+    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.7</div>
     <div class="logo">
       <h1>San<span>Track</span></h1>
       <p>Track your pay, shifts, seniority, routes and more!</p>
@@ -797,13 +801,20 @@ document.currentScript.parentNode.appendChild(_link);
         <span style="font-size:11px;color:var(--text3);font-style:italic;">· Logs out in 24 hours</span>
       </div>
       <button class="btn btn-primary" onclick="login()">Sign In</button>
-      <button id="biometricBtn" class="btn btn-secondary" onclick="biometricLogin()" style="display:none;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <button id="biometricBtn" class="btn btn-secondary" onclick="biometricLogin()" style="display:none;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;color:#ffffff;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4v2"/><path d="M8 6V4a4 4 0 0 1 4-4"/><path d="M3 10a9 9 0 0 1 18 0"/><path d="M12 12v4"/><path d="M8 12a4 4 0 0 0 8 0"/><circle cx="12" cy="20" r="2"/></svg>
         Sign in with Face ID / Touch ID
       </button>
+      <!-- GUEST ACCESS — set display:block to enable, display:none to disable -->
+      <div id="guestAccessBtn" style="display:block;margin-top:10px;">
+        <button onclick="loginAsGuest()" style="background:#000000;border:1px solid #000000;border-radius:10px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;padding:12px;cursor:pointer;width:100%;letter-spacing:0.5px;">
+          <mark style="background:#FFD100;color:#000000;padding:0 2px;">TRY IT OUT AS A GUEST DURING TESTING</mark>
+        </button>
+        <div style="font-size:10px;color:var(--text3);text-align:center;margin-top:6px;line-height:1.5;">Your data will save if you add SanTrack to your home screen.<br>Don't delete it until the iOS app comes out!</div>
+      </div>
       <div class="auth-toggle" style="margin-top:12px;">Forgot your password? <a onclick="showForgot()">Reset it</a></div>
       <div class="auth-toggle">Don't have an account? <a onclick="showRegister()">Register</a></div>
-      <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:16px;">Prototype Test – not affiliated with DSNY</p>
+      <p style="text-align:center;font-size:11px;color:var(--text3);margin-top:16px;">PROTOTYPE TEST – NOT AFFILIATED WITH DSNY</p>
     </div>
 
     <!-- FORGOT PASSWORD FORM -->
@@ -974,7 +985,7 @@ document.currentScript.parentNode.appendChild(_link);
   <div class="app-header">
     <div style="display:flex;align-items:baseline;gap:8px;">
       <div class="header-logo">San<span>Track</span></div>
-      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.6</div>
+      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.7</div>
     </div>
   </div>
 
@@ -1004,10 +1015,10 @@ document.currentScript.parentNode.appendChild(_link);
           <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="monthPay"><span class="tilde">~</span>$0</div>
           <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="monthPayNet">net: —</div>
         </div>
-        <div class="card" style="padding:8px 6px;text-align:center;position:relative;overflow:hidden;">
+        <div class="card" style="padding:8px 6px;text-align:center;cursor:pointer;" onclick="showCompHoursPage()">
           <div class="card-title" style="font-size:9px;text-align:center;margin-bottom:2px;">Comp Hours</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:40px;font-weight:700;text-align:center;line-height:1;opacity:0.3;" id="monthHours">0</div>
-          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--green);padding:3px 0;font-family:'Barlow',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.3px;color:#ffffff;text-transform:uppercase;">Coming Soon</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:40px;font-weight:700;text-align:center;line-height:1;" id="compHoursDisplay">0</div>
+          <div style="font-size:9px;color:#58a6ff;margin-top:3px;text-decoration:underline;">Details</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;position:relative;overflow:hidden;">
           <div class="card-title" style="font-size:9px;text-align:center;">Next Chart</div>
@@ -1076,32 +1087,32 @@ document.currentScript.parentNode.appendChild(_link);
         <button onclick="toggleCalDropdown('paternityDropdown',event)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;letter-spacing:0.3px;">PATERNITY <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
 
         <!-- All dropdowns at the end -->
-        <div id="vacWeekDropdown" style="display:none;position:absolute;top:calc(100% + 6px);left:0;background:#1e1e1e;border:1px solid var(--dark4);border-radius:12px;padding:12px;z-index:200;width:260px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+        <div id="vacWeekDropdown" style="display:none;position:absolute;bottom:calc(100% + 6px);left:0;background:#1e1e1e;border:1px solid var(--dark4);border-radius:12px;padding:12px;z-index:200;width:260px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;text-align:center;">SELECT VACATION WEEK</div>
           <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;" id="vacWeekGrid"></div>
           <button onclick="saveVacWeek()" style="width:100%;margin-top:10px;background:var(--green);border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
         </div>
-        <div id="vacationDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div id="vacationDropdown" style="display:none;position:absolute;right:0;bottom:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT XWP/XWOP DAYS</div>
           <div id="vacationDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
           <button onclick="saveVacationDays()" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
         </div>
-        <div id="fmlaDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div id="fmlaDropdown" style="display:none;position:absolute;right:0;bottom:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT FMLA DAYS</div>
           <div id="fmlaDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
           <button onclick="saveDayType('fmla')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
         </div>
-        <div id="sickDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div id="sickDropdown" style="display:none;position:absolute;right:0;bottom:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT SICK DAYS</div>
           <div id="sickDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
           <button onclick="saveDayType('sick')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
         </div>
-        <div id="lodiDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div id="lodiDropdown" style="display:none;position:absolute;right:0;bottom:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT LODI DAYS</div>
           <div id="lodiDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
           <button onclick="saveDayType('lodi')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
         </div>
-        <div id="paternityDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+        <div id="paternityDropdown" style="display:none;position:absolute;right:0;bottom:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT PATERNITY DAYS</div>
           <div id="paternityDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
           <button onclick="saveDayType('paternity')" style="width:100%;margin-top:10px;background:#444;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
@@ -1128,10 +1139,16 @@ document.currentScript.parentNode.appendChild(_link);
     <div id="payPage" class="page">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
         <div class="section-title" style="margin-bottom:0;">Pay Summary</div>
-        <button disabled style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:not-allowed;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;opacity:0.6;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          Compare Pay Stub <em style="font-size:10px;font-weight:400;">(Coming Soon)</em>
-        </button>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="showPayHistoryPage()" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Pay History
+          </button>
+          <button disabled style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:not-allowed;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;opacity:0.6;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Compare Pay Stub <em style="font-size:10px;font-weight:400;">(Coming Soon)</em>
+          </button>
+        </div>
         <input type="file" id="payStubInput" accept="image/*" style="display:none;" onchange="comparePayStub(event)">
       </div>
 
@@ -1178,7 +1195,7 @@ document.currentScript.parentNode.appendChild(_link);
           <span class="amount" style="color:#a855f7" id="payOTPay"><span class="tilde">~</span>$0.00</span>
         </div>
         <div id="otBreakdownList" style="display:none;padding:4px 0 8px 12px;"></div>
-        <div class="pay-row"><span class="label">Holiday Pay (2x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay"><span class="tilde">~</span>$0.00</span></div>
+        <div class="pay-row"><span class="label">Holiday Pay (1.5x)</span><span class="amount" style="color:var(--red)" id="payHolidayPay"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-row"><span class="label">Night Differential (+10%)</span><span class="amount" style="color:#4A7FD4" id="payDiffPay"><span class="tilde">~</span>$0.00</span></div>
         <div class="pay-row"><span class="label">Saturday Pay <span style="font-size:10px;color:var(--text3);font-weight:400;font-style:italic;">Premium hours worked on Saturday, truck diff, route ext.</span></span><span class="amount" style="color:#ffffff" id="paySaturdayPay">$0.00</span></div>
         <div class="pay-row"><span class="label">Sunday Pay (2x)</span><span class="amount" style="color:var(--red)" id="paySundayPay"><span class="tilde">~</span>$0.00</span></div>
@@ -1265,32 +1282,21 @@ document.currentScript.parentNode.appendChild(_link);
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
           <div>Countdowns</div>
         </button>
-        <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;" disabled>
+        <button class="note-cat-btn" onclick="showWeatherPage()" id="cat-weather">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span>
           <div>Weather <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
-          <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
-        </button>
-        <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;" disabled>
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-          <div>Social <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
-          <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
         </button>
         <button class="note-cat-btn" onclick="showLocationsPage()" id="cat-locations">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
           <div>Locations <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
         </button>
-        <button class="note-cat-btn" style="opacity:0.5;cursor:not-allowed;grid-column:1/-1;" disabled>
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="5" rx="1"/><rect x="13" y="3" width="8" height="5" rx="1"/><rect x="3" y="11" width="8" height="5" rx="1"/><rect x="13" y="11" width="8" height="5" rx="1"/><rect x="3" y="19" width="8" height="2" rx="1"/><rect x="13" y="19" width="8" height="2" rx="1"/></svg></span>
-          <div>Board <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
-          <div style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;margin-top:2px;">Coming Soon</div>
+        <button class="note-cat-btn" onclick="showChangelogPage()" id="cat-changelog">
+          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+          <div>Updates</div>
         </button>
         <button class="note-cat-btn" onclick="showCareerStatsPage()" id="cat-career" style="grid-column:1/-1;">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></span>
           <div>Career Statistics</div>
-        </button>
-        <button class="note-cat-btn" onclick="showChangelogPage()" id="cat-changelog" style="grid-column:1/-1;">
-          <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
-          <div>Updates</div>
         </button>
       </div>
 
@@ -1339,7 +1345,7 @@ document.currentScript.parentNode.appendChild(_link);
     <div id="weatherPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
         <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
-        <div class="section-title" style="margin-bottom:0;">Weather</div>
+        <div class="section-title" style="margin-bottom:0;">Weather <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Sources: NOAA, DWD, ECMWF</span></div>
       </div>
       <div id="weatherContent">
         <div style="text-align:center;padding:40px 20px;color:var(--text3);">
@@ -1448,10 +1454,6 @@ document.currentScript.parentNode.appendChild(_link);
             <button type="button" onclick="setLocStar(5)" class="star-btn" data-star="5" style="font-size:24px;background:none;border:none;cursor:pointer;opacity:0.3;">★</button>
           </div>
           <input type="hidden" id="locStarValue" value="0">
-        </div>
-        <div class="form-group" id="locNotesGroup">
-          <label>Notes <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
-          <textarea id="locNotes" rows="2" placeholder="e.g. Best bacon egg & cheese in Brooklyn, clean bathroom..."></textarea>
         </div>
         <button class="btn btn-primary" onclick="submitLocation()">Submit</button>
       </div>
@@ -1574,21 +1576,31 @@ document.currentScript.parentNode.appendChild(_link);
     </div>
 
     <!-- CHANGELOG PAGE -->
+    <!-- COMP HOURS PAGE -->
+    <div id="compHoursPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('dash')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Comp Hours <span style="font-family:'Barlow',sans-serif;font-size:20px;font-weight:700;color:#FFD100;" id="compHoursTotal">0 hrs</span></div>
+      </div>
+      <div id="compHoursList"></div>
+    </div>
+
+    <!-- CHANGELOG PAGE -->
     <div id="changelogPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
         <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
         <div class="section-title" style="margin-bottom:0;">Updates</div>
+        <button onclick="window.location.href='mailto:santrackapp@gmail.com?subject=Bug Report — SanTrack v0.0.7&body=Bug:%0A%0A'" style="margin-left:auto;background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:8px;padding:7px 14px;color:#ffffff;font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">Report a Bug</button>
       </div>
 
       <!-- Known Bugs -->
       <div class="card" style="margin-bottom:16px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--red);letter-spacing:0.5px;margin-bottom:10px;">🐛 Known Bugs</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--red);letter-spacing:0.5px;margin-bottom:10px;">! Known Bugs</div>
         <div style="font-size:13px;color:var(--text2);line-height:1.6;">
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Pay breakdown totals may not be 100% accurate in all edge cases</div>
-          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Comp Hours card is not yet functional</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Night Differential auto-calculation has known issues</div>
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Next Chart Day card is not yet functional</div>
-          <div style="padding:6px 0;">• Board feature is coming soon</div>
-          <div style="padding:6px 0;border-top:1px solid var(--dark3);">• Dump Money disabled</div>
+          <div style="padding:6px 0;">• Dump Money disabled</div>
         </div>
       </div>
 
@@ -1597,6 +1609,23 @@ document.currentScript.parentNode.appendChild(_link);
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:0.5px;margin-bottom:10px;">📋 Changelog</div>
 
         <div style="margin-bottom:12px;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.7 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 30, 2026</span></div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+            • Weather page opened — live 21-day forecast powered by Open-Meteo (sources: NOAA, DWD, ECMWF)<br>
+            • Weather calendar shows 3 weeks in Sun–Sat rows; current week always visible with past days faded at 50%<br>
+            • Today highlighted in green, Sundays and DSNY holidays in red, chart days in blue<br>
+            • Weather badges: WARM (60°+), HOT (75°+), VERY HOT (90°+), EXTREME (100°+), HEAVY RAIN, LIGHT RAIN, WINDY (25mph+), LIGHT SNOW, PLOW SNOW (2"+ / under 35°), HEAVY SNOW (10"+ / under 35°), BLIZZARD (20"+ / under 35°)<br>
+            • All 59 DSNY garages added to the Locations page, organized by borough dropdown — including broom garages and extras<br>
+            • Set DSNY salary steps added to Edit Profile — select from preset pay steps or enter a custom amount<br>
+            • Comp Hours functionality added — auto-calculates total comp hours based on OOT assignments across zones using your home garage. Working per zone. Testing from different home garages. Comp Hour history page added showing date, location, and running total. More to be added.<br>
+            • When a Chart Day and Holiday fall on the same day, both the blue CHART DAY badge and red HOLIDAY badge now appear in the calendar box<br>
+            • Holiday Pay corrected to 1.5x (was 2x)<br>
+            • Pay History button added to the Pay page above the pay breakdown<br>
+            • Seniority Tracker improvements: move all seniority numbers up or down by one tap; hide San Workers not currently in the garage (LODI, detached, etc.) to condense their row; Add San Man form is now collapsible so it's out of the way when you open the page
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.6 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 29, 2026</span></div>
           <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
             • Saturday Pay added — $24.10 show-up bonus + $7.77 full truck bonus (scales with chart day &amp; fraction)<br>
@@ -1677,6 +1706,15 @@ document.currentScript.parentNode.appendChild(_link);
       </div>
     </div>
 
+    <!-- PAY HISTORY PAGE -->
+    <div id="payHistoryPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showPage('pay')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Pay History</div>
+      </div>
+      <div id="payHistoryList"></div>
+    </div>
+
     <!-- CAREER STATS PAGE -->
     <div id="careerStatsPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
@@ -1691,62 +1729,78 @@ document.currentScript.parentNode.appendChild(_link);
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
         <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
         <div class="section-title" style="margin-bottom:0;">Seniority Tracker <span class="badge" id="seniorityCount">0</span></div>
+        <div style="margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;">Move All Seniority</div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button onclick="shiftSeniorityNums(1)" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:6px 12px;cursor:pointer;">▼ All</button>
+            <button onclick="shiftSeniorityNums(-1)" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:6px 12px;cursor:pointer;">▲ All</button>
+          </div>
+        </div>
       </div>
 
       <!-- Add San Man form -->
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-title" style="margin-bottom:12px;">Add San Man</div>
-        <div style="display:flex;gap:8px;margin-bottom:12px;">
-          <div class="form-group" style="width:80px;margin-bottom:0;">
-            <label style="font-size:11px;">#</label>
-            <input type="number" id="seniorityNum" placeholder="12" min="1" style="padding:10px 12px;font-size:15px;">
-          </div>
-          <div class="form-group" style="flex:1;margin-bottom:0;">
-            <label style="font-size:11px;">Name</label>
-            <input type="text" id="seniorityName" placeholder="e.g. J. Smith">
-          </div>
+      <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden;">
+        <div onclick="toggleAddSanMan()" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;">
+          <div class="card-title" style="margin-bottom:0;">Add San Man</div>
+          <svg id="addSanManChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text3);transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-          <div class="form-group" style="margin-bottom:0;">
-            <label style="font-size:11px;">Role</label>
-            <select id="seniorityRole">
-              <option value="">Select role</option>
-              <option value="Driver">Driver</option>
-              <option value="Loader">Loader</option>
-            </select>
+        <div id="addSanManForm" style="display:none;padding:0 16px 16px;">
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <div class="form-group" style="width:80px;margin-bottom:0;">
+              <label style="font-size:11px;">#</label>
+              <input type="number" id="seniorityNum" placeholder="12" min="1" style="padding:10px 12px;font-size:15px;">
+            </div>
+            <div class="form-group" style="flex:1;margin-bottom:0;">
+              <label style="font-size:11px;">Name</label>
+              <input type="text" id="seniorityName" placeholder="e.g. J. Smith">
+            </div>
           </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label style="font-size:11px;">Section <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
-            <select id="senioritySection">
-              <option value="">None</option>
-              <option value="1">Section 1</option>
-              <option value="2">Section 2</option>
-              <option value="3">Section 3</option>
-              <option value="4">Section 4</option>
-              <option value="5">Section 5</option>
-            </select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Role</label>
+              <select id="seniorityRole">
+                <option value="">Select role</option>
+                <option value="Driver">Driver</option>
+                <option value="Loader">Loader</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Section <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
+              <select id="senioritySection">
+                <option value="">None</option>
+                <option value="1">Section 1</option>
+                <option value="2">Section 2</option>
+                <option value="3">Section 3</option>
+                <option value="4">Section 4</option>
+                <option value="5">Section 5</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Tissue <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
+              <select id="seniorityTissue">
+                <option value="">None</option>
+                <option value="GU">GU</option>
+                <option value="MB">MB</option>
+                <option value="WR">WR</option>
+                <option value="DSA">DSA</option>
+              </select>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label style="font-size:11px;">Night Signee</label>
+              <select id="seniorityNight">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label style="font-size:11px;">Tissue <span style="color:var(--text3);font-size:10px;text-transform:none;">(optional)</span></label>
-            <select id="seniorityTissue">
-              <option value="">None</option>
-              <option value="GU">GU</option>
-              <option value="MB">MB</option>
-              <option value="WR">WR</option>
-              <option value="DSA">DSA</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label style="font-size:11px;">Night Signee</label>
-            <select id="seniorityNight">
-              <option value="no">No</option>
-              <option value="yes">Yes</option>
-            </select>
-          </div>
+          <button onclick="addSeniorityPerson()" class="btn btn-primary">Add San Man</button>
         </div>
-        <button onclick="addSeniorityPerson()" class="btn btn-primary">Add San Man</button>
       </div>
 
+      <div style="display:flex;align-items:center;padding:0 12px;margin-bottom:4px;gap:10px;">
+        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;min-width:28px;text-align:center;">Seniority</div>
+        <div style="font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Name</div>
+      </div>
       <div id="seniorityList">
         <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><p>No one added yet. Add a San Man above.</p></div>
       </div>
@@ -1887,7 +1941,7 @@ document.currentScript.parentNode.appendChild(_link);
             </div>
             <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">
               <div style="font-size:12px;color:var(--text);">Email</div>
-              <div style="font-size:11px;font-weight:600;color:var(--text2);word-break:break-all;" id="profileId">—</div>
+              <div style="font-size:11px;font-weight:600;color:transparent;background:#333;border-radius:3px;user-select:none;filter:blur(4px);word-break:break-all;" id="profileId">—</div>
             </div>
             <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">
               <div style="font-size:12px;color:var(--text);">Garage</div>
@@ -1924,7 +1978,8 @@ document.currentScript.parentNode.appendChild(_link);
         </div>
       </div>
 
-      <div class="section-title" style="margin-bottom:6px;font-size:13px;">Edit Profile</div>
+      <div class="section-title" style="margin-bottom:2px;font-size:13px;">Edit Profile</div>
+      <div style="font-size:10px;color:var(--text3);margin-bottom:8px;">All information can only be seen by yourself</div>
       <div class="card">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px;">
           <!-- Left column -->
@@ -1939,19 +1994,30 @@ document.currentScript.parentNode.appendChild(_link);
             </div>
             <div class="form-group" style="margin-bottom:8px">
               <label>Base Salary ($)</label>
-              <input type="number" id="updateRate" placeholder="e.g. 50128">
+              <select id="salaryPreset" onchange="onSalaryPresetChange()" style="margin-bottom:6px;">
+                <option value="">— Select a pay step —</option>
+                <option value="46390">$46,390 — First 6 Months</option>
+                <option value="50320">$50,320 — After 6 Months</option>
+                <option value="51493">$51,493 — After 1.5 Years</option>
+                <option value="55047">$55,047 — After 2.5 Years</option>
+                <option value="61853">$61,853 — After 3.5 Years</option>
+                <option value="78860">$78,860 — After 4.5 Years</option>
+                <option value="95316">$95,316 — After 5.5 Years</option>
+                <option value="custom">Custom amount...</option>
+              </select>
+              <input type="number" id="updateRate" placeholder="e.g. 50128" oninput="syncSalaryDropdown(this.value)">
             </div>
             <div class="form-group" style="margin-bottom:0">
               <label>Garage</label>
               <select id="updateGarage">
                 <option value="">Select garage</option>
-                <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
+                <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX3A</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX6A</option><option>BX7</option><option>BX7A</option><option>BX8</option><option>BX8A</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
                 <optgroup label="Brooklyn North"><option>BK1</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
-                <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK16</option><option>BK18</option></optgroup>
-                <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option></optgroup>
-                <optgroup label="Queens East"><option>Q7</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q14</option></optgroup>
+                <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK6A</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15-49th St</option><option>BK16</option><option>BK18</option></optgroup>
+                <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M3A</option><option>M4</option><option>M4A</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M8A</option><option>M9</option><option>M10</option><option>M11</option><option>M11A</option><option>M12</option></optgroup>
+                <optgroup label="Queens East"><option>Q7</option><option>Q7A</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q13J</option><option>Q13W</option><option>Q14</option></optgroup>
                 <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
-                <optgroup label="Staten Island"><option>SI1</option><option>SI2</option><option>SI3</option></optgroup>
+                <optgroup label="Staten Island"><option>SI1</option><option>SI1 Annex</option><option>SI2</option><option>SI3</option></optgroup>
               </select>
             </div>
           </div>
@@ -2224,6 +2290,7 @@ document.currentScript.parentNode.appendChild(_link);
         <optgroup label="Staten Island">
           <option>SI1</option><option>SI2</option><option>SI3</option>
         </optgroup>
+        <optgroup label="Other"><option>FBF</option><option>BKNBO</option></optgroup>
       </select>
     </div>
     <div class="form-group">
@@ -2378,6 +2445,20 @@ document.currentScript.parentNode.appendChild(_link);
       <input type="text" id="editShiftPartner" placeholder="e.g. J. Smith">
     </div>
     <div class="form-group">
+      <label>Sent Out of Town? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
+      <select id="editShiftLocation">
+        <option value="">No — worked home garage</option>
+        <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
+        <optgroup label="Brooklyn North"><option>BK1</option><option>BK2</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
+        <optgroup label="Brooklyn South"><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15A</option><option>BK18</option></optgroup>
+        <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option></optgroup>
+        <optgroup label="Queens East"><option>Q7</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q14</option></optgroup>
+        <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
+        <optgroup label="Staten Island"><option>SI1</option><option>SI2</option><option>SI3</option></optgroup>
+        <optgroup label="Other"><option>FBF</option><option>BKNBO</option></optgroup>
+      </select>
+    </div>
+    <div class="form-group">
       <label>Did you down any trucks today? <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
       <p style="font-size:11px;color:var(--text3);margin-bottom:6px;">For Achievements &amp; Counting Purposes</p>
       <select id="editTruckDowned">
@@ -2424,13 +2505,13 @@ document.currentScript.parentNode.appendChild(_link);
       <label>Garage</label>
       <select id="routeGarage">
         <option value="">Select garage</option>
-        <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
+        <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX3A</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX6A</option><option>BX7</option><option>BX7A</option><option>BX8</option><option>BX8A</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
         <optgroup label="Brooklyn North"><option>BK1</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
-        <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK16</option><option>BK18</option></optgroup>
-        <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option></optgroup>
-        <optgroup label="Queens East"><option>Q7</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q14</option></optgroup>
+        <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK6A</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15-49th St</option><option>BK16</option><option>BK18</option></optgroup>
+        <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M3A</option><option>M4</option><option>M4A</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M8A</option><option>M9</option><option>M10</option><option>M11</option><option>M11A</option><option>M12</option></optgroup>
+        <optgroup label="Queens East"><option>Q7</option><option>Q7A</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q13J</option><option>Q13W</option><option>Q14</option></optgroup>
         <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
-        <optgroup label="Staten Island"><option>SI1</option><option>SI2</option><option>SI3</option></optgroup>
+        <optgroup label="Staten Island"><option>SI1</option><option>SI1 Annex</option><option>SI2</option><option>SI3</option></optgroup>
       </select>
     </div>
     <div class="form-group">
@@ -2573,6 +2654,30 @@ function register() {
   showLogin();
 }
 
+function loginAsGuest() {
+  const GUEST_ID = 'guest@santrack.app';
+  const users = getUsers();
+  // Create guest account if it doesn't exist
+  if (!users[GUEST_ID]) {
+    users[GUEST_ID] = {
+      id: GUEST_ID,
+      email: GUEST_ID,
+      name: 'Guest',
+      pass: 'guest',
+      district: '',
+      rate: 46390,
+      title: 'Sanitation Worker',
+      badge: '',
+      isGuest: true
+    };
+    saveUsers(users);
+  }
+  currentUser = users[GUEST_ID];
+  localStorage.setItem('dsny_session', GUEST_ID);
+  localStorage.setItem('dsny_session_expiry', Date.now() + 365 * 24 * 60 * 60 * 1000); // 1 year
+  startApp();
+}
+
 function login() {
   const id = document.getElementById('loginId').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value.trim();
@@ -2705,15 +2810,16 @@ function comparePayStub(event) {
     shifts.forEach(s => {
       const isSunday = s.date ? new Date(s.date + 'T12:00:00').getDay() === 0 : false;
       if (s.chartDay && s.type) chartP += calcChartDayPay(s.type, s.hours, rate);
-      else if (s.type === 'holiday') holP += s.hours * (rate/2080) * 2;
-      else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); diffP += bp*0.10; regP += bp; }
+      else if (s.type === 'holiday') holP += s.hours * (rate/2080) * 1.5;
+      // night diff from field
       else if (isSunday) sundayP += s.hours * (rate/2080) * 2;
       else { regP += Math.min(s.hours||0,8)*(rate/2080); otP += (s.otHours||0)*(rate/2080)*1.5; }
     });
     const truckByDate = {};
     shifts.forEach(s => { if (!s.truckMoney||s.truckMoney<=0) return; const existing=truckByDate[s.date]; if (!existing) truckByDate[s.date]=s; else if (s.fraction&&!existing.fraction) truckByDate[s.date]=s; });
     truckP = Object.values(truckByDate).reduce((a,s)=>a+(s.truckMoney||0),0);
-    const grossP = regP+otP+holP+diffP+chartP+sundayP+truckP;
+    const ndP = shifts.reduce((a,s)=>a+(s.nightDiffPay||0),0);
+    const grossP = regP+otP+holP+ndP+chartP+sundayP+truckP;
 
     const santrackSummary = `Regular Pay: $${regP.toFixed(2)}, OT Pay: $${otP.toFixed(2)}, Holiday Pay: $${holP.toFixed(2)}, Chart Day Pay: $${chartP.toFixed(2)}, Sunday Pay: $${sundayP.toFixed(2)}, Truck Money: $${truckP.toFixed(2)}, Total Gross: $${grossP.toFixed(2)}`;
 
@@ -2770,7 +2876,7 @@ function exportData() {
   const users = getUsers();
   const userData = getUserData(currentUser.id);
   const exportObj = {
-    version: '0.0.6',
+    version: '0.0.7',
     exportedAt: new Date().toISOString(),
     user: users[currentUser.id],
     data: userData
@@ -2904,8 +3010,38 @@ function startApp() {
 // ── ROUTES ──
 let dashWeekOffset = 0;
 
-function dashPrevWeek() { dashWeekOffset--; renderWeeklyList(); updateDashWeekLabel(); }
-function dashNextWeek() { if (dashWeekOffset < 0) { dashWeekOffset++; renderWeeklyList(); updateDashWeekLabel(); } }
+function dashPrevWeek() { dashWeekOffset--; renderWeeklyList(); updateDashWeekLabel(); updateDashWeekPay(); }
+function dashNextWeek() { if (dashWeekOffset < 0) { dashWeekOffset++; renderWeeklyList(); updateDashWeekLabel(); updateDashWeekPay(); } }
+
+function updateDashWeekPay() {
+  const now = new Date();
+  const sunday = new Date(now);
+  sunday.setDate(now.getDate() - now.getDay() + (dashWeekOffset * 7));
+  sunday.setHours(0,0,0,0);
+  const saturday = new Date(sunday); saturday.setDate(sunday.getDate() + 6); saturday.setHours(23,59,59,999);
+  const d = getUserData(currentUser.id);
+  const weekShifts = d.shifts.filter(s => {
+    const sd = new Date(s.date + 'T12:00:00');
+    return sd >= sunday && sd <= saturday;
+  });
+  const rate = parseFloat(currentUser.rate) || 0;
+  let gross = 0;
+  weekShifts.forEach(s => {
+    gross += s.pay || 0;
+    gross += s.nightDiffPay || 0;
+  });
+  const deductRate = 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331;
+  const health = 7.42, disability = 18.89, pension = 40.48, unionAssn = 21.00;
+  const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
+  const totalDeductions = (gross * deductRate) + health + disability + pension + unionAssn + (gross * contrib457Pct / 100);
+  const net = gross - totalDeductions;
+  const label = document.querySelector('.card-title[style*="9px"]');
+  // Update the card title
+  const titleEl = document.getElementById('weekPay')?.previousElementSibling;
+  if (titleEl) titleEl.textContent = dashWeekOffset === 0 ? 'This Week Pay' : 'Week Pay';
+  document.getElementById('weekPay').innerHTML = '<span class="tilde">~</span>$' + Math.round(gross).toLocaleString();
+  document.getElementById('weekPayNetSub').textContent = 'net: ~$' + Math.round(net).toLocaleString();
+}
 
 function updateDashWeekLabel() {
   const label = document.getElementById('dashWeekLabel');
@@ -3011,9 +3147,11 @@ function renderWeeklyList() {
     }
     row += '</div></div>';
     if (shift && shift.pay > 0) {
-      row += '<div style="text-align:right;"><div style="font-family:\'Barlow\',sans-serif;font-size:16px;font-weight:700;"><span style="color:var(--green);">' + (shift.truckMoney > 0 ? '' : '<span class="tilde">~</span>') + '$</span><span style="color:#ffffff;">' + shift.pay.toFixed(2) + '</span></div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div></div>';
+      row += '<div style="text-align:right;"><div style="font-family:\'Barlow\',sans-serif;font-size:16px;font-weight:700;"><span style="color:var(--green);">' + (shift.truckMoney > 0 ? '' : '<span class="tilde">~</span>') + '$</span><span style="color:#ffffff;">' + shift.pay.toFixed(2) + '</span></div><div style="font-size:11px;color:var(--text2);">' + shift.hours + 'h</div>' + ((isAnyChartDay || isManualChartDay2) ? '<div style="font-size:10px;color:#388BFD;font-weight:700;">Chart Day</div>' : '') + '</div>';
+    } else if (shift && shift.pay === 0) {
+      row += '<div style="text-align:right;"><div style="font-size:11px;color:var(--text2);">' + (shift.hours || 0) + 'h</div>' + ((isAnyChartDay || isManualChartDay2) ? '<div style="font-size:10px;color:#388BFD;font-weight:700;">Chart Day</div>' : '') + '</div>';
     } else if (!shift) {
-      var noShiftLabel = isManualChartDay2 ? '<span style="color:#388BFD;font-weight:700;">Chart Day</span>' : isVacationDay2 ? '<span style="color:#FF8C00;font-weight:700;">XWP/XWOP</span>' : isHolidayRow ? '<span style="color:#ff9d9a;font-weight:700;">Holiday</span>' : days[i] === 'Sunday' ? '<span style="color:#ff9d9a;font-weight:700;">Sunday</span>' : (isPast ? 'No shift' : 'Tap to log');
+      var noShiftLabel = (isAnyChartDay || isManualChartDay2) ? '<span style="color:#388BFD;font-weight:700;">Chart Day</span>' : isVacationDay2 ? '<span style="color:#FF8C00;font-weight:700;">XWP/XWOP</span>' : isHolidayRow ? '<span style="color:#ff9d9a;font-weight:700;">Holiday</span>' : days[i] === 'Sunday' ? '<span style="color:#ff9d9a;font-weight:700;">Sunday</span>' : (isPast ? 'No shift' : 'Tap to log');
       row += '<div style="font-size:10px;color:' + (isPast ? 'var(--text3)' : 'var(--text2)') + ';">' + noShiftLabel + '</div>';
     }
     row += '</div>';
@@ -3727,16 +3865,26 @@ function showWeatherPage() {
 
 function loadWeather() {
   const el = document.getElementById('weatherContent');
-  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">📡 Getting your location...</div>';
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">⛅ Loading weather...</div>';
+  const lat = 40.7128, lon = -74.0060; // NYC bypass
+
+  // ── MOCK DATA FOR LOCAL EDITING ──
+  const todayForWeather = new Date();
+  const startDayIndex = todayForWeather.getDay(); // days since Sunday
+  const sundayOfWeek = new Date(todayForWeather);
+  sundayOfWeek.setDate(todayForWeather.getDate() - startDayIndex);
+  const sundayStr = sundayOfWeek.toISOString().split('T')[0];
+  // Fetch from Sunday of current week, 21 days forward (plus past days of this week)
+  const totalDays = 21 + startDayIndex;
+  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">⛅ Loading weather...</div>';
   if (!navigator.geolocation) {
-    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Geolocation not supported on this device.</div>';
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Geolocation not supported.</div>';
     return;
   }
   navigator.geolocation.getCurrentPosition(function(pos) {
     const lat = pos.coords.latitude.toFixed(4);
     const lon = pos.coords.longitude.toFixed(4);
-    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">⛅ Loading weather...</div>';
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode,windspeed_10m,relativehumidity_2m&hourly=temperature_2m&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=7`)
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=16&start_date=${sundayStr}`)
       .then(r => r.json())
       .then(data => {
         const c = data.current;
@@ -3766,33 +3914,110 @@ function loadWeather() {
           return 'Unknown';
         };
         const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        const forecastRows = daily.time.slice(0,7).map((date, i) => {
+
+        const dayHeaders = daily.time.slice(0, 21 + startDayIndex).map((date) => {
           const d = new Date(date + 'T12:00:00');
-          return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--dark3);">
-            <span style="font-size:13px;color:var(--text2);width:36px;">${days[d.getDay()]}</span>
-            <span style="font-size:18px;">${wmoIcon(daily.weathercode[i])}</span>
-            <span style="font-size:12px;color:var(--text3);flex:1;text-align:center;">${wmoLabel(daily.weathercode[i])}</span>
-            <span style="font-size:13px;color:var(--text);font-weight:700;">${Math.round(daily.temperature_2m_max[i])}°</span>
-            <span style="font-size:12px;color:var(--text3);margin-left:6px;">${Math.round(daily.temperature_2m_min[i])}°</span>
-          </div>`;
-        }).join('');
-        el.innerHTML = `
-          <div class="card" style="text-align:center;padding:24px;margin-bottom:12px;">
-            <div style="font-size:64px;margin-bottom:4px;">${wmoIcon(c.weathercode)}</div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:56px;font-weight:900;color:#fff;line-height:1;">${Math.round(c.temperature_2m)}°F</div>
-            <div style="font-size:16px;color:var(--text2);margin-top:4px;">${wmoLabel(c.weathercode)}</div>
-            <div style="font-size:13px;color:var(--text3);margin-top:8px;">💨 ${Math.round(c.windspeed_10m)} mph &nbsp;•&nbsp; 💧 ${c.relativehumidity_2m}% humidity</div>
+          return `<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;padding:6px 0;">${days[d.getDay()]}</div>`;
+        });
+
+        const calGridCells = daily.time.slice(0, 21 + startDayIndex).map((date, i) => {
+          const d = new Date(date + 'T12:00:00');
+          const isToday = i === startDayIndex;
+          const isSun = d.getDay() === 0;
+          // Check DSNY holidays
+          const yr = d.getFullYear();
+          const nthWD = (y,m,dow,n) => { const d=new Date(y,m,1); let c=0; while(d.getMonth()===m){if(d.getDay()===dow){c++;if(c===n)return new Date(d);} d.setDate(d.getDate()+1);} return null; };
+          const lastWD = (y,m,dow) => { const d=new Date(y,m+1,0); while(d.getDay()!==dow)d.setDate(d.getDate()-1); return d; };
+          const fmt = x => x ? `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}` : '';
+          const holidayDates = [
+            `${yr}-01-01`, fmt(nthWD(yr,0,1,3)), fmt(nthWD(yr,1,1,3)), fmt(lastWD(yr,4,1)),
+            `${yr}-06-19`, `${yr}-07-04`, fmt(nthWD(yr,8,1,1)), fmt(nthWD(yr,9,1,2)),
+            `${yr}-11-11`, fmt(nthWD(yr,10,4,4)), `${yr}-12-25`
+          ];
+          const isHoliday = holidayDates.includes(date);
+          // Chart days
+          const chartDaysStore = JSON.parse(localStorage.getItem('chart_days_' + (currentUser ? currentUser.id : '')) || '{}');
+          const monthKey = date.slice(0, 7);
+          const dayNum = parseInt(date.slice(8));
+          const isChartDay = !!(chartDaysStore[monthKey] && chartDaysStore[monthKey].includes(dayNum));
+          const border = isToday ? '2px solid var(--green)' : '1px solid var(--dark3)';
+          const bg = isToday ? 'rgba(66,130,71,0.4)' : isChartDay ? 'rgba(88,166,255,0.12)' : isHoliday || isSun ? 'rgba(248,81,73,0.08)' : 'var(--dark2)';
+          const dateColor = isToday ? '#fff' : isChartDay ? '#58a6ff' : isHoliday || isSun ? '#ff9d9a' : '#fff';
+          const precip = (daily.precipitation_sum && daily.precipitation_sum[i]) || 0;
+          const wind = (daily.windspeed_10m_max && daily.windspeed_10m_max[i]) || 0;
+          const tempMax = daily.temperature_2m_max[i];
+          const code = daily.weathercode[i];
+          const isSnowCode = [71,73,75,77,85,86].includes(code);
+          const isSnow = isSnowCode || (tempMax <= 32 && precip > 0);
+          const isBlizzard    = isSnow && tempMax <= 35 && precip >= 20;
+          const isHeavySnow   = !isBlizzard && isSnow && tempMax <= 35 && precip >= 10;
+          const isPlowSnow    = !isBlizzard && !isHeavySnow && isSnow && tempMax <= 35 && precip >= 2;
+          const isLightSnow   = !isBlizzard && !isHeavySnow && !isPlowSnow && isSnow && tempMax <= 32 && precip < 2;
+          const isHeavyRain   = !isSnow && [65,67,82,95,96,99].includes(code);
+          const isLightRain   = !isSnow && !isHeavyRain && [51,53,55,61,63,80,81].includes(code);
+          const isWindy       = wind >= 25;
+          const isExtreme     = tempMax >= 100;
+          const isVeryHot     = !isExtreme && tempMax > 90;
+          const isHot         = !isExtreme && !isVeryHot && tempMax > 75;
+          const isWarm        = !isExtreme && !isVeryHot && !isHot && tempMax > 60;
+          const badge = (bg, border, color, text) => `<div style="margin-top:3px;background:${bg};border:1px solid ${border};border-radius:6px;padding:2px 4px;font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:800;color:${color};letter-spacing:0.3px;text-align:center;width:103.5%;box-sizing:border-box;align-self:center;display:block;">${text}</div>`;
+          return `<div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="background:${bg};border:${border};border-radius:10px;padding:8px 4px;min-height:180px;width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:${dateColor};">${d.getDate()}</div>
+            <div style="font-size:20px;line-height:1;">${wmoIcon(code)}</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;">${Math.round(tempMax)}°</div>
+            <div style="font-size:11px;color:var(--text3);">${Math.round(daily.temperature_2m_min[i])}°</div>
+            <div style="font-size:8px;color:var(--text3);text-align:center;line-height:1.2;">${wmoLabel(code)}</div>
+            ${isWarm        ? badge('#3a3000','#7a6000','#FFD100','WARM') : ''}
+            ${isHot         ? badge('#4a1a00','#7a3300','#ff6b2b','HOT') : ''}
+            ${isVeryHot     ? badge('#4a0000','#aa0000','#ff4444','VERY HOT') : ''}
+            ${isExtreme     ? badge('#000000','#aa0000','#ff0000','EXTREME') : ''}
+            ${isLightRain   ? badge('#002a1a','#005533','#33cc88','LIGHT RAIN') : ''}
+            ${isHeavyRain   ? badge('#0d2a4a','#1a4a7a','#58a6ff','HEAVY RAIN') : ''}
+            ${isWindy       ? badge('#162030','#2a4060','#a0c8f0','WINDY') : ''}
+            ${isLightSnow   ? badge('#e8f0ff','#aabbdd','#3355aa','LIGHT SNOW') : ''}
+            ${isPlowSnow    ? badge('#4a2800','#aa6600','#ffaa44','PLOW SNOW') : ''}
+            ${isHeavySnow   ? badge('#ddeeff','#3366aa','#1a3a6a','HEAVY SNOW') : ''}
+            ${isBlizzard    ? badge('#d0d8e8','#888899','#444455','BLIZZARD') : ''}
           </div>
-          <div class="card" style="padding:12px 16px;">
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;text-transform:uppercase;">7-Day Forecast</div>
-            ${forecastRows}
+          </div>`;
+        });
+
+        const emptyCell = `<div style="min-height:180px;"></div>`;
+        // startDayIndex = how many days before today are in the array (past days of this week)
+        const sdx = startDayIndex;
+        // Row 1: this week (Sun through Sat), past days faded
+        const row1Cells = calGridCells.slice(0, 7).map((cell, i) => {
+          if (i < sdx) return cell.replace('display:flex;flex-direction:column', 'opacity:0.5;display:flex;flex-direction:column');
+          return cell;
+        });
+        // Row 2 & 3: future weeks
+        const row2Cells = calGridCells.slice(7, 14);
+        const row3Cells = calGridCells.slice(14, 21);
+        while (row2Cells.length < 7) row2Cells.push(emptyCell);
+        while (row3Cells.length < 7) row3Cells.push(emptyCell);
+        const weekHeader = `<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;padding:6px 0;">`;
+        const weekDayNames = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
+        const fixedHeaders = weekDayNames.map(d => weekHeader + d + '</div>');
+        el.innerHTML = `
+          <div class="card" style="padding:12px;">
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;">21-Day Forecast</div>
+              <div style="font-size:10px;color:var(--text3);font-weight:400;">Sources: NOAA, DWD, ECMWF</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">${fixedHeaders.join('')}</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px;">${row1Cells.join('')}</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">${fixedHeaders.join('')}</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px;">${row2Cells.join('')}</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">${fixedHeaders.join('')}</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">${row3Cells.join('')}</div>
           </div>
           <div style="text-align:center;margin-top:12px;">
             <button onclick="loadWeather()" style="background:none;border:1px solid var(--dark4);border-radius:8px;color:var(--text3);font-size:12px;padding:6px 16px;cursor:pointer;">↻ Refresh</button>
           </div>`;
       })
       .catch(() => {
-        el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.</div>';
+        el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
       });
   }, function() {
     el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Location access denied. Please allow location access and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
@@ -3813,6 +4038,152 @@ function showChangelogPage() {
   document.getElementById('changelogPage').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-tasks').classList.add('active');
+}
+
+function showPayHistoryPage() {
+  currentPage = 'payHistory';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('payHistoryPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
+
+  const d = getUserData(currentUser.id);
+  const el = document.getElementById('payHistoryList');
+
+  if (!d.shifts.length) {
+    el.innerHTML = '<div class="card" style="text-align:center;padding:32px;color:var(--text3);">No shifts logged yet.</div>';
+    return;
+  }
+
+  const deductRate = 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331;
+  const health = 7.42, disability = 18.89, pension = 40.48, unionAssn = 21.00;
+  const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Group shifts by year → month → week
+  const yearMap = {};
+  d.shifts.forEach(s => {
+    const sd = new Date(s.date + 'T12:00:00');
+    const yr = sd.getFullYear();
+    const mo = sd.getMonth();
+    if (!yearMap[yr]) yearMap[yr] = {};
+    if (!yearMap[yr][mo]) yearMap[yr][mo] = [];
+    yearMap[yr][mo].push(s);
+  });
+
+  const years = Object.keys(yearMap).sort().reverse();
+
+  let html = '';
+  years.forEach(yr => {
+    const months = Object.keys(yearMap[yr]).sort().reverse();
+    // Calc year total
+    const allYearShifts = months.flatMap(mo => yearMap[yr][mo]);
+    const yearGross = allYearShifts.reduce((a, s) => a + (s.pay || 0) + (s.nightDiffPay || 0), 0);
+    const yearDeductions = (yearGross * deductRate) + (health + disability + pension + unionAssn) * 52 + (yearGross * contrib457Pct / 100);
+    const yearNet = yearGross - yearDeductions;
+
+    html += `<div style="margin-bottom:10px;">
+      <div onclick="togglePayYear('yr-${yr}')" style="display:flex;align-items:center;justify-content:space-between;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;padding:14px 16px;cursor:pointer;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;">${yr}</div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--text3);">Gross</div>
+            <div style="font-family:'Barlow',sans-serif;font-weight:700;color:#fff;">~$${Math.round(yearGross).toLocaleString()}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--text3);">Net</div>
+            <div style="font-family:'Barlow',sans-serif;font-weight:700;color:#fff;">~$${Math.round(yearNet).toLocaleString()}</div>
+          </div>
+          <svg id="yr-${yr}-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text3);transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+      <div id="yr-${yr}" style="display:none;margin-top:4px;padding-left:8px;">`;
+
+    months.forEach(mo => {
+      const moShifts = yearMap[yr][mo];
+      const moGross = moShifts.reduce((a, s) => a + (s.pay || 0) + (s.nightDiffPay || 0), 0);
+      const moDeductions = (moGross * deductRate) + (health + disability + pension + unionAssn) * 4 + (moGross * contrib457Pct / 100);
+      const moNet = moGross - moDeductions;
+
+      // Group by week (Sun–Sat)
+      const weekMap = {};
+      moShifts.forEach(s => {
+        const sd = new Date(s.date + 'T12:00:00');
+        const sun = new Date(sd); sun.setDate(sd.getDate() - sd.getDay());
+        const key = sun.toISOString().split('T')[0];
+        if (!weekMap[key]) weekMap[key] = [];
+        weekMap[key].push(s);
+      });
+      const weeks = Object.keys(weekMap).sort().reverse();
+
+      html += `<div style="margin-bottom:6px;">
+        <div onclick="togglePayMonth('mo-${yr}-${mo}')" style="display:flex;align-items:center;justify-content:space-between;background:var(--dark2);border:1px solid var(--dark3);border-radius:8px;padding:12px 14px;cursor:pointer;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:#fff;">${MONTHS[mo]}</div>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:var(--text3);">Gross</div>
+              <div style="font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;color:#fff;">~$${Math.round(moGross).toLocaleString()}</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px;color:var(--text3);">Net</div>
+              <div style="font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;color:#fff;">~$${Math.round(moNet).toLocaleString()}</div>
+            </div>
+            <svg id="mo-${yr}-${mo}-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text3);transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div id="mo-${yr}-${mo}" style="display:none;margin-top:3px;padding-left:8px;">
+          <div style="background:var(--dark2);border-radius:8px;overflow:hidden;border:1px solid var(--dark3);">
+            <table style="width:100%;border-collapse:collapse;font-family:'Barlow',sans-serif;font-size:12px;">
+              <thead>
+                <tr style="background:rgba(255,255,255,0.03);">
+                  <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Week</th>
+                  <th style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Gross</th>
+                  <th style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Net</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${weeks.map((key, i) => {
+                  const wShifts = weekMap[key];
+                  const sun = new Date(key + 'T12:00:00');
+                  const sat = new Date(sun); sat.setDate(sun.getDate() + 6);
+                  const fmt = d => `${d.getMonth()+1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
+                  const wGross = wShifts.reduce((a, s) => a + (s.pay || 0) + (s.nightDiffPay || 0), 0);
+                  const wDeductions = (wGross * deductRate) + health + disability + pension + unionAssn + (wGross * contrib457Pct / 100);
+                  const wNet = wGross - wDeductions;
+                  const rowBg = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)';
+                  return `<tr style="background:${rowBg};border-bottom:1px solid rgba(255,255,255,0.04);">
+                    <td style="padding:8px 12px;color:#fff;white-space:nowrap;">${fmt(sun)} – ${fmt(sat)}</td>
+                    <td style="padding:8px 12px;text-align:right;color:#fff;">~$${Math.round(wGross).toLocaleString()}</td>
+                    <td style="padding:8px 12px;text-align:right;color:#fff;">~$${Math.round(wNet).toLocaleString()}</td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+function togglePayYear(id) {
+  const el = document.getElementById(id);
+  const chevron = document.getElementById(id + '-chevron');
+  const open = el.style.display === 'none';
+  el.style.display = open ? 'block' : 'none';
+  if (chevron) chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function togglePayMonth(id) {
+  const el = document.getElementById(id);
+  const chevron = document.getElementById(id + '-chevron');
+  const open = el.style.display === 'none';
+  el.style.display = open ? 'block' : 'none';
+  if (chevron) chevron.style.transform = open ? 'rotate(180deg)' : '';
 }
 
 function showCareerStatsPage() {
@@ -3949,6 +4320,34 @@ function moveSanMan(id, direction) {
   renderSeniorityList();
 }
 
+function toggleAddSanMan() {
+  const form = document.getElementById('addSanManForm');
+  const chevron = document.getElementById('addSanManChevron');
+  const open = form.style.display === 'none';
+  form.style.display = open ? 'block' : 'none';
+  chevron.style.transform = open ? 'rotate(180deg)' : '';
+}
+
+function toggleSeniorityHide(id) {
+  const d = getUserData(currentUser.id);
+  d.seniorityHidden = d.seniorityHidden || [];
+  const idx = d.seniorityHidden.indexOf(id);
+  if (idx === -1) d.seniorityHidden.push(id);
+  else d.seniorityHidden.splice(idx, 1);
+  saveUserData(currentUser.id, d);
+  renderSeniorityList();
+}
+
+function shiftSeniorityNums(delta) {
+  const d = getUserData(currentUser.id);
+  if (!d.seniority || !d.seniority.length) { showToast('No San Men to update'); return; }
+  d.seniority = d.seniority.map(p => ({ ...p, num: Math.max(1, (p.num || 0) + delta) }));
+  d.seniority.sort((a, b) => a.num - b.num);
+  saveUserData(currentUser.id, d);
+  renderSeniorityList();
+  showToast(delta > 0 ? '▼ All numbers moved down by 1' : '▲ All numbers moved up by 1');
+}
+
 function addSeniorityPerson() {
   const num = parseInt(document.getElementById('seniorityNum').value);
   const name = document.getElementById('seniorityName').value.trim();
@@ -3970,6 +4369,8 @@ function addSeniorityPerson() {
   document.getElementById('seniorityNight').value = 'no';
   renderSeniorityList();
   showToast('✅ San Man added!');
+  document.getElementById('addSanManForm').style.display = 'none';
+  document.getElementById('addSanManChevron').style.transform = '';
 }
 
 let editingSanManId = null;
@@ -4037,26 +4438,29 @@ function renderSeniorityList() {
     const loaderBg = (!isDriver && p.section && sectionColors[p.section]) ? sectionColors[p.section] : null;
     const isDarkBg = loaderBg && ['#F52795','#7D4710'].includes(loaderBg);
     const loaderTextColor = loaderBg ? (isDarkBg ? '#ffffff' : '#000000') : '';
-    const rowStyle = isDriver
-      ? 'background:#ffffff;border-color:#e0e0e0;'
-      : loaderBg ? `background:${loaderBg};border-color:${loaderBg};` : '';
+    const rowStyle = isDriver ? 'background:#ffffff;border-color:#e0e0e0;' : loaderBg ? `background:${loaderBg};border-color:${loaderBg};` : '';
     const numColor = isDriver ? '#000000' : loaderBg ? (isDarkBg ? '#ffffff' : '#000000') : 'var(--green)';
     const nameColor = isDriver ? '#000000' : loaderTextColor;
-    const btnColor = (isDriver || loaderBg) ? (isDarkBg ? 'rgba(255,255,255,0.7)' : '#555') : 'var(--text3)';    return `<div class="shift-item" style="padding:12px 16px;${rowStyle}">
-      <div style="display:flex;align-items:center;gap:14px;flex:1;min-width:0;">
-        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:${numColor};min-width:36px;text-align:center;">${p.num}</div>
+    const btnColor = (isDriver || loaderBg) ? (isDarkBg ? 'rgba(255,255,255,0.7)' : '#555') : 'var(--text3)';
+    const isHidden = (d.seniorityHidden || []).includes(p.id);
+    const rowOpacity = isHidden ? 'opacity:0.5;max-height:32px;overflow:hidden;padding:4px 16px !important;' : '';
+    const eyeColor = isDarkBg ? '#ffffff' : '#000000';
+    return `<div class="shift-item" id="sen-row-${p.id}" style="padding:9px 12px;${rowStyle}${rowOpacity}">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+        <div style="font-family:'Barlow',sans-serif;font-size:18px;font-weight:700;color:${numColor};min-width:28px;text-align:center;">${p.num}</div>
         <div style="min-width:0;">
-          <div style="font-size:15px;font-weight:600;margin-bottom:3px;${nameColor ? 'color:' + nameColor + ';' : ''}">${p.name}</div>
-          ${tags ? `<div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">${tags}</div>` : ''}
+          <div style="font-size:15px;font-weight:600;margin-bottom:2px;${nameColor ? 'color:' + nameColor + ';' : ''}">${p.name}</div>
+          ${tags && !isHidden ? `<div style="display:flex;flex-wrap:wrap;gap:3px;align-items:center;">${tags}</div>` : ''}
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:2px;margin-right:6px;">
-        <button class="delete-btn" onclick="moveSanMan(${p.id}, -1)" style="color:${btnColor};padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
-        <button class="delete-btn" onclick="moveSanMan(${p.id}, 1)" style="color:${btnColor};padding:2px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-right:4px;">
+        <button class="delete-btn" onclick="moveSanMan(${p.id}, -1)" style="color:${btnColor};padding:2px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg></button>
+        <button class="delete-btn" onclick="toggleSeniorityHide(${p.id})" style="color:${eyeColor};padding:2px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>${isHidden ? '<line x1="2" y1="2" x2="22" y2="22"/>' : ''}</svg></button>
+        <button class="delete-btn" onclick="moveSanMan(${p.id}, 1)" style="color:${btnColor};padding:2px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
       </div>
-      <div style="display:flex;gap:6px;flex-shrink:0;">
-        <button class="delete-btn" onclick="openEditSanMan(${p.id})" style="color:${btnColor};"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-        <button class="delete-btn" onclick="deleteSeniorityPerson(${p.id})" style="color:${btnColor};"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
+      <div style="display:flex;gap:5px;flex-shrink:0;">
+        <button class="delete-btn" onclick="openEditSanMan(${p.id})" style="color:${btnColor};"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+        <button class="delete-btn" onclick="deleteSeniorityPerson(${p.id})" style="color:${btnColor};"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button>
       </div>
     </div>`;
   }).join('');
@@ -4402,7 +4806,17 @@ function openFab() {
   }
 }
 
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  if (!document.querySelector('.modal-overlay.open')) {
+    document.body.style.overflow = '';
+  }
+}
 
 // ── SHIFTS ──
 function calcHours(start, end) {
@@ -4421,7 +4835,7 @@ function calcShiftPay(shift, rate) {
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   const isSunday = shift.date ? new Date(shift.date + 'T12:00:00').getDay() === 0 : false;
 
-  if (shift.type === 'holiday') return h * hourly * 2;
+  if (shift.type === 'holiday') return h * hourly * 1.5;
   if (shift.type === 'differential') return h * hourly * 1.10;
 
   // Sunday premium — always 2x
@@ -4467,6 +4881,14 @@ function calcTruckMoney(type, fraction, chartDay, isSnow) {
 const SAT_SHOW_UP = 24.10;
 const SAT_TRUCK   = 7.77;
 const TRUCK_DIFF_FULL = 18.17;
+
+function calcNightDiffPay(start, hours, rate) {
+  if (!start || !hours) return 0;
+  const [h] = start.split(':').map(Number);
+  const mins = h * 60 + parseInt(start.split(':')[1]);
+  if (mins < 660) return 0; // before 11:00 — no night diff
+  return hours * (rate / 2080) * 0.10;
+}
 
 function calcSaturdayPay(date, type, fraction, chartDay) {
   if (!date) return 0;
@@ -4529,10 +4951,11 @@ function addShift() {
   const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
   const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
-  pay += truckMoney + saturdayPay + truckDifferential;
+  const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, currentUser.rate) : 0;
+  pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay;
 
   const d = getUserData(currentUser.id);
-  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential });
+  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential, nightDiffPay });
   saveUserData(currentUser.id, d);
   closeModal('shiftModal');
   showToast('✅ Shift logged!');
@@ -4615,6 +5038,7 @@ function openEditShift(id) {
   document.getElementById('editShiftRoute').value = s.route || '';
   document.getElementById('editShiftSection').value = s.section || '';
   document.getElementById('editShiftPartner').value = s.partner || '';
+  document.getElementById('editShiftLocation').value = s.location || '';
   document.getElementById('editTruckDowned').value = s.truckDowned || 0;
   document.getElementById('editShiftNotes').value = s.notes || '';
   // Restore start time preset button
@@ -4671,6 +5095,7 @@ function saveEditShift() {
   const route = document.getElementById('editShiftRoute').value;
   const section = document.getElementById('editShiftSection').value;
   const partner = document.getElementById('editShiftPartner').value.trim();
+  const location = document.getElementById('editShiftLocation').value;
   const truckDowned = parseInt(document.getElementById('editTruckDowned').value) || 0;
   const notes = document.getElementById('editShiftNotes').value.trim();
 
@@ -4685,9 +5110,10 @@ function saveEditShift() {
   const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
   const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
-  pay += truckMoney + saturdayPay + truckDifferential;
+  const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, currentUser.rate) : 0;
+  pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay;
 
-  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential };
+  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, location, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential, nightDiffPay };
   saveUserData(currentUser.id, d);
   closeModal('editShiftModal');
   editingShiftId = null;
@@ -5101,10 +5527,10 @@ function renderCalendar() {
       // Special annual dates
       const mmdd = dateStr.slice(5); // MM-DD
       if (mmdd === '03-29') {
-        chipsHtml += `<div style="font-size:10px;font-weight:600;color:#ffffff;line-height:1.2;padding:1px 2px;position:absolute;bottom:3px;left:2px;right:2px;">Night Plow Ends</div>`;
+        chipsHtml += `<div style="font-size:9px;font-weight:600;color:#ffffff;line-height:1.2;padding:1px 2px;position:absolute;bottom:3px;left:3px;">Night Plow Ends</div>`;
       }
       if (holiday) {
-        chipsHtml += `<div style="font-size:10px;font-weight:600;color:#ffffff;line-height:1.2;padding:1px 2px;position:absolute;bottom:3px;left:2px;right:2px;">${holiday.name}</div>`;
+        chipsHtml += `<div style="font-size:9px;font-weight:600;color:#ffffff;line-height:1.2;padding:1px 2px;position:absolute;bottom:3px;left:3px;">${holiday.name}</div>`;
       }
       const hasShifts = dayShifts.length > 0;
       if (!hasShifts) {
@@ -5114,11 +5540,11 @@ function renderCalendar() {
               <span class="chip-type">VACATION</span>
             </div>
           </div>`;
-        } else if (isManualChartDay) {
-          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
-            <div class="cal-shift-chip" style="background:rgba(56,139,253,0.3);color:#82b8ff;margin:0;">
-              <span class="chip-type">CHART DAY</span>
-            </div>
+        }
+        if (isManualChartDay || isChartDay) {
+          chipsHtml += `<div style="position:absolute;top:0;left:0;right:0;bottom:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;">
+            <div class="cal-shift-chip" style="background:rgba(56,139,253,0.3);color:#82b8ff;margin:0;"><span class="chip-type">CHART DAY</span></div>
+            ${holiday ? `<div class="cal-shift-chip" style="background:rgba(248,81,73,0.3);color:#ff9d9a;margin:0;"><span class="chip-type">HOLIDAY</span></div>` : ''}
           </div>`;
         } else if (isVacationDay) {
           chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:35%;">
@@ -5150,8 +5576,9 @@ function renderCalendar() {
               <span class="chip-type">FMLA</span>
             </div>
           </div>`;
-        } else if (holiday) {
-          chipsHtml += `<div style="display:flex;align-items:center;justify-content:center;flex:1;min-height:30px;padding-bottom:55%;">
+        }
+        if (holiday && !(isManualChartDay || isChartDay)) {
+          chipsHtml += `<div style="position:absolute;top:0;left:0;right:0;bottom:18px;display:flex;align-items:center;justify-content:center;">
             <div class="cal-shift-chip" style="background:rgba(248,81,73,0.3);color:#ff9d9a;margin:0;">
               <span class="chip-type">HOLIDAY</span>
             </div>
@@ -5533,11 +5960,6 @@ function updatePayPage() {
       }
     }
     else if (s.type === 'holiday') { holP += calculatedPay; }
-    else if (s.type === 'differential') {
-      const basePay = (s.hours || 0) * (rate / 2080);
-      diffP += basePay * 0.10; // only the 10% extra
-      regP += basePay;         // base goes into regular
-    }
     else if (isSunday) { sundayP += calculatedPay; }
     else {
       const shiftRegHours = Math.min(s.hours || 0, 8);
@@ -5551,6 +5973,7 @@ function updatePayPage() {
   truckP = Object.values(truckByDate).reduce((a, s) => a + (s.truckMoney || 0), 0);
   satP = shifts.reduce((a, s) => a + (s.saturdayPay || 0), 0);
   truckDiffP = shifts.reduce((a, s) => a + (s.truckDifferential || 0), 0);
+  diffP = shifts.reduce((a, s) => a + (s.nightDiffPay || 0), 0);
 
   const total = regP + otP + holP + diffP + chartP + sundayP + truckP + satP + truckDiffP;
 
@@ -5645,6 +6068,7 @@ function recalculateAllShiftPays() {
 }
 
 function refreshAll() {
+  updateCompHoursCard();
   recalculateAllShiftPays();
   const d = getUserData(currentUser.id);
   const now = new Date();
@@ -5679,7 +6103,7 @@ function refreshAll() {
       const calculatedPay = s.chartDay && s.type ? calcChartDayPay(s.type, s.hours, rate) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
       if (s.chartDay && s.type) chartP += calculatedPay;
       else if (s.type === 'holiday') holP += calculatedPay;
-      else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); diffP += bp*0.10; regP += bp; }
+      // night diff from field
       else if (isSunday) sundayP += calculatedPay;
       else {
         regP += Math.min(s.hours||0, 8) * (rate/2080);
@@ -5689,7 +6113,8 @@ function refreshAll() {
       satP += (s.saturdayPay || 0);
       truckDiffP += (s.truckDifferential || 0);
     });
-    return regP + otP + holP + diffP + chartP + sundayP + truckP + satP + truckDiffP;
+    const wndP = weekShifts.reduce((a,s)=>a+(s.nightDiffPay||0),0);
+    return regP + otP + holP + wndP + chartP + sundayP + truckP + satP + truckDiffP;
   }
 
   const weekP = calcWeekPay(weekShifts);
@@ -5701,7 +6126,7 @@ function refreshAll() {
     const calculatedPay = s.chartDay && s.type ? calcChartDayPay(s.type, s.hours, rate) : calcShiftPay({type: s.type, hours: s.hours, date: s.date}, rate);
     if (s.chartDay && s.type) monthChartP += calculatedPay;
     else if (s.type === 'holiday') monthHolP += calculatedPay;
-    else if (s.type === 'differential') { const bp = (s.hours||0)*(rate/2080); monthDiffP += bp*0.10; monthPay += bp; }
+    // night diff accumulated from field below
     else if (isSunday) monthSundayP += calculatedPay;
     else {
       monthPay += Math.min(s.hours||0, 8) * (rate/2080);
@@ -5710,6 +6135,7 @@ function refreshAll() {
     monthTruckP += (s.truckMoney || 0);
     monthSatP += (s.saturdayPay || 0);
     monthTruckDiffP += (s.truckDifferential || 0);
+    monthDiffP += (s.nightDiffPay || 0);
   });
   const monthTotal = monthPay + monthOtP + monthHolP + monthDiffP + monthChartP + monthSundayP + monthTruckP + monthSatP + monthTruckDiffP;
   const monthH = monthShifts.reduce((a, s) => a + s.hours, 0);
@@ -5724,27 +6150,10 @@ function refreshAll() {
   const weekPayCard = document.getElementById('weekPay').parentElement;
   const subDivs = weekPayCard.querySelectorAll('.card-sub');
   if (subDivs[1]) subDivs[1].innerHTML = 'net: <span class="tilde">~</span>$' + netPay.toLocaleString();
-  const compEl = document.getElementById('monthHours');
-  compEl.textContent = Math.round(monthH) + '/173';
-  if (monthH >= 250) {
-    compEl.style.background = 'linear-gradient(135deg, #a855f7, #6366f1)';
-    compEl.style.webkitBackgroundClip = 'text';
-    compEl.style.webkitTextFillColor = 'transparent';
-    compEl.style.backgroundClip = 'text';
-  } else if (monthH >= 100) {
-    compEl.style.background = 'linear-gradient(135deg, #428247, #00C863)';
-    compEl.style.webkitBackgroundClip = 'text';
-    compEl.style.webkitTextFillColor = 'transparent';
-    compEl.style.backgroundClip = 'text';
-  } else {
-    compEl.style.background = '';
-    compEl.style.webkitBackgroundClip = '';
-    compEl.style.webkitTextFillColor = '';
-    compEl.style.backgroundClip = '';
-    compEl.style.color = monthH < 52 ? 'var(--red)' : 'var(--yellow)';
-  }
   document.getElementById('monthPay').innerHTML = '<span class="tilde">~</span>$' + Math.round(monthTotal).toLocaleString();
-  document.getElementById('monthPayNet').innerHTML = 'net: <span class="tilde">~</span>$' + Math.round(monthTotal * (1 - (taxRate + 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331))).toLocaleString();
+  const monthWeeks = monthShifts.length > 0 ? Math.ceil(monthShifts.length / 5) || 4 : 4;
+  const monthDeductions = (monthTotal * (0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331)) + (health + disability + pension + unionAssn) * 4 + (monthTotal * contrib457Pct / 100);
+  document.getElementById('monthPayNet').innerHTML = 'net: <span class="tilde">~</span>$' + Math.round(monthTotal - monthDeductions).toLocaleString();
   const monthShiftsEl = document.getElementById('monthShifts');
   if (monthShiftsEl) monthShiftsEl.textContent = monthShifts.length;
 
@@ -5826,16 +6235,9 @@ function updateProfile() {
 
   saveUsers(users);
   updateProbationDisplay();
-  document.getElementById('updateName').value = '';
-  document.getElementById('updateBadge').value = '';
-  document.getElementById('updateRate').value = '';
-  document.getElementById('updateGarage').value = '';
-  document.getElementById('updateTitle').value = '';
-  document.getElementById('updateHireDate').value = '';
-  document.getElementById('update457').value = '';
-  document.getElementById('updateProbation').value = '';
   showToast('✅ Profile updated!');
-  if (document.getElementById('payPeriodSelect')) updatePayPage();
+  if (r && r > 0) refreshAll();
+  else if (document.getElementById('payPeriodSelect')) updatePayPage();
 }
 
 // ── TOAST ──
@@ -6212,20 +6614,37 @@ function renderLocationsArray(locs) {
   }).join('');
 }
 
+function onSalaryPresetChange() {
+  const val = document.getElementById('salaryPreset').value;
+  if (val && val !== 'custom') {
+    document.getElementById('updateRate').value = val;
+  } else if (val === 'custom') {
+    document.getElementById('updateRate').value = '';
+    document.getElementById('updateRate').focus();
+  }
+}
+
+function syncSalaryDropdown(rate) {
+  const presets = ['46390','50320','51493','55047','61853','78860','95316'];
+  const el = document.getElementById('salaryPreset');
+  if (!el) return;
+  const match = presets.find(p => Math.abs(parseFloat(p) - parseFloat(rate)) < 1);
+  el.value = match || (rate ? 'custom' : '');
+}
+
+
 function onLocCategoryChange() {
   const cat = document.getElementById('locCategory').value;
-  document.getElementById('locNotesGroup').style.display = cat === 'garages' ? 'none' : 'block';
+  document.getElementById('locNotesGroup') && (document.getElementById('locNotesGroup').style.display = cat === 'garages' ? 'none' : 'block');
 }
 
 function openAddLocationModal() {
   currentLocRating = 0;
   document.getElementById('locName').value = '';
   document.getElementById('locAddress').value = '';
-  document.getElementById('locNotes').value = '';
   document.getElementById('locStarValue').value = '0';
   document.getElementById('locCategory').value = currentLocTab;
   document.querySelectorAll('.star-btn').forEach(b => { b.style.opacity = '0.3'; b.style.color = '#FFD100'; });
-  document.getElementById('locNotesGroup').style.display = currentLocTab === 'garages' ? 'none' : 'block';
   document.getElementById('addLocationModal').classList.add('open');
 }
 
@@ -6241,7 +6660,7 @@ function submitLocation() {
   const name = document.getElementById('locName').value.trim();
   const address = document.getElementById('locAddress').value.trim();
   const category = document.getElementById('locCategory').value;
-  const notes = document.getElementById('locNotes').value.trim();
+  const notes = '';
   const stars = parseInt(document.getElementById('locStarValue').value) || 0;
   if (!name) { showToast('Please enter a name'); return; }
   if (!address) { showToast('Please enter an address'); return; }
@@ -6306,7 +6725,7 @@ function openRateLocation(id) {
     document.getElementById('sliderNeighborhood').value = 5;
   }
 
-  document.getElementById('rateLocationModal').classList.add('open');
+  openModal('rateLocationModal');
 }
 
 function setRateStar(n) {
@@ -6410,7 +6829,21 @@ const PRESET_GARAGES = [
   {id:"garage_Q9",name:"Q9",address:"Queens West, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
   {id:"garage_SI1",name:"SI1",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
   {id:"garage_SI2",name:"SI2",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
-  {id:"garage_SI3",name:"SI3",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null}
+  {id:"garage_SI3",name:"SI3",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-28T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M3A",name:"M3A",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M4A",name:"M4A",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M8A",name:"M8A",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_M11A",name:"M11A",address:"Manhattan, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX3A",name:"BX3A",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX6A",name:"BX6A",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX7A",name:"BX7A",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BX8A",name:"BX8A",address:"Bronx, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK6A",name:"BK6A",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_BK15_49th_St",name:"BK15-49th St",address:"Brooklyn South, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q7A",name:"Q7A",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q13J",name:"Q13J",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_Q13W",name:"Q13W",address:"Queens East, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null},
+  {id:"garage_SI1_Annex",name:"SI1 Annex",address:"Staten Island, NYC",category:"garages",addedBy:"Developer",addedAt:"2026-03-29T00:00:00.000Z",rating:0,ratings:[],lat:null,lng:null}
 ];
 function seedGarages() {
   const existing = JSON.parse(localStorage.getItem('santrack_locations') || '[]');
@@ -6422,6 +6855,158 @@ function seedGarages() {
   if (added) localStorage.setItem('santrack_locations', JSON.stringify(existing));
 }
 seedGarages();
+
+
+// ── COMP HOURS ──
+const COMP_ZONES = {
+  'Bronx':          ['BX1','BX2','BX3','BX4','BX5','BX6','BX7','BX8','BX9','BX10','BX11','BX12'],
+  'Brooklyn North': ['BK1','BK2','BK3','BK4','BK5','BK8','BK9','BK16','BK17'],
+  'Brooklyn South': ['BK6','BK7','BK10','BK11','BK12','BK13','BK14','BK15','BK15A','BK18'],
+  'Manhattan':      ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],
+  'Queens West':    ['Q1','Q2','Q3','Q4','Q5','Q6','Q9'],
+  'Queens East':    ['Q7','Q8','Q10','Q11','Q12','Q13A','Q14'],
+  'Staten Island':  ['SI1','SI2','SI3']
+};
+const NO_COMP_GARAGES = ['BK9','BK13','BK14','BK15','BK16','BK17','BK18','FBF','BKNBO'];
+
+function getGarageZone(garage) {
+  for (const [zone, garages] of Object.entries(COMP_ZONES)) {
+    if (garages.includes(garage)) return zone;
+  }
+  return null;
+}
+
+function calcCompHours() {
+  if (!currentUser || !currentUser.id) return { total: 0, events: [] };
+  const homeGarage = currentUser.district;
+  if (!homeGarage) return { total: 0, events: [] };
+
+  const d = getUserData(currentUser.id);
+  const shifts = d.shifts.slice().sort((a, b) => a.date < b.date ? -1 : 1);
+  const homeZone = getGarageZone(homeGarage);
+
+  function getHolidayDates(year) {
+    function nthWD(y,m,dow,n){const d=new Date(y,m,1);let c=0;while(d.getMonth()===m){if(d.getDay()===dow){c++;if(c===n)return new Date(d);}d.setDate(d.getDate()+1);}return null;}
+    function lastWD(y,m,dow){const d=new Date(y,m+1,0);while(d.getDay()!==dow)d.setDate(d.getDate()-1);return d;}
+    function fmt(x){return x?`${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`:''}
+    return [`${year}-01-01`,fmt(nthWD(year,0,1,3)),fmt(nthWD(year,1,1,3)),fmt(lastWD(year,4,1)),`${year}-06-19`,`${year}-07-04`,fmt(nthWD(year,8,1,1)),fmt(nthWD(year,9,1,2)),`${year}-11-11`,fmt(nthWD(year,10,4,4)),`${year}-12-25`];
+  }
+
+  const chartDaysStore = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
+  function isChartDay(dateStr) {
+    const mk = dateStr.slice(0,7);
+    return (chartDaysStore[mk] || []).includes(parseInt(dateStr.slice(8)));
+  }
+  function isHoliday(dateStr) {
+    return getHolidayDates(parseInt(dateStr.slice(0,4))).includes(dateStr);
+  }
+  function fmtDate(dateStr) {
+    const d = new Date(dateStr + 'T12:00:00');
+    return d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+  }
+
+  let totalComp = 0;
+  let lastWorkedZone = null;
+  const events = [];
+
+  const shiftByDate = {};
+  shifts.forEach(s => { shiftByDate[s.date] = s; });
+
+  const allDates = [...new Set([
+    ...shifts.map(s => s.date),
+    ...Object.entries(chartDaysStore).flatMap(([mk, days]) =>
+      days.map(d => `${mk}-${String(d).padStart(2,'0')}`)
+    )
+  ])].sort();
+
+  for (const dateStr of allDates) {
+    const shift = shiftByDate[dateStr];
+    const chartDay = isChartDay(dateStr);
+    const holiday = isHoliday(dateStr);
+
+    if (chartDay && holiday && !shift) {
+      totalComp += 8;
+      events.push({ date: dateStr, hours: 8, garage: '—', reason: 'Chart Day fell on a Holiday — not worked', zone: '—' });
+      continue;
+    }
+
+    if (!shift || !shift.start) continue;
+
+    const assignedGarage = shift.location || homeGarage;
+    const assignedZone = getGarageZone(assignedGarage) || homeZone;
+    const isOOT = shift.location && shift.location !== homeGarage;
+
+    if (isOOT && !NO_COMP_GARAGES.includes(assignedGarage)) {
+      if (lastWorkedZone && assignedZone !== lastWorkedZone) {
+        totalComp += 4;
+        events.push({ date: dateStr, hours: 4, garage: assignedGarage, reason: `OOT from ${homeGarage} → ${assignedGarage} (zone change: ${lastWorkedZone} → ${assignedZone})`, zone: assignedZone });
+      }
+    }
+
+    lastWorkedZone = assignedZone;
+  }
+
+  return { total: totalComp, events };
+}
+
+function showCompHoursPage() {
+  currentPage = 'compHours';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('compHoursPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  const { total, events } = calcCompHours();
+  document.getElementById('compHoursTotal').textContent = total + ' hrs';
+
+  const el = document.getElementById('compHoursList');
+  if (!events.length) {
+    el.innerHTML = '<div class="card" style="text-align:center;padding:32px;color:var(--text3);">No comp hours earned yet.<br><span style="font-size:12px;margin-top:8px;display:block;">Comp hours are earned when sent OOT to a different zone, or when your Chart Day falls on a holiday.</span></div>';
+    return;
+  }
+
+  // Build running totals (chronological order, then display reversed)
+  let running = 0;
+  const withTotals = events.map(e => {
+    running += e.hours;
+    return { ...e, runningTotal: running };
+  }).reverse(); // most recent first
+
+  el.innerHTML = `
+    <div style="background:var(--dark2);border-radius:10px;overflow:hidden;border:1px solid var(--dark3);">
+      <table style="width:100%;border-collapse:collapse;font-family:'Barlow',sans-serif;font-size:13px;">
+        <thead>
+          <tr style="background:var(--dark3);">
+            <th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--dark4);">Date</th>
+            <th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--dark4);">Garage Movement</th>
+            <th style="padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--dark4);">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${withTotals.map((e, i) => {
+            const d = new Date(e.date + 'T12:00:00');
+            const dateLabel = `${d.getMonth()+1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
+            const fromGarage = currentUser.district || '';
+            const movement = e.garage === '—'
+              ? `<span style="color:#fff;">Chart Day on Holiday (+${e.hours}h)</span>`
+              : `<span style="color:#54a55a;font-weight:700;">${fromGarage}</span><span style="color:#fff;"> → </span><span style="color:#FFD100;font-weight:700;">${e.garage}</span><span style="color:var(--text3);"> (+${e.hours}h)</span>`;
+            const rowBg = i % 2 === 0 ? 'var(--dark2)' : 'rgba(255,255,255,0.02)';
+            return `<tr style="background:${rowBg};border-bottom:1px solid rgba(255,255,255,0.04);">
+              <td style="padding:10px 12px;color:#fff;white-space:nowrap;">${dateLabel}</td>
+              <td style="padding:10px 12px;">${movement}</td>
+              <td style="padding:10px 12px;text-align:right;color:#FFD100;font-weight:700;">${e.runningTotal}h</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+function updateCompHoursCard() {
+  const el = document.getElementById('compHoursDisplay');
+  if (!el) return;
+  const { total } = calcCompHours();
+  el.textContent = total;
+}
 
 // ── WELCOME POPUP ──
 function closeWelcome() {
@@ -6480,21 +7065,21 @@ initBiometricButton();
     document.getElementById('rememberMe').checked = true;
   }
 })();
-// ── BYPASS LOGIN ENABLED ──
-(function() {
-  const users = getUsers();
-  const ids = Object.keys(users);
-  if (ids.length > 0) {
-    currentUser = users[ids[0]];
-  } else {
-    currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
-    const u = getUsers();
-    u['guest'] = currentUser;
-    saveUsers(u);
-    saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
-  }
-  startApp();
-})();
+// ── BYPASS LOGIN DISABLED ──
+// (function() {
+//   const users = getUsers();
+//   const ids = Object.keys(users);
+//   if (ids.length > 0) {
+//     currentUser = users[ids[0]];
+//   } else {
+//     currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
+//     const u = getUsers();
+//     u['guest'] = currentUser;
+//     saveUsers(u);
+//     saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
+//   }
+//   startApp();
+// })();
 
 </script>
 </body>
