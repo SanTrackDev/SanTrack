@@ -132,10 +132,11 @@ document.currentScript.parentNode.appendChild(_link);
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 35px;
     font-weight: 800;
+    font-style: italic;
     letter-spacing: 1px;
     color: var(--text);
     text-shadow: 0 2px 16px rgba(0,0,0,0.6);
-    -webkit-text-stroke: 1.1px #000;
+    -webkit-text-stroke: 2px #000;
     paint-order: stroke fill;
   }
   .logo span { color: var(--green); -webkit-text-stroke: 2px #000; paint-order: stroke fill; }
@@ -227,6 +228,7 @@ document.currentScript.parentNode.appendChild(_link);
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 32px;
     font-weight: 800;
+    font-style: italic;
     letter-spacing: 1px;
     color: #FFFFFF;
     -webkit-text-stroke: 2px #000;
@@ -757,15 +759,72 @@ document.currentScript.parentNode.appendChild(_link);
   .settings-row:last-child { border-bottom: none; }
   .settings-row .label { color: var(--text2); font-size: 11px; }
   .settings-row .value { font-weight: 600; font-size: 13px; }
+
+  .weather-shift-alert { display:flex;align-items:center;gap:10px;border-radius:10px;padding:10px 12px;font-size:13px;color:#fff;margin-bottom:12px; }
+  .weather-shift-alert.good { background:rgba(66,130,71,0.12);border:1px solid rgba(66,130,71,0.35); }
+  .weather-shift-alert.warn { background:rgba(255,209,0,0.1);border:1px solid rgba(255,209,0,0.3); }
+  .weather-shift-alert.bad  { background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35); }
 </style>
+
+  <!-- Service Worker Registration (real browser only, not sandbox/iframe) -->
+  <script>
+    if ('serviceWorker' in navigator && location.protocol !== 'blob:' && !window.frameElement) {
+      const SW_CACHE = 'santrack-v008';
+      // Build SW as a data URI so no separate file is needed
+      const swSrc = [
+        'const C="santrack-v008";',
+        'self.addEventListener("install",e=>e.waitUntil(caches.open(C).then(c=>c.add(location.href)).then(()=>self.skipWaiting())));',
+        'self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(n=>n!==C).map(n=>caches.delete(n)))).then(()=>self.clients.claim())));',
+        'self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;',
+        'if(e.request.url.includes("supabase.co")){e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));}',
+        'else{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const c=res.clone();caches.open(C).then(x=>x.put(e.request,c));return res;})));}})'
+      ].join('');
+      const swUrl = 'data:application/javascript;charset=utf-8,' + encodeURIComponent(swSrc);
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register(swUrl)
+          .then(() => console.log('SanTrack: Offline mode enabled'))
+          .catch(() => {}); // Silently fail in sandboxed environments
+      });
+    }
+  </script>
 </head>
 <body>
+
+<!-- SPLASH SCREEN -->
+<div id="splashScreen" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#2e2e2e;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  pointer-events:none;
+">
+  <div id="splashLogo" style="
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:52px;font-weight:800;
+    font-style:italic;
+    letter-spacing:1px;
+    color:#fff;
+    -webkit-text-stroke:2px #000;
+    paint-order:stroke fill;
+    opacity:0;
+    transform:scale(0.85);
+    transition:opacity 0.4s ease, transform 0.4s ease;
+  ">San<span style="color:#428247;-webkit-text-stroke:2px #000;paint-order:stroke fill;">Track</span></div>
+  <div id="splashSub" style="
+    font-family:'Barlow',sans-serif;
+    font-size:13px;color:#888;
+    margin-top:10px;
+    letter-spacing:0.5px;
+    opacity:0;
+    transition:opacity 0.4s ease 0.15s;
+  ">v0.0.8</div>
+</div>
 
 <!-- WELCOME POPUP -->
 <div class="modal-overlay" id="welcomeModal" style="align-items:center;">
   <div class="modal" style="border-radius:20px;max-width:380px;margin:20px;">
     <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;">Welcome to San<span style="color:var(--green)">Track</span>!</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:800;-webkit-text-stroke:2px #000;paint-order:stroke fill;"><i>San<span style="color:var(--green);-webkit-text-stroke: 2px #000; paint-order: stroke fill;">Track</span></i>!</div>
     </div>
     <p style="font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px;">This app was created primarily to make it easier for Sanitation Workers to track what they do during the week and know what they should be getting paid based on their salary, truck money, etc. This app automatically calculates <strong style="color:var(--text)">(net and gross)</strong> what you should receive every week.</p>
     <div style="background:rgba(66,130,71,0.1);border:1px solid rgba(50,205,50,0.3);border-radius:12px;padding:14px;margin-bottom:16px;">
@@ -780,9 +839,9 @@ document.currentScript.parentNode.appendChild(_link);
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box" style="position:relative;">
-    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.7</div>
+    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.8</div>
     <div class="logo">
-      <h1>San<span>Track</span></h1>
+      <h1 style="-webkit-text-stroke: 2px #000; paint-order: stroke fill;">San<span style="color:var(--green);-webkit-text-stroke: 2px #000; paint-order: stroke fill;">Track</span></h1>
       <p>Track your pay, shifts, seniority, routes and more!</p>
     </div>
     <div id="loginError" class="alert" style="display:none"></div>
@@ -985,7 +1044,7 @@ document.currentScript.parentNode.appendChild(_link);
   <div class="app-header">
     <div style="display:flex;align-items:baseline;gap:8px;">
       <div class="header-logo">San<span>Track</span></div>
-      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.7</div>
+      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.8</div>
     </div>
   </div>
 
@@ -1004,27 +1063,26 @@ document.currentScript.parentNode.appendChild(_link);
         </div>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;align-items:start;">
         <div class="card" style="padding:8px 6px;text-align:center;">
-          <div class="card-title" style="font-size:9px;text-align:center;">This Week Pay</div>
+          <div class="card-title" style="font-size:9px;text-align:center;font-family:'Barlow',sans-serif;">This Week Pay</div>
           <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="weekPay"><span class="tilde">~</span>$0</div>
-          <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="weekPayNetSub">net: —</div>
+          <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;font-family:'Barlow',sans-serif;" id="weekPayNetSub">net: —</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;">
-          <div class="card-title" style="font-size:9px;text-align:center;">Month Pay</div>
+          <div class="card-title" style="font-size:9px;text-align:center;font-family:'Barlow',sans-serif;">Month Pay</div>
           <div style="font-family:'Barlow',sans-serif;font-size:26px;font-weight:700;color:#ffffff;line-height:1.1;" id="monthPay"><span class="tilde">~</span>$0</div>
-          <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;" id="monthPayNet">net: —</div>
+          <div style="font-size:10px;color:#ffffff;font-weight:600;margin-top:3px;font-family:'Barlow',sans-serif;" id="monthPayNet">net: —</div>
         </div>
         <div class="card" style="padding:8px 6px;text-align:center;cursor:pointer;" onclick="showCompHoursPage()">
-          <div class="card-title" style="font-size:9px;text-align:center;margin-bottom:2px;">Comp Hours</div>
+          <div class="card-title" style="font-size:9px;text-align:center;margin-bottom:2px;font-family:'Barlow',sans-serif;">Comp Hours</div>
           <div style="font-family:'Barlow',sans-serif;font-size:40px;font-weight:700;text-align:center;line-height:1;" id="compHoursDisplay">0</div>
           <div style="font-size:9px;color:#58a6ff;margin-top:3px;text-decoration:underline;">Details</div>
         </div>
-        <div class="card" style="padding:8px 6px;text-align:center;position:relative;overflow:hidden;">
-          <div class="card-title" style="font-size:9px;text-align:center;">Next Chart</div>
-          <div style="font-family:'Barlow',sans-serif;font-size:22px;font-weight:700;text-align:center;color:#388BFD;line-height:1.1;opacity:0.3;" id="weekHours">04/01</div>
-          <div class="card-sub" id="weekOT" style="font-size:8px"></div>
-          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--green);padding:3px 0;font-family:'Barlow',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.3px;color:#ffffff;text-transform:uppercase;">Coming Soon</div>
+        <div style="display:flex;flex-direction:column;gap:2px;justify-content:flex-start;">
+          <button onclick="window.prevPage='dash';showWeatherPage()" style="background:transparent;border:1px solid #FFD100;border-radius:var(--radius);padding:0 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:opacity 0.2s;height:28px;font-family:'Barlow',sans-serif;font-size:11px;font-weight:800;color:#FFD100;letter-spacing:0.3px;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFD100" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Weather</button>
+          <button onclick="window.prevPage='dash';showSeniorityPage()" style="background:transparent;border:1px solid #5dbd63;border-radius:var(--radius);padding:0 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:opacity 0.2s;height:28px;font-family:'Barlow',sans-serif;font-size:11px;font-weight:800;color:#5dbd63;letter-spacing:0.3px;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#5dbd63" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Seniority</button>
+          <button onclick="window.prevPage='dash';showLocationsPage()" style="background:transparent;border:1px solid var(--blue);border-radius:var(--radius);padding:0 6px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:opacity 0.2s;height:28px;font-family:'Barlow',sans-serif;font-size:11px;font-weight:800;color:var(--blue);letter-spacing:0.3px;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Locations</button>
         </div>
       </div>
 
@@ -1274,7 +1332,7 @@ document.currentScript.parentNode.appendChild(_link);
         <button class="note-cat-btn" onclick="showRoutesPage()" id="cat-routes">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></span><div>Route Diary</div>
         </button>
-        <button class="note-cat-btn" onclick="showSeniorityPage()" id="cat-seniority">
+        <button class="note-cat-btn" onclick="window.prevPage='tasks';showSeniorityPage()" id="cat-seniority">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
           <div>Seniority Tracker <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
         </button>
@@ -1282,11 +1340,11 @@ document.currentScript.parentNode.appendChild(_link);
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
           <div>Countdowns</div>
         </button>
-        <button class="note-cat-btn" onclick="showWeatherPage()" id="cat-weather">
+        <button class="note-cat-btn" onclick="window.prevPage='tasks';showWeatherPage()" id="cat-weather">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span>
           <div>Weather <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
         </button>
-        <button class="note-cat-btn" onclick="showLocationsPage()" id="cat-locations">
+        <button class="note-cat-btn" onclick="window.prevPage='tasks';showLocationsPage()" id="cat-locations">
           <span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
           <div>Locations <span style="font-size:10px;background:rgba(56,139,253,0.25);color:#82b8ff;border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.3px;">BETA</span></div>
         </button>
@@ -1344,7 +1402,7 @@ document.currentScript.parentNode.appendChild(_link);
     <!-- WEATHER PAGE -->
     <div id="weatherPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <button onclick="showPage(window.prevPage||'tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
         <div class="section-title" style="margin-bottom:0;">Weather <span style="font-size:10px;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0;">Sources: NOAA, DWD, ECMWF</span></div>
       </div>
       <div id="weatherContent">
@@ -1359,7 +1417,7 @@ document.currentScript.parentNode.appendChild(_link);
     <!-- LOCATIONS PAGE -->
     <div id="locationsPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">‹</button>
+        <button onclick="showPage(window.prevPage||'tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">‹</button>
         <div class="section-title" style="margin-bottom:0;">Locations <span class="badge">BETA</span></div>
       </div>
 
@@ -1590,27 +1648,73 @@ document.currentScript.parentNode.appendChild(_link);
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
         <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
         <div class="section-title" style="margin-bottom:0;">Updates</div>
-        <button onclick="window.location.href='mailto:santrackapp@gmail.com?subject=Bug Report — SanTrack v0.0.7&body=Bug:%0A%0A'" style="margin-left:auto;background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:8px;padding:7px 14px;color:#ffffff;font-family:\'Barlow Condensed\',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">Report a Bug</button>
+        <button onclick="openBugReport()" style="margin-left:auto;background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:8px;padding:7px 14px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">Report a Bug</button>
       </div>
 
       <!-- Known Bugs -->
-      <div class="card" style="margin-bottom:16px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--red);letter-spacing:0.5px;margin-bottom:10px;">! Known Bugs</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6;">
+      <div class="card" style="margin-bottom:16px;padding:0;overflow:hidden;">
+        <div onclick="this.parentElement.querySelector('.bugs-body').style.display=this.parentElement.querySelector('.bugs-body').style.display==='none'?'block':'none';this.querySelector('.bugs-chevron').style.transform=this.parentElement.querySelector('.bugs-body').style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--red);letter-spacing:0.5px;">! Known Bugs</div>
+          <svg class="bugs-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;transform:rotate(180deg);"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="bugs-body" style="padding:0 20px 16px;font-size:13px;color:var(--text2);line-height:1.6;">
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Pay breakdown totals may not be 100% accurate in all edge cases</div>
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Night Differential auto-calculation has known issues</div>
-          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Next Chart Day card is not yet functional</div>
-          <div style="padding:6px 0;">• Dump Money disabled</div>
+          <div style="padding:6px 0;">• Snow pay not yet functional</div>
         </div>
       </div>
 
       <!-- Changelog -->
-      <div class="card">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:0.5px;margin-bottom:10px;">📋 Changelog</div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div onclick="var b=this.parentElement.querySelector('.changelog-body');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.cl-chevron').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:pointer;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:800;color:var(--green);letter-spacing:0.5px;">📋 Changelog</div>
+          <svg class="cl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;transform:rotate(180deg);"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="changelog-body" style="padding:0 20px 8px;">
 
-        <div style="margin-bottom:12px;">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.7 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 30, 2026</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v008');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.8 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 31, 2026</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;transform:rotate(180deg);;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v008" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
+            &bull; SanTrack logo now italic across login screen, app header, and welcome modal<br>
+            &bull; Splash screen added on app launch and every sign-in — shows italic SanTrack logo and version number, fades in and out<br>
+            &bull; Splash fires on regular login, guest login, biometric login, and auto-login (remembered session)<br>
+            &bull; Homepage shortcuts panel added — Weather, Seniority, and Locations shortcuts sit next to Comp Hours card for one-tap navigation<br>
+            &bull; Back button on Weather, Seniority, and Locations returns to homepage when accessed via shortcuts, or Info &amp; Apps when accessed normally<br>
+            &bull; "Next Chart Day" card removed from homepage dashboard<br>
+            &bull; Homepage card subtitles (This Week Pay, Month Pay, Comp Hours, net labels) switched to Barlow font<br>
+            &bull; Weather page UI redesigned — new Today hero card with large temp display, condition badge, and 4-stat row (precip, wind, low, high)<br>
+            &bull; Hero card background gradient now changes color based on weather condition — icy blue for cold/freezing, deep amber for warm, burnt red for extreme heat, teal for rain, orange for plow snow, grey-blue for blizzard, etc.<br>
+            &bull; Shift Alert banner added to weather page — alerts workers of plow conditions, heat advisories, high winds, and good shift days<br>
+            &bull; Hourly strip improved — auto-scrolls to current hour on load<br>
+            &bull; 14-day forecast reorganized into weekly cards (Last Week / This Week / Next Week) for easier reading<br>
+            &bull; Comp Hours detail page: home garage and same-zone garages shown in white, OOT garages shown in yellow, total column changed to white<br>
+            &bull; Comp Hours movement now shows the actual garage worked the day before, not always the home garage<br>
+            &bull; Previous garage in Comp Hours shown yellow if already OOT, white if in home zone<br>
+            &bull; Legacy garage name normalization added — old abbreviations (BKN→BK, BKS→BK, QE→Q, QW→Q) auto-corrected from saved data<br>
+            &bull; Enabled dump money in shift logging and editing — "Did you dump on shift?" checkbox appears under Truck Money for eligible shift types; adds $8.00 to shift pay and shows in the pay breakdown under Truck Money<br>
+            &bull; Weather page SVG icons — all weather emojis replaced with custom SVG icons throughout forecast grid, hourly strip, hero card, and shift alerts<br>
+            &bull; Weather condition gradients — hero card background changes color per condition (arctic blue, blizzard white, plow snow orange, warm amber, extreme red-black, rain deep blue, etc.)<br>
+            &bull; PLOWS DOWN badge — appears in hero card when temp &le;35&deg; and &ge;2&quot; precipitation, with plow truck SVG icon<br>
+            &bull; SPREAD SALT badge — appears in hero card when temp &lt;40&deg; with any precipitation, with dumper truck SVG icon<br>
+            &bull; Tap any forecast day to update the hero card with that day&apos;s full details, gradient, badges, and shift alert<br>
+            &bull; Citywide garage reviews — workers can rate any DSNY garage (overall + cleanliness, management, safety, equipment) directly from the Locations page; reviews shared across all SanTrack users in real time<br>
+            &bull; One review per worker per garage — re-rating updates the existing review rather than adding duplicates<br>
+            &bull; Cloud sync added — shift data automatically backed up to the cloud and synced across devices<br>
+            <span style="background:rgba(255,209,0,0.18);border:1px solid rgba(255,209,0,0.4);border-radius:6px;padding:2px 8px;color:#FFD100;font-weight:800;">&bull; Log in information remembered and data will start saving (beta)</span><br>
+            &bull; Onboarding flow added — new users guided through garage, hire date, and pay step setup on first launch<br>
+            &bull; Service worker added — app now works fully offline; shifts can be logged without internet connection
+          </div>
+        </div>
+
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v007');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.7 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 30, 2026</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v007" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             • Weather page opened — live 21-day forecast powered by Open-Meteo (sources: NOAA, DWD, ECMWF)<br>
             • Weather calendar shows 3 weeks in Sun–Sat rows; current week always visible with past days faded at 50%<br>
             • Today highlighted in green, Sundays and DSNY holidays in red, chart days in blue<br>
@@ -1625,9 +1729,12 @@ document.currentScript.parentNode.appendChild(_link);
           </div>
         </div>
 
-        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.6 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 29, 2026</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v006');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.6 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 29, 2026</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v006" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             • Saturday Pay added — $24.10 show-up bonus + $7.77 full truck bonus (scales with chart day &amp; fraction)<br>
             • Truck Differential added — ~$18.17 per full truck, fractional trucks get proportional amount<br>
             • Truck Differential shown as sub-item inside Truck Money dropdown<br>
@@ -1639,9 +1746,12 @@ document.currentScript.parentNode.appendChild(_link);
           </div>
         </div>
 
-        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.5 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 25, 2026</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v005');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.5 <span style="font-size:11px;color:var(--text3);font-weight:400;">March 25, 2026</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v005" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             • Tap calendar day to log or edit shifts<br>
             • Chart Day now supports overtime<br>
             • Profile page compacted into two columns<br>
@@ -1665,9 +1775,12 @@ document.currentScript.parentNode.appendChild(_link);
           </div>
         </div>
 
-        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.4 <span style="font-size:11px;color:var(--text3);font-weight:400;">3/23/26</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v004');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.4 <span style="font-size:11px;color:var(--text3);font-weight:400;">3/23/26</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v004" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             • Added Career Statistics page<br>
             • Added Updates page<br>
             • Calendar redesigned — squares, Sunday highlights, Night Plow Ends annotation<br>
@@ -1680,9 +1793,12 @@ document.currentScript.parentNode.appendChild(_link);
           </div>
         </div>
 
-        <div style="margin-bottom:12px;padding-top:10px;border-top:1px solid var(--dark3);">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.3 <span style="font-size:11px;color:var(--text3);font-weight:400;">Early 2026</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v003');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.3 <span style="font-size:11px;color:var(--text3);font-weight:400;">Early 2026</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v003" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             • Pay breakdown with tax deductions<br>
             • Truck money dropdown in breakdown<br>
             • Seniority Tracker added<br>
@@ -1693,9 +1809,12 @@ document.currentScript.parentNode.appendChild(_link);
           </div>
         </div>
 
-        <div style="padding-top:10px;border-top:1px solid var(--dark3);">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.1 – v0.0.2 <span style="font-size:11px;color:var(--text3);font-weight:400;">Initial builds</span></div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.7;margin-top:4px;">
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v001v002');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.1 – v0.0.2 <span style="font-size:11px;color:var(--text3);font-weight:400;">Initial builds</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v001v002" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             • Core shift logging<br>
             • Pay calculation engine<br>
             • Calendar view<br>
@@ -1703,7 +1822,9 @@ document.currentScript.parentNode.appendChild(_link);
             • Homepage dashboard
           </div>
         </div>
+
       </div>
+        </div>
     </div>
 
     <!-- PAY HISTORY PAGE -->
@@ -1727,7 +1848,7 @@ document.currentScript.parentNode.appendChild(_link);
     <!-- SENIORITY PAGE -->
     <div id="seniorityPage" class="page">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-        <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <button onclick="showPage(window.prevPage||'tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
         <div class="section-title" style="margin-bottom:0;">Seniority Tracker <span class="badge" id="seniorityCount">0</span></div>
         <div style="margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:4px;">
           <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;">Move All Seniority</div>
@@ -2066,6 +2187,10 @@ document.currentScript.parentNode.appendChild(_link);
             ⬆ Import / Restore Data
           </button>
         </div>
+        <button onclick="cloudRestore()" style="width:100%;padding:12px;background:rgba(66,130,71,0.12);border:1px solid rgba(66,130,71,0.35);border-radius:10px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.3px;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Restore from Cloud
+        </button>
       </div>
 
       <div id="biometricProfileSection" style="display:none;margin-bottom:12px;">
@@ -2237,6 +2362,14 @@ document.currentScript.parentNode.appendChild(_link);
         <option value="1/2 Organics to MLP">1/2 Organics to MLP (+$40.50)</option>
         <option value="3/4 Organics to MLP">3/4 Organics to MLP (+$60.75)</option>
       </select>
+    </div>
+    <div class="form-group" id="dumpOnShiftGroup" style="display:none;">
+      <label>Did you dump on shift?</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="checkbox" id="dumpedOnShift" style="width:auto;accent-color:var(--green);cursor:pointer;width:18px;height:18px;"> Yes &nbsp;<span style="color:var(--green);font-size:12px;font-weight:700;">(+$8.00)</span>
+        </label>
+      </div>
     </div>
     <div class="form-group">
       <label>Section & Route <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
@@ -2417,6 +2550,14 @@ document.currentScript.parentNode.appendChild(_link);
         <option value="3/4 Organics to MLP">3/4 Organics to MLP (+$60.75)</option>
       </select>
     </div>
+    <div class="form-group" id="editDumpOnShiftGroup" style="display:none;">
+      <label>Did you dump on shift?</label>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
+          <input type="checkbox" id="editDumpedOnShift" style="width:auto;accent-color:var(--green);cursor:pointer;width:18px;height:18px;"> Yes &nbsp;<span style="color:var(--green);font-size:12px;font-weight:700;">(+$8.00)</span>
+        </label>
+      </div>
+    </div>
     <div class="form-group">
       <label>Section & Route <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
@@ -2576,6 +2717,7 @@ window.onerror = function(msg, src, line, col, err) {
 // ── STATE ──
 let currentUser = null;
 let currentPage = 'dash';
+window.prevPage = 'tasks';
 let calDate = new Date();
 
 function getUsers() { try { return JSON.parse(localStorage.getItem('dsny_users') || '{}'); } catch(e) { return {}; } }
@@ -2632,7 +2774,7 @@ function showLogin() {
   document.getElementById('loginError').style.display = 'none';
 }
 
-function register() {
+async function register() {
   const name = document.getElementById('regName').value.trim();
   const id = document.getElementById('regId').value.trim().toLowerCase();
   const district = document.getElementById('regDistrict').value;
@@ -2648,8 +2790,35 @@ function register() {
   }
   const users = getUsers();
   if (users[id]) { showError('Email already registered.'); return; }
+
+  // Check Supabase — email may exist on another device
+  try {
+    const existing = await sbFetch('/rest/v1/user_sync?email=eq.' + encodeURIComponent(id) + '&select=email');
+    if (existing && existing.length) { showError('Email already registered.'); return; }
+  } catch(e) { /* offline — proceed with local only */ }
+
   users[id] = { name, id, district, title, rate, pass, probation, secQ, secA };
   saveUsers(users);
+
+  // Push credentials to Supabase
+  const userHash = await hashUserId(id);
+  try {
+    await sbFetch('/rest/v1/user_sync', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify({
+        user_hash: userHash,
+        email: id,
+        password_hash: await hashUserId(id + pass),
+        display_name: name,
+        display_name_full: name,
+        garage: district || null,
+        sec_question: secQ,
+        sec_answer_hash: await hashUserId(secA.toLowerCase()),
+      })
+    });
+  } catch(e) { /* offline — credentials saved locally, will sync on next login */ }
+
   showToast('Account created! Sign in now.');
   showLogin();
 }
@@ -2675,35 +2844,81 @@ function loginAsGuest() {
   currentUser = users[GUEST_ID];
   localStorage.setItem('dsny_session', GUEST_ID);
   localStorage.setItem('dsny_session_expiry', Date.now() + 365 * 24 * 60 * 60 * 1000); // 1 year
-  startApp();
+  showSplash(() => startApp());
 }
 
-function login() {
+async function login() {
   const id = document.getElementById('loginId').value.trim().toLowerCase();
   const pass = document.getElementById('loginPass').value.trim();
   const remember = document.getElementById('rememberMe').checked;
   const users = getUsers();
-  // Check both exact and lowercase email
+
+  // Check local first
   const userKey = users[id] ? id : Object.keys(users).find(k => k.toLowerCase() === id);
-  if (!userKey || users[userKey].pass !== pass) {
-    showError('Invalid email or password.'); return;
+  if (userKey && users[userKey].pass === pass) {
+    // Local login success
+    _completeLogin(users[userKey], userKey, remember);
+    return;
   }
-  currentUser = users[userKey];
-  const expiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+  // Not found locally — try Supabase (new device / new version)
+  const loginBtn = document.querySelector('button[onclick="login()"]');
+  if (loginBtn) loginBtn.textContent = 'Signing in...';
+  try {
+    const passHash = await hashUserId(id + pass);
+    const rows = await sbFetch('/rest/v1/user_sync?email=eq.' + encodeURIComponent(id) + '&password_hash=eq.' + passHash + '&select=*');
+    if (!rows || !rows.length) {
+      if (loginBtn) loginBtn.textContent = 'Sign In';
+      showError('Invalid email or password.'); return;
+    }
+    const row = rows[0];
+    // Rebuild user locally from cloud
+    const rebuiltUser = {
+      name: row.display_name || row.display_name_full || id,
+      id: id,
+      district: row.garage || '',
+      title: '',
+      rate: parseFloat(row.annual_salary) || 0,
+      pass: pass,
+      probation: 'no',
+      secQ: row.sec_question || '',
+      secA: '',
+    };
+    users[id] = rebuiltUser;
+    saveUsers(users);
+    // Restore all shift data
+    if (row.shifts) {
+      const restored = {
+        shifts: JSON.parse(row.shifts || '[]'),
+        tasks:  JSON.parse(row.tasks  || '[]'),
+        routes: JSON.parse(row.routes || '[]'),
+      };
+      localStorage.setItem('dsny_data_' + id, JSON.stringify(restored));
+    }
+    if (loginBtn) loginBtn.textContent = 'Sign In';
+    _completeLogin(rebuiltUser, id, remember);
+  } catch(e) {
+    if (loginBtn) loginBtn.textContent = 'Sign In';
+    // Offline and not in local storage
+    showError('Invalid email or password.');
+  }
+}
+
+function _completeLogin(user, userKey, remember) {
+  currentUser = user;
+  const expiry = Date.now() + 24 * 60 * 60 * 1000;
   localStorage.setItem('dsny_session', userKey);
   localStorage.setItem('dsny_session_expiry', expiry);
   if (remember) {
     localStorage.setItem('dsny_saved_email', userKey);
-    localStorage.setItem('dsny_saved_pass', pass);
+    localStorage.setItem('dsny_saved_pass', user.pass);
     localStorage.setItem('dsny_remember', 'true');
   } else {
     localStorage.removeItem('dsny_saved_email');
     localStorage.removeItem('dsny_saved_pass');
     localStorage.removeItem('dsny_remember');
   }
-  // After successful login, offer to register biometrics
-  setTimeout(() => offerBiometricSetup(userKey), 500);
-  startApp();
+  showSplash(() => { startApp(); setTimeout(() => offerBiometricSetup(userKey), 1600); });
 }
 
 // ── BIOMETRIC AUTH ──
@@ -2785,7 +3000,7 @@ async function biometricLogin() {
     currentUser = users[userId];
     localStorage.setItem('dsny_session', userId);
     localStorage.setItem('dsny_session_expiry', Date.now() + 24 * 60 * 60 * 1000);
-    startApp();
+    showSplash(() => startApp());
   } catch(e) {
     showError('Biometric authentication failed. Try your password.');
   }
@@ -3003,7 +3218,48 @@ function startApp() {
   showPage('dash');
   renderCalendar();
   refreshAll();
+  checkOnboarding();
+  // Auto-restore from cloud silently on login, then sync back
+  cloudRestoreOnLogin().then(() => cloudSync());
 
+}
+
+async function cloudRestoreOnLogin() {
+  if (!currentUser) return;
+  try {
+    const userHash = await hashUserId(currentUser.id);
+    const data = await sbFetch('/rest/v1/user_sync?user_hash=eq.' + userHash + '&select=*');
+    if (!data || !data.length) return;
+    const row = data[0];
+    const mergeById = (arr1, arr2) => {
+      const map = {};
+      [...arr1, ...arr2].forEach(item => { if (item && item.id) map[item.id] = item; });
+      return Object.values(map);
+    };
+    const existing = getUserData(currentUser.id);
+    const restored = {
+      shifts: JSON.parse(row.shifts || '[]'),
+      tasks:  JSON.parse(row.tasks  || '[]'),
+      routes: JSON.parse(row.routes || '[]'),
+    };
+    existing.shifts = mergeById(existing.shifts || [], restored.shifts);
+    existing.tasks  = mergeById(existing.tasks  || [], restored.tasks);
+    existing.routes = mergeById(existing.routes || [], restored.routes);
+    localStorage.setItem('dsny_data_' + currentUser.id, JSON.stringify(existing));
+    // Restore profile fields
+    const users = getUsers();
+    if (users[currentUser.id]) {
+      if (!users[currentUser.id].garage && row.garage) { users[currentUser.id].garage = row.garage; users[currentUser.id].district = row.garage; }
+      if (!users[currentUser.id].hireDate && row.hire_date) users[currentUser.id].hireDate = row.hire_date;
+      if (!users[currentUser.id].annualSalary && row.annual_salary) { users[currentUser.id].annualSalary = parseFloat(row.annual_salary); users[currentUser.id].rate = parseFloat(row.annual_salary); }
+      localStorage.setItem('dsny_users', JSON.stringify(users));
+      currentUser = users[currentUser.id];
+    }
+    refreshAll();
+    renderCalendar();
+  } catch(e) {
+    // Silent fail — offline or sandbox
+  }
 }
 
 // ── NAVIGATION ──
@@ -3861,24 +4117,17 @@ function showWeatherPage() {
   document.getElementById('weatherPage').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-tasks').classList.add('active');
+  loadWeather();
 }
 
 function loadWeather() {
   const el = document.getElementById('weatherContent');
   el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">⛅ Loading weather...</div>';
-  const lat = 40.7128, lon = -74.0060; // NYC bypass
 
-  // ── MOCK DATA FOR LOCAL EDITING ──
   const todayForWeather = new Date();
-  const startDayIndex = todayForWeather.getDay(); // days since Sunday
-  const sundayOfWeek = new Date(todayForWeather);
-  sundayOfWeek.setDate(todayForWeather.getDate() - startDayIndex);
-  const sundayStr = sundayOfWeek.toISOString().split('T')[0];
-  // Fetch from Sunday of current week, 21 days forward (plus past days of this week)
-  const totalDays = 21 + startDayIndex;
+  const startDayIndex = todayForWeather.getDay();
   const forecastDays = Math.min(16, 21 - startDayIndex + 1);
-  const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=${forecastDays}&past_days=${startDayIndex}`;
-  el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text3);font-size:14px;">⛅ Loading weather...</div>';
+
   if (!navigator.geolocation) {
     el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Geolocation not supported.</div>';
     return;
@@ -3886,46 +4135,265 @@ function loadWeather() {
   navigator.geolocation.getCurrentPosition(function(pos) {
     const lat = pos.coords.latitude.toFixed(4);
     const lon = pos.coords.longitude.toFixed(4);
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=${forecastDays}&past_days=${startDayIndex}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&hourly=temperature_2m,weathercode,precipitation,windspeed_10m&forecast_hours=24&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=14&past_days=0`;
     fetch(url)
       .then(r => r.json())
-      .then(data => renderWeather(data, el, startDayIndex))
+      .then(data => renderWeather(data, el, startDayIndex, 0))
       .catch(() => {
         el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
       });
   }, function() {
-    // Location denied — fall back to NYC coordinates
     const lat = 40.7128, lon = -74.0060;
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=${forecastDays}&past_days=${startDayIndex}`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max&hourly=temperature_2m,weathercode,precipitation,windspeed_10m&forecast_hours=24&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=14&past_days=0`;
     fetch(url)
       .then(r => r.json())
-      .then(data => renderWeather(data, el, startDayIndex))
+      .then(data => renderWeather(data, el, startDayIndex, 0))
       .catch(() => {
         el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather. Check your connection and try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
       });
   });
 }
 
-function renderWeather(data, el, startDayIndex) {
+
+function getWeatherShiftAlert(tempMax, precip, wind, code) {
+  const isSnowCode = [71,73,75,77,85,86].includes(code);
+  const isSnow = isSnowCode || (tempMax <= 32 && precip > 0);
+  if (isSnow && precip >= 20) return { type:'bad',  icon:'🌨️', msg:'<strong>Blizzard conditions.</strong> Expect emergency operations and extended shifts.' };
+  if (isSnow && precip >= 10) return { type:'bad',  icon:'❄️',  msg:'<strong>Heavy snow — plowing likely.</strong> Prepare for a long shift.' };
+  if (isSnow && precip >= 2)  return { type:'warn', icon:'🚨', msg:'<strong>Plow conditions likely.</strong> Heavy snow expected. Prepare for extended shift.' };
+  if (isSnow)                 return { type:'warn', icon:'🌨️', msg:'<strong>Light snow today.</strong> Roads may be slippery on route.' };
+  if (tempMax >= 100)         return { type:'bad',  icon:'🥵', msg:'<strong>Extreme heat advisory.</strong> Take extra hydration breaks.' };
+  if (tempMax >= 85)          return { type:'bad',  icon:'🌡️', msg:'<strong>Very hot today.</strong> Stay hydrated on route.' };
+  if (wind >= 25)             return { type:'warn', icon:'💨', msg:'<strong>High winds expected.</strong> Watch for loose debris on route.' };
+  if ([65,67,82,95,96,99].includes(code)) return { type:'bad', icon:'🌧️', msg:'<strong>Heavy rain today.</strong> Slippery conditions on route.' };
+  if ([51,53,55,61,63,80,81].includes(code)) return { type:'warn', icon:'🌦️', msg:'<strong>Light rain today.</strong> Stay dry on route.' };
+  if (tempMax <= 20)          return { type:'bad',  icon:'🥶', msg:'<strong>Arctic air warning.</strong> Layer up — extreme cold today.' };
+  if (tempMax <= 32)          return { type:'warn', icon:'🧊', msg:'<strong>Freezing temperatures.</strong> Watch for ice on route.' };
+  if (tempMax >= 60 && precip < 0.1 && wind < 20) return { type:'good', icon:'✅', msg:'<strong>Good shift conditions.</strong> Clear skies, comfortable temps.' };
+  return { type:'warn', icon:'⛅', msg:'<strong>Standard conditions.</strong> Check gear before heading out.' };
+}
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://mdukbvsgzokzwjyrwzkd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_oIPkLx_maHJunMtT8Jhuuw_3-UhLsNq';
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(SUPABASE_URL + path, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) { const t = await res.text(); throw new Error(t); }
+  return res.status === 204 ? null : res.json();
+}
+
+// Hash user ID for anonymous reviews
+async function hashUserId(id) {
+  const enc = new TextEncoder().encode(id + 'santrack_salt');
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('').slice(0,16);
+}
+
+// Garage reviews cache
+let _garageReviewsCache = null;
+let _garageReviewsCacheTime = 0;
+
+
+
+async function fetchGarageReviews() {
+  const now = Date.now();
+  if (_garageReviewsCache && now - _garageReviewsCacheTime < 60000) return _garageReviewsCache;
+  try {
+    const data = await sbFetch('/rest/v1/garage_summary?select=*');
+    _garageReviewsCache = data;
+    _garageReviewsCacheTime = now;
+    return data;
+  } catch(e) { console.warn('Supabase fetch failed:', e); return []; }
+}
+
+async function submitGarageReview(garageId, garageName, rating, cleanliness, management, safety, equipment, comment) {
+  const userHash = await hashUserId(currentUser?.id || 'guest');
+  try {
+    await sbFetch('/rest/v1/garage_reviews', {
+      method: 'POST',
+      body: JSON.stringify({ garage_id: garageId, garage_name: garageName, rating, cleanliness, management, safety, equipment, comment, user_hash: userHash })
+    });
+    _garageReviewsCache = null; // invalidate cache
+    return true;
+  } catch(e) {
+    // Unique constraint = already reviewed
+    if (e.message.includes('duplicate') || e.message.includes('unique') || e.message.includes('23505')) {
+      // Update existing review
+      try {
+        await sbFetch('/rest/v1/garage_reviews?garage_id=eq.' + encodeURIComponent(garageId) + '&user_hash=eq.' + userHash, {
+          method: 'PATCH',
+          body: JSON.stringify({ rating, cleanliness, management, safety, equipment, comment })
+        });
+        _garageReviewsCache = null;
+        return true;
+      } catch(e2) { throw e2; }
+    }
+    throw e;
+  }
+}
+
+const weatherIcons = {
+  sun:     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" fill="#FFD700"/><line x1="12" y1="2" x2="12" y2="5" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="2" y1="12" x2="5" y2="12" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="12" x2="22" y2="12" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="19.78" y1="4.22" x2="17.66" y2="6.34" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/><line x1="6.34" y1="17.66" x2="4.22" y2="19.78" stroke="#FFD700" stroke-width="2" stroke-linecap="round"/></svg>`,
+  partlyCloudy: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="9" r="3" fill="#FFD700"/><line x1="10" y1="3" x2="10" y2="5" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="9" x2="14" y2="9" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/><line x1="14.24" y1="4.76" x2="12.83" y2="6.17" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/><path d="M7 17.5a4.5 4.5 0 0 1 0-9 4.5 4.5 0 0 1 8.9 1A3 3 0 1 1 18 17.5Z" fill="#ccc" stroke="#aaa" stroke-width="1"/></svg>`,
+  cloudy:  `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 18a4 4 0 0 1 0-8 4 4 0 0 1 7.9.9A3 3 0 1 1 17 18Z" fill="#ccc" stroke="#aaa" stroke-width="1"/></svg>`,
+  foggy:   `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 8a4 4 0 0 1 7.9-.9A3 3 0 1 1 15 13H4" fill="#ccc" stroke="#aaa" stroke-width="1"/><line x1="3" y1="16" x2="21" y2="16" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/><line x1="3" y1="19" x2="17" y2="19" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  lightRain: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14a4 4 0 0 1 0-8 4 4 0 0 1 7.9.9A3 3 0 1 1 17 14Z" fill="#ccc" stroke="#aaa" stroke-width="1"/><line x1="9" y1="17" x2="8" y2="20" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/><line x1="13" y1="17" x2="12" y2="20" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  rain:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14a4 4 0 0 1 0-8 4 4 0 0 1 7.9.9A3 3 0 1 1 17 14Z" fill="#aaa" stroke="#888" stroke-width="1"/><line x1="7" y1="17" x2="6" y2="21" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="17" x2="10" y2="21" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="17" x2="14" y2="21" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  snow:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="12" y1="2" x2="12" y2="22" stroke="#9cf" stroke-width="2" stroke-linecap="round"/><line x1="2" y1="12" x2="22" y2="12" stroke="#9cf" stroke-width="2" stroke-linecap="round"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" stroke="#9cf" stroke-width="2" stroke-linecap="round"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07" stroke="#9cf" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="2" fill="#9cf"/></svg>`,
+  snowShowers: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14a4 4 0 0 1 0-8 4 4 0 0 1 7.9.9A3 3 0 1 1 17 14Z" fill="#ccc" stroke="#aaa" stroke-width="1"/><circle cx="8" cy="18" r="1.2" fill="#9cf"/><circle cx="12" cy="18" r="1.2" fill="#9cf"/><circle cx="16" cy="18" r="1.2" fill="#9cf"/><circle cx="10" cy="21" r="1.2" fill="#9cf"/><circle cx="14" cy="21" r="1.2" fill="#9cf"/></svg>`,
+  thunder: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 14a4 4 0 0 1 0-8 4 4 0 0 1 7.9.9A3 3 0 1 1 17 14Z" fill="#888" stroke="#666" stroke-width="1"/><line x1="7" y1="17" x2="6" y2="20" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="17" x2="14" y2="20" stroke="#6af" stroke-width="1.5" stroke-linecap="round"/><polyline points="13,14 10,19 13,19 10,24" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+  thermometer: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="3" width="4" height="12" rx="2" fill="none" stroke="#fff" stroke-width="1.5"/><rect x="11" y="8" width="2" height="7" rx="1" fill="#ff6666"/><circle cx="12" cy="18" r="3" fill="#ff6666"/></svg>`,
+  wind:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 9h10a3 3 0 1 0-3-3" stroke="#a0c8f0" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M4 13h14a3 3 0 1 1-3 3" stroke="#a0c8f0" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="4" y1="16" x2="8" y2="16" stroke="#a0c8f0" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  drop:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3C12 3 6 10 6 15a6 6 0 0 0 12 0C18 10 12 3 12 3Z" fill="#6af" stroke="#4af" stroke-width="1"/></svg>`,
+  hot:     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="13" r="8" fill="#ff6b2b" stroke="#cc4400" stroke-width="1"/><circle cx="9.5" cy="12" r="1.5" fill="#fff"/><circle cx="14.5" cy="12" r="1.5" fill="#fff"/><path d="M9 16.5q3 2 6 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/><path d="M10 5l-1 3h2.5l-1 3" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M14 5l-1 3h2.5l-1 3" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+  cold:    `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="13" r="8" fill="#6af" stroke="#4af" stroke-width="1"/><circle cx="9.5" cy="12" r="1.5" fill="#fff"/><circle cx="14.5" cy="12" r="1.5" fill="#fff"/><path d="M9 16q3-1 6 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/><line x1="9" y1="8" x2="9" y2="5" stroke="#9cf" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="8" x2="15" y2="5" stroke="#9cf" stroke-width="1.5" stroke-linecap="round"/><line x1="7.5" y1="6.5" x2="10.5" y2="6.5" stroke="#9cf" stroke-width="1.5" stroke-linecap="round"/><line x1="13.5" y1="6.5" x2="16.5" y2="6.5" stroke="#9cf" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  ice:     `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="12,3 21,8 21,16 12,21 3,16 3,8" fill="#9cf" fill-opacity="0.4" stroke="#6af" stroke-width="1.5"/><line x1="12" y1="3" x2="12" y2="21" stroke="#6af" stroke-width="1" stroke-opacity="0.6"/><line x1="3" y1="8" x2="21" y2="16" stroke="#6af" stroke-width="1" stroke-opacity="0.6"/><line x1="3" y1="16" x2="21" y2="8" stroke="#6af" stroke-width="1" stroke-opacity="0.6"/></svg>`,
+  siren:   `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="11" width="16" height="9" rx="2" fill="#cc2200" stroke="#ff4444" stroke-width="1"/><circle cx="12" cy="11" r="5" fill="#ff4444" stroke="#cc2200" stroke-width="1"/><circle cx="12" cy="11" r="2" fill="#ffaa00"/><line x1="12" y1="2" x2="12" y2="6" stroke="#ffaa00" stroke-width="2" stroke-linecap="round"/><line x1="5.5" y1="5.5" x2="7.5" y2="7.5" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/><line x1="18.5" y1="5.5" x2="16.5" y2="7.5" stroke="#ffaa00" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  check:   `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" fill="#2a7a2a" stroke="#3a9a3a" stroke-width="1"/><polyline points="7,12 10,15 17,8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  standard:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="9" r="3" fill="#FFD700"/><line x1="10" y1="3" x2="10" y2="5" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="9" x2="14" y2="9" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/><line x1="14.24" y1="4.76" x2="12.83" y2="6.17" stroke="#FFD700" stroke-width="1.5" stroke-linecap="round"/><path d="M7 17.5a4.5 4.5 0 0 1 0-9 4.5 4.5 0 0 1 8.9 1A3 3 0 1 1 18 17.5Z" fill="#ccc" stroke="#aaa" stroke-width="1"/></svg>`,
+};
+
+function getWeatherShiftAlert(tempMax, precip, wind, code) {
+  const isSnowCode = [71,73,75,77,85,86].includes(code);
+  const isSnow = isSnowCode || (tempMax <= 32 && precip > 0);
+  if (isSnow && precip >= 20) return { type:'bad',  icon:weatherIcons.snowShowers, msg:'<strong>Blizzard conditions.</strong> Expect emergency operations and extended shifts.' };
+  if (isSnow && precip >= 10) return { type:'bad',  icon:weatherIcons.snow,        msg:'<strong>Heavy snow — plowing likely.</strong> Prepare for a long shift.' };
+  if (isSnow && precip >= 2)  return { type:'warn', icon:weatherIcons.siren,       msg:'<strong>Plow conditions likely.</strong> Heavy snow expected. Prepare for extended shift.' };
+  if (isSnow)                 return { type:'warn', icon:weatherIcons.snowShowers,  msg:'<strong>Light snow today.</strong> Roads may be slippery on route.' };
+  if (tempMax >= 100)         return { type:'bad',  icon:weatherIcons.hot,         msg:'<strong>Extreme heat advisory.</strong> Take extra hydration breaks.' };
+  if (tempMax >= 85)          return { type:'bad',  icon:weatherIcons.thermometer, msg:'<strong>Very hot today.</strong> Stay hydrated on route.' };
+  if (wind >= 25)             return { type:'warn', icon:weatherIcons.wind,        msg:'<strong>High winds expected.</strong> Watch for loose debris on route.' };
+  if ([65,67,82,95,96,99].includes(code)) return { type:'bad',  icon:weatherIcons.rain,      msg:'<strong>Heavy rain today.</strong> Slippery conditions on route.' };
+  if ([51,53,55,61,63,80,81].includes(code)) return { type:'warn', icon:weatherIcons.lightRain, msg:'<strong>Light rain today.</strong> Stay dry on route.' };
+  if (tempMax <= 20)          return { type:'bad',  icon:weatherIcons.cold,        msg:'<strong>Arctic air warning.</strong> Layer up — extreme cold today.' };
+  if (tempMax <= 32)          return { type:'warn', icon:weatherIcons.ice,         msg:'<strong>Freezing temperatures.</strong> Watch for ice on route.' };
+  if (tempMax >= 60 && precip < 0.1 && wind < 20) return { type:'good', icon:weatherIcons.check, msg:'<strong>Good shift conditions.</strong> Clear skies, comfortable temps.' };
+  return { type:'warn', icon:weatherIcons.standard, msg:'<strong>Standard conditions.</strong> Check gear before heading out.' };
+}
+
+function selectWeatherDay(i) {
+  if (!window._weatherData) return;
+  const daily = window._weatherData.daily;
+  
+  const wmoLabel = (code) => {
+    if (code === 0) return 'Clear';
+    if (code <= 2) return 'Partly Cloudy';
+    if (code <= 3) return 'Overcast';
+    if (code <= 49) return 'Foggy';
+    if (code <= 59) return 'Drizzle';
+    if (code <= 69) return 'Rain';
+    if (code <= 79) return 'Snow';
+    if (code <= 84) return 'Snow Showers';
+    if (code <= 99) return 'Thunderstorm';
+    return 'Unknown';
+  };
+  const tMax  = daily.temperature_2m_max[i];
+  const tMin  = daily.temperature_2m_min[i];
+  const tPrec = daily.precipitation_sum[i] || 0;
+  const tWind = daily.windspeed_10m_max[i] || 0;
+  const tCode = daily.weathercode[i] || 1;
+  const dateStr = new Date(daily.time[i] + 'T12:00:00').toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+
+  const heroThemes = {
+    'ARCTIC AIR': { grad: 'linear-gradient(135deg, #e8eaec 0%, #4a5060 100%)', border: '#b0b8c4' },
+    'FREEZING':   { grad: 'linear-gradient(135deg, #dce8f0 0%, #1a3a5c 100%)', border: '#7ab0d4' },
+    'COLD':       { grad: 'linear-gradient(135deg, #a8c8e8 0%, #e8f4ff 100%)', border: '#6aaad4' },
+    'CHILLY':     { grad: 'linear-gradient(135deg, #4a7ab0 0%, #c8d8f0 100%)', border: '#6a9ad0' },
+    'WARM':       { grad: 'linear-gradient(135deg, #b8860b 0%, #4a3200 100%)', border: '#d4a000' },
+    'HOT':        { grad: 'linear-gradient(135deg, #cc5500 0%, #7a2200 100%)', border: '#ff8800' },
+    'VERY HOT':   { grad: 'linear-gradient(135deg, #cc1a00 0%, #7a1a00 100%)', border: '#ff4400' },
+    'EXTREME':    { grad: 'linear-gradient(135deg, #990000 0%, #0a0000 100%)', border: '#dd0000' },
+    'LIGHT RAIN': { grad: 'linear-gradient(135deg, #1a3a5a 0%, #0e2040 100%)', border: '#4a8ab8' },
+    'NORMAL RAIN':{ grad: 'linear-gradient(135deg, #0d2548 0%, #071530 100%)', border: '#1a5090' },
+    'HEAVY RAIN': { grad: 'linear-gradient(135deg, #050d18 0%, #020508 100%)', border: '#0a2040' },
+    'LIGHT SNOW': { grad: 'linear-gradient(135deg, #8a9ab0 0%, #a8c8e8 100%)', border: '#7a9ab8' },
+    'PLOW SNOW':  { grad: 'linear-gradient(135deg, #e8eaec 0%, #9aa0aa 100%)', border: '#b0b8c4' },
+    'HEAVY SNOW': { grad: 'linear-gradient(135deg, #f0f2f4 0%, #8a9098 100%)', border: '#c0c8d0' },
+    'BLIZZARD':   { grad: 'linear-gradient(135deg, #ffffff 0%, #7a8088 100%)', border: '#d8dde4' },
+    'default':    { grad: 'linear-gradient(135deg, #1a2e1c 0%, #0e160f 100%)', border: '#2e5c32' },
+  };
+  const isSnowCode = tCode && [71,73,75,77,85,86].includes(tCode);
+  const isSnow = isSnowCode || (tMax <= 32 && tPrec > 0);
+  const badge = (() => {
+    if (isSnow && tMax <= 35 && tPrec >= 20) return 'BLIZZARD';
+    if (isSnow && tMax <= 35 && tPrec >= 10) return 'HEAVY SNOW';
+    if (isSnow && tMax <= 35 && tPrec >= 2)  return 'PLOW SNOW';
+    if (isSnow && tMax <= 32)                return 'LIGHT SNOW';
+    if ([67,82,95,96,99].includes(tCode))    return 'HEAVY RAIN';
+    if ([65].includes(tCode))                return 'NORMAL RAIN';
+    if ([51,53,55,61,63,80,81].includes(tCode)) return 'LIGHT RAIN';
+    if (tWind >= 25) return 'default';
+    if (tMax >= 100) return 'EXTREME';
+    if (tMax >= 85)  return 'VERY HOT';
+    if (tMax >= 70)  return 'HOT';
+    if (tMax >= 60)  return 'WARM';
+    if (tMax >= 50)  return 'CHILLY';
+    if (tMax >= 33)  return 'COLD';
+    if (tMax >= 20)  return 'FREEZING';
+    return 'ARCTIC AIR';
+  })();
+  const theme = heroThemes[badge] || heroThemes['default'];
+  const alert = getWeatherShiftAlert(tMax, tPrec, tWind, tCode);
+  const alertHtml = `<div class="weather-shift-alert ${alert.type}"><span style="flex-shrink:0;display:flex;align-items:center;">${alert.icon}</span><span>${alert.msg}</span></div>`;
+
+  const SHADOW = 'text-shadow:0 1px 4px rgba(0,0,0,0.7);';
+  const saltSvg = `<svg width="12" height="12" viewBox="0 0 217.211 217.211" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8));"><path d="M212.795,105.908l-24.859-2.925l-8.513-17.026c-0.847-1.693-2.578-2.764-4.472-2.764h-23.976c-2.761,0-5,2.238-5,5v0.691v18.346v21.957H10.272c-1.756,0-3.384,0.922-4.288,2.428c-0.903,1.506-0.951,3.376-0.124,4.926l5.192,9.733c0.389,0.728,0.949,1.325,1.607,1.773c0.697,9.018,8.241,16.146,17.434,16.146c4.896,0,9.323-2.026,12.503-5.278c3.18,3.251,7.607,5.278,12.503,5.278c8.894,0,16.243-6.673,17.345-15.272h78.53h20.522c1.101,8.6,8.45,15.272,17.345,15.272s16.244-6.673,17.345-15.272h6.024c2.761,0,5-2.238,5-5v-33.047C217.211,108.338,215.314,106.204,212.795,105.908z M155.976,102.23v-8.346h13.507l5.023,8.346H155.976z M151.449,53.018h-14.39H22.254c-2.22,0-4.173,1.463-4.798,3.593L0.202,115.446c-0.443,1.512-0.148,3.144,0.795,4.404c0.944,1.261,2.427,2.003,4.002,2.003h115.469c2.239,0,4.205-1.488,4.813-3.643l15.563-55.192h10.604c2.761,0,5-2.238,5-5S154.21,53.018,151.449,53.018z M37.771,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.847-2.629,3.664-4.074,6.292-3.226C37.174,62.117,38.618,64.934,37.771,67.562z M66.854,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.847-2.629,3.664-4.074,6.292-3.226C66.257,62.117,67.701,64.934,66.854,67.562z M95.937,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.846-2.629,3.664-4.074,6.292-3.226C95.34,62.117,96.784,64.934,95.937,67.562z M125.021,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.846-2.629,3.664-4.074,6.292-3.226C124.424,62.117,125.868,64.934,125.021,67.562z"/></svg>`;
+  const plowSvg = `<svg width="12" height="12" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" fill="#ffaa44" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8));"><path d="M10.84375 5L10.71875 5.03125L8.71875 5.625L8.21875 5.75L8.0625 6.25L6.625 10.28125L0.71875 12.03125L0 12.25L0 25.8125L0.8125 25.96875L2 26.21875C1.890625 26.378906 1.773438 26.546875 1.6875 26.71875C1.234375 27.625 1 28.761719 1 30C1 31.238281 1.234375 32.375 1.6875 33.28125C2.140625 34.1875 2.90625 35 4 35L7 35C8.09375 35 8.859375 34.1875 9.3125 33.28125C9.523438 32.855469 9.667969 32.386719 9.78125 31.875L14 32.8125C13.996094 32.875 14 32.933594 14 33C14 34.515625 14.300781 35.882813 14.84375 36.96875C15.386719 38.054688 16.269531 39 17.5 39L21.3125 39C21.179688 39.773438 21.03125 40.8125 21.03125 40.8125C20.976563 41.082031 21.035156 41.363281 21.195313 41.589844C21.355469 41.8125 21.601563 41.960938 21.875 42L46.875 45C47.347656 45.050781 47.792969 44.765625 47.9375 44.3125C47.9375 44.3125 50 38.480469 50 33.8125C50 31.476563 49.457031 29.835938 48.875 28.78125C48.292969 27.726563 47.59375 27.1875 47.59375 27.1875C47.421875 27.0625 47.210938 26.996094 47 27L44.9375 27C44.972656 26.839844 45 26.671875 45 26.5C45 25.132813 43.867188 24 42.5 24C41.132813 24 40 25.132813 40 26.5C40 26.671875 40.027344 26.839844 40.0625 27L39 27L39 23C39 22.449219 38.550781 22 38 22L30 22C29.96875 22 29.9375 22 29.90625 22C29.875 22 29.84375 22 29.8125 22C29.335938 22.089844 28.992188 22.511719 29 23L29 27L27.9375 27C27.972656 26.839844 28 26.671875 28 26.5C28 25.132813 26.867188 24 25.5 24C24.132813 24 23 25.132813 23 26.5C23 26.671875 23.027344 26.839844 23.0625 27L22 27C21.96875 27 21.9375 27 21.90625 27C21.875 27 21.84375 27 21.8125 27C21.496094 27.058594 21.230469 27.269531 21.09375 27.558594C20.957031 27.847656 20.96875 28.1875 21.125 28.46875C21.125 28.46875 22 30.03125 22 32.90625C22 34.085938 21.816406 35.59375 21.625 37L20.125 37C20.132813 36.988281 20.148438 36.980469 20.15625 36.96875C20.699219 35.882813 21 34.515625 21 33C21 31.484375 20.699219 30.117188 20.15625 29.03125C19.613281 27.945313 18.730469 27 17.5 27C16.925781 27 16.421875 27.199219 16 27.53125L16 13.25C16 12.578125 16.5 12.046875 17.15625 12C17.1875 12 17.21875 12 17.25 12L17.40625 12C18.5625 12 19.523438 12.808594 19.75 13.9375L20.34375 18.125C20.40625 18.628906 20.835938 19.003906 21.34375 19L35.78125 19L38.6875 20.15625C39.476563 20.472656 40 21.242188 40 22.09375C39.996094 22.453125 40.183594 22.789063 40.496094 22.972656C40.808594 23.152344 41.191406 23.152344 41.503906 22.972656C41.816406 22.789063 42.003906 22.453125 42 22.09375C42 20.433594 40.980469 18.929688 39.4375 18.3125L36.9375 17.28125L36.4375 13.5625C36.4375 13.550781 36.4375 13.542969 36.4375 13.53125C36.359375 13.070313 36.210938 12.644531 36 12.25L36 5 Z M 12 7L34 7L34 10.40625C33.46875 10.164063 32.894531 10 32.28125 10L17.3125 10C17.28125 10 17.25 10 17.21875 10C17.15625 10.003906 17.09375 10.015625 17.03125 10.03125C15.347656 10.148438 14 11.539063 14 13.25L14 26L12 26 Z M 10 7.34375L10 25.8125L2 24.1875L2 13.75L7.6875 12.03125L8.1875 11.875L8.34375 11.40625L9.75 7.40625 Z M 21.09375 12L32.28125 12C32.972656 12 33.589844 12.3125 34 12.8125L34 12.84375C34.222656 13.121094 34.402344 13.4375 34.46875 13.8125L34.46875 13.84375L34.875 17L22.1875 17L21.75 13.65625C21.75 13.644531 21.75 13.636719 21.75 13.625C21.640625 13.023438 21.414063 12.484375 21.09375 12 Z M 31 24L37 24L37 27L31 27 Z M 25.5 26C25.789063 26 26 26.210938 26 26.5C26 26.789063 25.789063 27 25.5 27C25.210938 27 25 26.789063 25 26.5C25 26.210938 25.210938 26 25.5 26 Z M 42.5 26C42.789063 26 43 26.210938 43 26.5C43 26.789063 42.789063 27 42.5 27C42.210938 27 42 26.789063 42 26.5C42 26.210938 42.210938 26 42.5 26 Z M 4 27C4.011719 27 4.261719 27.082031 4.53125 27.625C4.800781 28.167969 5 29.03125 5 30C5 30.96875 4.800781 31.832031 4.53125 32.375C4.261719 32.917969 4.011719 33 4 33C3.988281 33 3.738281 32.917969 3.46875 32.375C3.199219 31.832031 3 30.96875 3 30C3 29.03125 3.199219 28.167969 3.46875 27.625C3.738281 27.082031 3.988281 27 4 27 Z M 6.46875 27.09375L10.8125 27.96875L10.90625 28L14 28L14 30.75L6.96875 29.1875C6.902344 28.421875 6.726563 27.714844 6.46875 27.09375 Z M 17.5 29C17.648438 29 18.011719 29.183594 18.375 29.90625C18.738281 30.628906 19 31.753906 19 33C19 34.246094 18.738281 35.371094 18.375 36.09375C18.011719 36.816406 17.648438 37 17.5 37C17.351563 37 16.988281 36.816406 16.625 36.09375C16.261719 35.371094 16 34.246094 16 33C16 31.753906 16.261719 30.628906 16.625 29.90625C16.988281 29.183594 17.351563 29 17.5 29 Z M 23.4375 29L46.5625 29C46.652344 29.070313 46.792969 29.152344 47.125 29.75C47.542969 30.503906 48 31.785156 48 33.8125C48 37.410156 46.628906 41.820313 46.28125 42.90625L23.15625 40.125C23.40625 38.820313 24 35.609375 24 32.90625C24 31.265625 23.714844 29.933594 23.4375 29 Z M 6.90625 31.21875L7.84375 31.4375C7.761719 31.800781 7.65625 32.128906 7.53125 32.375C7.261719 32.917969 7.011719 33 7 33L6.4375 33C6.667969 32.464844 6.816406 31.867188 6.90625 31.21875Z"/></svg>`;
+
+  const saltBadge = tMax < 40 && tPrec > 0 ? `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:3px 8px 3px 6px;box-shadow:0 1px 4px rgba(0,0,0,0.7);">${saltSvg}<span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.8);">Spread Salt</span></div>` : '';
+  const plowCond = (isSnowCode || (tMax <= 35 && tPrec > 0)) && tMax <= 35 && tPrec >= 2;
+  const plowBadge = plowCond ? `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,170,68,0.15);border:1px solid rgba(255,170,68,0.5);border-radius:20px;padding:3px 8px 3px 6px;box-shadow:0 1px 4px rgba(0,0,0,0.7);">${plowSvg}<span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;color:#ffaa44;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.8);">Plows Down</span></div>` : '';
+
+  const heroEl = document.getElementById('weatherHero');
+  if (!heroEl) return;
+  heroEl.style.background = theme.grad;
+  heroEl.style.borderColor = theme.border;
+  heroEl.querySelector('#heroDate').textContent = dateStr;
+  heroEl.querySelector('#heroIcon').textContent = wmoIcon(tCode);
+  heroEl.querySelector('#heroLabel').textContent = wmoLabel(tCode);
+  heroEl.querySelector('#heroLow').textContent = 'Low ' + Math.round(tMin) + '°';
+  heroEl.querySelector('#heroTemp').innerHTML = Math.round(tMax) + '<sup style="font-size:26px;vertical-align:super;font-weight:700;">°</sup>';
+  heroEl.querySelector('#heroBadges').innerHTML = `<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;justify-content:center;">${saltBadge}${plowBadge}</div>`;
+  heroEl.querySelector('#heroAlert').innerHTML = alertHtml;
+  heroEl.querySelector('#heroPrec').textContent = tPrec > 0 ? tPrec + '"' : '0"';
+  heroEl.querySelector('#heroWind').textContent = Math.round(tWind) + ' mph';
+  heroEl.querySelector('#heroStatLow').textContent = Math.round(tMin) + '°';
+  heroEl.querySelector('#heroStatHigh').textContent = Math.round(tMax) + '°';
+}
+
+function renderWeather(data, el, startDayIndex, prevWeekDays) {
+        prevWeekDays = prevWeekDays || 0;
         if (!data || !data.daily || !data.daily.time) {
           el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Could not load weather data. Please try again.<br><br><button onclick="loadWeather()" class="btn btn-primary" style="width:auto;padding:10px 24px;margin-top:8px;">Try Again</button></div>';
           return;
         }
         try {
-        const c = data.current;
         const daily = data.daily;
+
         const wmoIcon = (code) => {
-          if (code === 0) return '☀️';
-          if (code <= 2) return '⛅';
-          if (code <= 3) return '☁️';
-          if (code <= 49) return '🌫️';
-          if (code <= 59) return '🌦️';
-          if (code <= 69) return '🌧️';
-          if (code <= 79) return '❄️';
-          if (code <= 84) return '🌨️';
-          if (code <= 99) return '⛈️';
-          return '🌡️';
+          if (code === 0) return weatherIcons.sun;
+          if (code <= 2) return weatherIcons.partlyCloudy;
+          if (code <= 3) return weatherIcons.cloudy;
+          if (code <= 49) return weatherIcons.foggy;
+          if (code <= 59) return weatherIcons.lightRain;
+          if (code <= 69) return weatherIcons.rain;
+          if (code <= 79) return weatherIcons.snow;
+          if (code <= 84) return weatherIcons.snowShowers;
+          if (code <= 99) return weatherIcons.thunder;
+          return weatherIcons.thermometer;
         };
+        window._weatherData = data;
+        const todayIdx = prevWeekDays + startDayIndex; // index of today in the array
+        
         const wmoLabel = (code) => {
           if (code === 0) return 'Clear';
           if (code <= 2) return 'Partly Cloudy';
@@ -3940,16 +4408,17 @@ function renderWeather(data, el, startDayIndex) {
         };
         const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-        const dayHeaders = daily.time.slice(0, 21).map((date) => {
+        const dayHeaders = daily.time.slice(0, 7).map((date) => {
           const d = new Date(date + 'T12:00:00');
           return `<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;padding:6px 0;">${days[d.getDay()]}</div>`;
         });
 
-        const calGridCells = daily.time.slice(0, 21).map((date, i) => {
+        const totalCells = daily.time.length;
+        const calGridCells = daily.time.slice(0, totalCells).map((date, i) => {
           const d = new Date(date + 'T12:00:00');
-          const isToday = i === startDayIndex;
+          const isToday = i === todayIdx;
+          const isPast = i < todayIdx;
           const isSun = d.getDay() === 0;
-          // Check DSNY holidays
           const yr = d.getFullYear();
           const nthWD = (y,m,dow,n) => { const d=new Date(y,m,1); let c=0; while(d.getMonth()===m){if(d.getDay()===dow){c++;if(c===n)return new Date(d);} d.setDate(d.getDate()+1);} return null; };
           const lastWD = (y,m,dow) => { const d=new Date(y,m+1,0); while(d.getDay()!==dow)d.setDate(d.getDate()-1); return d; };
@@ -3960,7 +4429,6 @@ function renderWeather(data, el, startDayIndex) {
             `${yr}-11-11`, fmt(nthWD(yr,10,4,4)), `${yr}-12-25`
           ];
           const isHoliday = holidayDates.includes(date);
-          // Chart days
           const chartDaysStore = JSON.parse(localStorage.getItem('chart_days_' + (currentUser ? currentUser.id : '')) || '{}');
           const monthKey = date.slice(0, 7);
           const dayNum = parseInt(date.slice(8));
@@ -3982,14 +4450,19 @@ function renderWeather(data, el, startDayIndex) {
           const isLightRain   = !isSnow && !isHeavyRain && [51,53,55,61,63,80,81].includes(code);
           const isWindy       = wind >= 25;
           const isExtreme     = tempMax >= 100;
-          const isVeryHot     = !isExtreme && tempMax > 90;
-          const isHot         = !isExtreme && !isVeryHot && tempMax > 75;
-          const isWarm        = !isExtreme && !isVeryHot && !isHot && tempMax > 60;
+          const isVeryHot     = !isExtreme && tempMax >= 85;
+          const isHot         = !isExtreme && !isVeryHot && tempMax >= 70;
+          const isWarm        = !isExtreme && !isVeryHot && !isHot && tempMax >= 60;
+          const isChilly      = tempMax >= 50 && tempMax < 60;
+          const isCold        = tempMax >= 33 && tempMax < 50;
+          const isFreezing    = tempMax >= 20 && tempMax < 33;
+          const isArcticAir   = tempMax < 20;
           const badge = (bg, border, color, text) => `<div style="margin-top:3px;background:${bg};border:1px solid ${border};border-radius:6px;padding:2px 4px;font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:800;color:${color};letter-spacing:0.3px;text-align:center;width:103.5%;box-sizing:border-box;align-self:center;display:block;">${text}</div>`;
-          return `<div style="display:flex;flex-direction:column;align-items:center;">
+          const opacity = isPast ? 'opacity:0.45;' : '';
+          return `<div onclick="selectWeatherDay(${i})" style="display:flex;flex-direction:column;align-items:center;${opacity};cursor:pointer;">
           <div style="background:${bg};border:${border};border-radius:10px;padding:8px 4px;min-height:180px;width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;">
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:${dateColor};">${d.getDate()}</div>
-            <div style="font-size:20px;line-height:1;">${wmoIcon(code)}</div>
+            <div style="line-height:1;display:flex;justify-content:center;">${wmoIcon(code)}</div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;">${Math.round(tempMax)}°</div>
             <div style="font-size:11px;color:var(--text3);">${Math.round(daily.temperature_2m_min[i])}°</div>
             <div style="font-size:8px;color:var(--text3);text-align:center;line-height:1.2;">${wmoLabel(code)}</div>
@@ -3997,6 +4470,10 @@ function renderWeather(data, el, startDayIndex) {
             ${isHot         ? badge('#4a1a00','#7a3300','#ff6b2b','HOT') : ''}
             ${isVeryHot     ? badge('#4a0000','#aa0000','#ff4444','VERY HOT') : ''}
             ${isExtreme     ? badge('#000000','#aa0000','#ff0000','EXTREME') : ''}
+            ${isChilly      ? badge('#1a2a3a','#2a4a6a','#7ab8f5','CHILLY') : ''}
+            ${isCold        ? badge('#0d1a2a','#1a3a5a','#58a6ff','COLD') : ''}
+            ${isFreezing    ? badge('#0a0f1a','#1a2a4a','#93c5fd','FREEZING') : ''}
+            ${isArcticAir   ? badge('#ffffff','#cccccc','#000000','ARCTIC AIR') : ''}
             ${isLightRain   ? badge('#002a1a','#005533','#33cc88','LIGHT RAIN') : ''}
             ${isHeavyRain   ? badge('#0d2a4a','#1a4a7a','#58a6ff','HEAVY RAIN') : ''}
             ${isWindy       ? badge('#162030','#2a4060','#a0c8f0','WINDY') : ''}
@@ -4008,34 +4485,162 @@ function renderWeather(data, el, startDayIndex) {
           </div>`;
         });
 
-        const emptyCell = `<div style="min-height:180px;"></div>`;
-        // startDayIndex = how many days before today are in the array (past days of this week)
-        const sdx = startDayIndex;
-        // Row 1: this week (Sun through Sat), past days faded
-        const row1Cells = calGridCells.slice(0, 7).map((cell, i) => {
-          if (i < sdx) return cell.replace('display:flex;flex-direction:column', 'opacity:0.5;display:flex;flex-direction:column');
-          return cell;
-        });
-        // Row 2 & 3: future weeks
-        const row2Cells = calGridCells.slice(7, 14);
-        const row3Cells = calGridCells.slice(14, 21);
-        while (row2Cells.length < 7) row2Cells.push(emptyCell);
-        while (row3Cells.length < 7) row3Cells.push(emptyCell);
+        // ── TODAY SECTION ──
+        const todayDate = new Date(); todayDate.setHours(0,0,0,0);
+        const todayStr = `${todayDate.getFullYear()}-${String(todayDate.getMonth()+1).padStart(2,'0')}-${String(todayDate.getDate()).padStart(2,'0')}`;
+        const currentHour = new Date().getHours();
+
+        // Always build shift alert from daily data
+        const _todayI = todayIdx;
+        const _tMax  = (daily.temperature_2m_max && daily.temperature_2m_max[_todayI]) || 60;
+        const _tPrec = (daily.precipitation_sum && daily.precipitation_sum[_todayI]) || 0;
+        const _tWind = (daily.windspeed_10m_max && daily.windspeed_10m_max[_todayI]) || 0;
+        const _tCode = (daily.weathercode && daily.weathercode[_todayI]) || 1;
+        const _alert = getWeatherShiftAlert(_tMax, _tPrec, _tWind, _tCode);
+        const _alertHtml = `<div class="weather-shift-alert ${_alert.type}"><span style="flex-shrink:0;display:flex;align-items:center;">${_alert.icon}</span><span>${_alert.msg}</span></div>`;
+
+        let todayHtml = _alertHtml;
+        if (data.hourly && data.hourly.time) {
+          const hourlyTimes = data.hourly.time;
+          const hourlyTemp  = data.hourly.temperature_2m;
+          const hourlyCodes = data.hourly.weathercode;
+          const hourlyPrecip = data.hourly.precipitation || [];
+          const hourlyWind   = data.hourly.windspeed_10m || [];
+          // Filter to today's hours only
+          const todayHours = hourlyTimes.map((t, i) => ({ t, i })).filter(({ t }) => t.startsWith(todayStr));
+          if (todayHours.length) {
+            const hourCells = todayHours.map(({ t, i }) => {
+              const h = parseInt(t.slice(11, 13));
+              const isNow = h === currentHour;
+              const isPastHour = h < currentHour;
+              const ampm = h === 0 ? '12AM' : h < 12 ? h + 'AM' : h === 12 ? '12PM' : (h - 12) + 'PM';
+              const temp = Math.round(hourlyTemp[i]);
+              const code = hourlyCodes[i];
+              const bg = isNow ? 'rgba(66,130,71,0.4)' : 'var(--dark3)';
+              const border = isNow ? '1px solid var(--green)' : '1px solid var(--dark4)';
+              const opacity = isPastHour ? 'opacity:0.45;' : '';
+              return `<div style="display:flex;flex-direction:column;align-items:center;gap:3px;min-width:52px;padding:8px 6px;background:${bg};border:${border};border-radius:10px;${opacity}flex-shrink:0;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;color:${isNow ? 'var(--green)' : 'var(--text3)'};">${isNow ? 'NOW' : ampm}</div>
+                <div style="line-height:1;display:flex;justify-content:center;">${wmoIcon(code)}</div>
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#fff;">${temp}°</div>
+                ${hourlyWind[i] >= 25 ? `<div style="font-size:9px;color:#a0c8f0;font-weight:700;">💨${Math.round(hourlyWind[i])}</div>` : ''}
+                ${hourlyPrecip[i] > 0 ? `<div style="font-size:9px;color:#58a6ff;font-weight:700;">🌧${hourlyPrecip[i]}"</div>` : ''}
+              </div>`;
+            }).join('');
+            todayHtml += `
+              <div style="margin-bottom:16px;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px;text-shadow:0 1px 4px rgba(0,0,0,0.7);">Today — Hourly</div>
+                <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;">
+                  ${hourCells}
+                </div>
+              </div>`;
+          }
+        }
         const weekHeader = `<div style="text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text3);letter-spacing:0.5px;padding:6px 0;">`;
         const weekDayNames = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
         const fixedHeaders = weekDayNames.map(d => weekHeader + d + '</div>');
+        const emptyCell = '<div style="background:transparent;border-color:transparent;min-height:180px;aspect-ratio:unset;"></div>';
+
+        // Row 0: previous week (indices 0–6 when prevWeekDays=7)
+        const prevRow = calGridCells.slice(0, 7);
+        while (prevRow.length < 7) prevRow.push(emptyCell);
+        // Row 1: current week (indices 7–13)
+        const curStart = prevWeekDays;
+        const row1Cells = calGridCells.slice(curStart, curStart + 7);
+        while (row1Cells.length < 7) row1Cells.push(emptyCell);
+        // Row 2: next week
+        const row2Cells = calGridCells.slice(curStart + 7, curStart + 14);
+        while (row2Cells.length < 7) row2Cells.push(emptyCell);
+        // Row 3: week after next
+        const row3Cells = calGridCells.slice(curStart + 14, curStart + 21);
+        while (row3Cells.length < 7) row3Cells.push(emptyCell);
+
+        const prevWeekLabel = '';
+
+        // Build today hero card
+        const _heroTempMax = Math.round(_tMax);
+        const _heroTempMin = Math.round((daily.temperature_2m_min && daily.temperature_2m_min[_todayI]) || (_tMax - 10));
+        const _heroIcon = wmoIcon(_tCode);
+        const _heroLabel = wmoLabel(_tCode);
+        const _heroDate = new Date().toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric'});
+        // Hero gradient themes based on condition
+        const _heroThemes = {
+          'ARCTIC AIR': { grad: 'linear-gradient(135deg, #e8eaec 0%, #4a5060 100%)', border: '#b0b8c4' },
+          'FREEZING':   { grad: 'linear-gradient(135deg, #dce8f0 0%, #1a3a5c 100%)', border: '#7ab0d4' },
+          'COLD':       { grad: 'linear-gradient(135deg, #a8c8e8 0%, #e8f4ff 100%)', border: '#6aaad4' },
+          'CHILLY':     { grad: 'linear-gradient(135deg, #4a7ab0 0%, #c8d8f0 100%)', border: '#6a9ad0' },
+          'WARM':       { grad: 'linear-gradient(135deg, #b8860b 0%, #4a3200 100%)', border: '#d4a000' },
+          'HOT':        { grad: 'linear-gradient(135deg, #cc5500 0%, #7a2200 100%)', border: '#ff8800' },
+          'VERY HOT':   { grad: 'linear-gradient(135deg, #cc1a00 0%, #7a1a00 100%)', border: '#ff4400' },
+          'EXTREME':    { grad: 'linear-gradient(135deg, #990000 0%, #0a0000 100%)', border: '#dd0000' },
+          'LIGHT RAIN': { grad: 'linear-gradient(135deg, #1a3a5a 0%, #0e2040 100%)', border: '#4a8ab8' },
+          'NORMAL RAIN':{ grad: 'linear-gradient(135deg, #0d2548 0%, #071530 100%)', border: '#1a5090' },
+          'HEAVY RAIN': { grad: 'linear-gradient(135deg, #050d18 0%, #020508 100%)', border: '#0a2040' },
+          'LIGHT SNOW': { grad: 'linear-gradient(135deg, #8a9ab0 0%, #a8c8e8 100%)', border: '#7a9ab8' },
+          'PLOW SNOW':  { grad: 'linear-gradient(135deg, #e8eaec 0%, #9aa0aa 100%)', border: '#b0b8c4' },
+          'HEAVY SNOW': { grad: 'linear-gradient(135deg, #f0f2f4 0%, #8a9098 100%)', border: '#c0c8d0' },
+          'BLIZZARD':   { grad: 'linear-gradient(135deg, #ffffff 0%, #7a8088 100%)', border: '#d8dde4' },
+          'default':    { grad: 'linear-gradient(135deg, #1a2e1c 0%, #0e160f 100%)', border: '#2e5c32'  },
+        };
+        // Determine badge for today
+        const _isTodaySnowCode = _tCode && [71,73,75,77,85,86].includes(_tCode);
+        const _isTodaySnow = _isTodaySnowCode || (_tMax <= 32 && _tPrec > 0);
+        const _todayBadge = (() => {
+          if (_isTodaySnow && _tMax <= 35 && _tPrec >= 20) return 'BLIZZARD';
+          if (_isTodaySnow && _tMax <= 35 && _tPrec >= 10) return 'HEAVY SNOW';
+          if (_isTodaySnow && _tMax <= 35 && _tPrec >= 2)  return 'PLOW SNOW';
+          if (_isTodaySnow && _tMax <= 32)                  return 'LIGHT SNOW';
+          if ([67,82,95,96,99].includes(_tCode))            return 'HEAVY RAIN';
+          if ([65].includes(_tCode))                        return 'NORMAL RAIN';
+          if ([51,53,55,61,63,80,81].includes(_tCode))      return 'LIGHT RAIN';
+          if (_tWind >= 25)                                  return 'WINDY';
+          if (_tMax >= 100) return 'EXTREME';
+          if (_tMax >= 85)  return 'VERY HOT';
+          if (_tMax >= 70)  return 'HOT';
+          if (_tMax >= 60)  return 'WARM';
+          if (_tMax >= 50)  return 'CHILLY';
+          if (_tMax >= 33)  return 'COLD';
+          if (_tMax >= 20)  return 'FREEZING';
+          return 'ARCTIC AIR';
+        })();
+        const _heroTheme = _heroThemes[_todayBadge] || _heroThemes['default'];
+        const _heroCard = `<div id="weatherHero" style="background:${_heroTheme.grad};border:1px solid ${_heroTheme.border};border-radius:14px;padding:16px;margin-bottom:12px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
+            <div>
+              <div id="heroDate" style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);">${_heroDate}</div>
+              <div id="heroIcon" style="margin-top:10px;line-height:1;">${_heroIcon}</div>
+              <div id="heroLabel" style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,0.7);">${_heroLabel}</div>
+              <div id="heroLow" style="font-size:11px;color:var(--text3);text-shadow:0 1px 4px rgba(0,0,0,0.7);">Low ${_heroTempMin}°</div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;">
+              <div id="heroBadges" style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;justify-content:center;">${_tMax < 40 && _tPrec > 0 ? `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.35);border-radius:20px;padding:3px 8px 3px 6px;box-shadow:0 1px 4px rgba(0,0,0,0.7);"><svg width="12" height="12" viewBox="0 0 217.211 217.211" xmlns="http://www.w3.org/2000/svg" fill="currentColor" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8));"><path d="M212.795,105.908l-24.859-2.925l-8.513-17.026c-0.847-1.693-2.578-2.764-4.472-2.764h-23.976c-2.761,0-5,2.238-5,5v0.691v18.346v21.957H10.272c-1.756,0-3.384,0.922-4.288,2.428c-0.903,1.506-0.951,3.376-0.124,4.926l5.192,9.733c0.389,0.728,0.949,1.325,1.607,1.773c0.697,9.018,8.241,16.146,17.434,16.146c4.896,0,9.323-2.026,12.503-5.278c3.18,3.251,7.607,5.278,12.503,5.278c8.894,0,16.243-6.673,17.345-15.272h78.53h20.522c1.101,8.6,8.45,15.272,17.345,15.272s16.244-6.673,17.345-15.272h6.024c2.761,0,5-2.238,5-5v-33.047C217.211,108.338,215.314,106.204,212.795,105.908z M155.976,102.23v-8.346h13.507l5.023,8.346H155.976z M151.449,53.018h-14.39H22.254c-2.22,0-4.173,1.463-4.798,3.593L0.202,115.446c-0.443,1.512-0.148,3.144,0.795,4.404c0.944,1.261,2.427,2.003,4.002,2.003h115.469c2.239,0,4.205-1.488,4.813-3.643l15.563-55.192h10.604c2.761,0,5-2.238,5-5S154.21,53.018,151.449,53.018z M37.771,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.847-2.629,3.664-4.074,6.292-3.226C37.174,62.117,38.618,64.934,37.771,67.562z M66.854,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.847-2.629,3.664-4.074,6.292-3.226C66.257,62.117,67.701,64.934,66.854,67.562z M95.937,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.846-2.629,3.664-4.074,6.292-3.226C95.34,62.117,96.784,64.934,95.937,67.562z M125.021,67.562l-13.579,42.136c-0.683,2.119-2.646,3.468-4.758,3.468c-0.508,0-1.025-0.078-1.535-0.242c-2.628-0.847-4.072-3.664-3.225-6.292l13.579-42.136c0.846-2.629,3.664-4.074,6.292-3.226C124.424,62.117,125.868,64.934,125.021,67.562z"/></svg><span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;color:#fff;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.8);">Spread Salt</span></div>` : ''}${(_tCode && [71,73,75,77,85,86].includes(_tCode) || (_tMax <= 35 && _tPrec > 0)) && _tMax <= 35 && _tPrec >= 2 ? `<div style="display:inline-flex;align-items:center;gap:4px;background:rgba(255,170,68,0.15);border:1px solid rgba(255,170,68,0.5);border-radius:20px;padding:3px 8px 3px 6px;box-shadow:0 1px 4px rgba(0,0,0,0.7);"><svg width="12" height="12" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" fill="#ffaa44" style="filter:drop-shadow(0 1px 2px rgba(0,0,0,0.8));"><path d="M10.84375 5L10.71875 5.03125L8.71875 5.625L8.21875 5.75L8.0625 6.25L6.625 10.28125L0.71875 12.03125L0 12.25L0 25.8125L0.8125 25.96875L2 26.21875C1.890625 26.378906 1.773438 26.546875 1.6875 26.71875C1.234375 27.625 1 28.761719 1 30C1 31.238281 1.234375 32.375 1.6875 33.28125C2.140625 34.1875 2.90625 35 4 35L7 35C8.09375 35 8.859375 34.1875 9.3125 33.28125C9.523438 32.855469 9.667969 32.386719 9.78125 31.875L14 32.8125C13.996094 32.875 14 32.933594 14 33C14 34.515625 14.300781 35.882813 14.84375 36.96875C15.386719 38.054688 16.269531 39 17.5 39L21.3125 39C21.179688 39.773438 21.03125 40.8125 21.03125 40.8125C20.976563 41.082031 21.035156 41.363281 21.195313 41.589844C21.355469 41.8125 21.601563 41.960938 21.875 42L46.875 45C47.347656 45.050781 47.792969 44.765625 47.9375 44.3125C47.9375 44.3125 50 38.480469 50 33.8125C50 31.476563 49.457031 29.835938 48.875 28.78125C48.292969 27.726563 47.59375 27.1875 47.59375 27.1875C47.421875 27.0625 47.210938 26.996094 47 27L44.9375 27C44.972656 26.839844 45 26.671875 45 26.5C45 25.132813 43.867188 24 42.5 24C41.132813 24 40 25.132813 40 26.5C40 26.671875 40.027344 26.839844 40.0625 27L39 27L39 23C39 22.449219 38.550781 22 38 22L30 22C29.96875 22 29.9375 22 29.90625 22C29.875 22 29.84375 22 29.8125 22C29.335938 22.089844 28.992188 22.511719 29 23L29 27L27.9375 27C27.972656 26.839844 28 26.671875 28 26.5C28 25.132813 26.867188 24 25.5 24C24.132813 24 23 25.132813 23 26.5C23 26.671875 23.027344 26.839844 23.0625 27L22 27C21.96875 27 21.9375 27 21.90625 27C21.875 27 21.84375 27 21.8125 27C21.496094 27.058594 21.230469 27.269531 21.09375 27.558594C20.957031 27.847656 20.96875 28.1875 21.125 28.46875C21.125 28.46875 22 30.03125 22 32.90625C22 34.085938 21.816406 35.59375 21.625 37L20.125 37C20.132813 36.988281 20.148438 36.980469 20.15625 36.96875C20.699219 35.882813 21 34.515625 21 33C21 31.484375 20.699219 30.117188 20.15625 29.03125C19.613281 27.945313 18.730469 27 17.5 27C16.925781 27 16.421875 27.199219 16 27.53125L16 13.25C16 12.578125 16.5 12.046875 17.15625 12C17.1875 12 17.21875 12 17.25 12L17.40625 12C18.5625 12 19.523438 12.808594 19.75 13.9375L20.34375 18.125C20.40625 18.628906 20.835938 19.003906 21.34375 19L35.78125 19L38.6875 20.15625C39.476563 20.472656 40 21.242188 40 22.09375C39.996094 22.453125 40.183594 22.789063 40.496094 22.972656C40.808594 23.152344 41.191406 23.152344 41.503906 22.972656C41.816406 22.789063 42.003906 22.453125 42 22.09375C42 20.433594 40.980469 18.929688 39.4375 18.3125L36.9375 17.28125L36.4375 13.5625C36.4375 13.550781 36.4375 13.542969 36.4375 13.53125C36.359375 13.070313 36.210938 12.644531 36 12.25L36 5 Z M 12 7L34 7L34 10.40625C33.46875 10.164063 32.894531 10 32.28125 10L17.3125 10C17.28125 10 17.25 10 17.21875 10C17.15625 10.003906 17.09375 10.015625 17.03125 10.03125C15.347656 10.148438 14 11.539063 14 13.25L14 26L12 26 Z M 10 7.34375L10 25.8125L2 24.1875L2 13.75L7.6875 12.03125L8.1875 11.875L8.34375 11.40625L9.75 7.40625 Z M 21.09375 12L32.28125 12C32.972656 12 33.589844 12.3125 34 12.8125L34 12.84375C34.222656 13.121094 34.402344 13.4375 34.46875 13.8125L34.46875 13.84375L34.875 17L22.1875 17L21.75 13.65625C21.75 13.644531 21.75 13.636719 21.75 13.625C21.640625 13.023438 21.414063 12.484375 21.09375 12 Z M 31 24L37 24L37 27L31 27 Z M 25.5 26C25.789063 26 26 26.210938 26 26.5C26 26.789063 25.789063 27 25.5 27C25.210938 27 25 26.789063 25 26.5C25 26.210938 25.210938 26 25.5 26 Z M 42.5 26C42.789063 26 43 26.210938 43 26.5C43 26.789063 42.789063 27 42.5 27C42.210938 27 42 26.789063 42 26.5C42 26.210938 42.210938 26 42.5 26 Z M 4 27C4.011719 27 4.261719 27.082031 4.53125 27.625C4.800781 28.167969 5 29.03125 5 30C5 30.96875 4.800781 31.832031 4.53125 32.375C4.261719 32.917969 4.011719 33 4 33C3.988281 33 3.738281 32.917969 3.46875 32.375C3.199219 31.832031 3 30.96875 3 30C3 29.03125 3.199219 28.167969 3.46875 27.625C3.738281 27.082031 3.988281 27 4 27 Z M 6.46875 27.09375L10.8125 27.96875L10.90625 28L14 28L14 30.75L6.96875 29.1875C6.902344 28.421875 6.726563 27.714844 6.46875 27.09375 Z M 17.5 29C17.648438 29 18.011719 29.183594 18.375 29.90625C18.738281 30.628906 19 31.753906 19 33C19 34.246094 18.738281 35.371094 18.375 36.09375C18.011719 36.816406 17.648438 37 17.5 37C17.351563 37 16.988281 36.816406 16.625 36.09375C16.261719 35.371094 16 34.246094 16 33C16 31.753906 16.261719 30.628906 16.625 29.90625C16.988281 29.183594 17.351563 29 17.5 29 Z M 23.4375 29L46.5625 29C46.652344 29.070313 46.792969 29.152344 47.125 29.75C47.542969 30.503906 48 31.785156 48 33.8125C48 37.410156 46.628906 41.820313 46.28125 42.90625L23.15625 40.125C23.40625 38.820313 24 35.609375 24 32.90625C24 31.265625 23.714844 29.933594 23.4375 29 Z M 6.90625 31.21875L7.84375 31.4375C7.761719 31.800781 7.65625 32.128906 7.53125 32.375C7.261719 32.917969 7.011719 33 7 33L6.4375 33C6.667969 32.464844 6.816406 31.867188 6.90625 31.21875Z"/></svg><span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:900;color:#ffaa44;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,0.8);">Plows Down</span></div>` : ''}</div>
+              <div id="heroTemp" style="font-family:'Barlow Condensed',sans-serif;font-size:60px;font-weight:900;line-height:1;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);">${_heroTempMax}<sup style="font-size:26px;vertical-align:super;font-weight:700;">°</sup></div>
+            </div>
+          </div>
+          <div id="heroAlert">${_alertHtml}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;background:rgba(0,0,0,0.2);border-radius:10px;padding:10px;margin-bottom:12px;">
+            <div style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);"><span id="heroPrec">${_tPrec > 0 ? _tPrec + '"' : '0"'}</span></div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px;text-shadow:0 1px 4px rgba(0,0,0,0.7);">Precip</div></div>
+            <div style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);"><span id="heroWind">${Math.round(_tWind)} mph</span></div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px;text-shadow:0 1px 4px rgba(0,0,0,0.7);">Wind</div></div>
+            <div style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);"><span id="heroStatLow">${_heroTempMin}°</span></div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px;text-shadow:0 1px 4px rgba(0,0,0,0.7);">Low</div></div>
+            <div style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.7);"><span id="heroStatHigh">${_heroTempMax}°</span></div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.3px;text-shadow:0 1px 4px rgba(0,0,0,0.7);">High</div></div>
+          </div>
+          ${todayHtml.replace(_alertHtml, '')}
+        </div>`;
+
         el.innerHTML = `
+          ${_heroCard}
           <div class="card" style="padding:12px;">
-            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;">21-Day Forecast</div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px;">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;">14-Day Forecast</div>
               <div style="font-size:10px;color:var(--text3);font-weight:400;">Sources: NOAA, DWD, ECMWF</div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">${fixedHeaders.join('')}</div>
             <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px;">${row1Cells.join('')}</div>
             <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">${fixedHeaders.join('')}</div>
             <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px;">${row2Cells.join('')}</div>
+            ${row3Cells.some(c => c !== emptyCell) ? `
             <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;">${fixedHeaders.join('')}</div>
-            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">${row3Cells.join('')}</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;">${row3Cells.join('')}</div>` : ''}
           </div>
           <div style="text-align:center;margin-top:12px;">
             <button onclick="loadWeather()" style="background:none;border:1px solid var(--dark4);border-radius:8px;color:var(--text3);font-size:12px;padding:6px 16px;cursor:pointer;">↻ Refresh</button>
@@ -4616,11 +5221,15 @@ function onOTEndInput() {
 function onShiftTypeChange(type, groupId, fractionId) {
   const eligible = ['garbage','recycling','organics','paper_rear_loader','metal_rear_loader'];
   const group = document.getElementById(groupId);
+  const dumpGroupId = groupId === 'truckMoneyGroup' ? 'dumpOnShiftGroup' : 'editDumpOnShiftGroup';
+  const dumpGroup = document.getElementById(dumpGroupId);
   if (eligible.indexOf(type) !== -1) {
     group.style.display = 'block';
+    if (dumpGroup) dumpGroup.style.display = 'block';
   } else {
     group.style.display = 'none';
     document.getElementById(fractionId).value = '';
+    if (dumpGroup) { dumpGroup.style.display = 'none'; }
   }
 }
 
@@ -4821,6 +5430,10 @@ function openFab() {
     document.querySelectorAll('#startTimePresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
     document.getElementById('truckMoneyGroup').style.display = 'none';
     document.getElementById('shiftFraction').value = '';
+    const dumpEl = document.getElementById('dumpedOnShift');
+    if (dumpEl) dumpEl.checked = false;
+    const dumpGroup = document.getElementById('dumpOnShiftGroup');
+    if (dumpGroup) dumpGroup.style.display = 'none';
     document.getElementById('didDumpNo').checked = true;
     document.getElementById('tonsGroup').style.display = 'none';
     document.getElementById('shiftModal').classList.add('open');
@@ -4949,6 +5562,8 @@ function addShift() {
   const start = document.getElementById('shiftStart').value;
   const end = document.getElementById('shiftEnd').value;
   const fraction = document.getElementById('shiftFraction').value;
+  const dumpedOnShift = document.getElementById('dumpedOnShift') && document.getElementById('dumpedOnShift').checked ? true : false;
+  const dumpPay = dumpedOnShift ? 8 : 0;
   const chartDay = (function() {
     const mk = date.slice(0,7);
     const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
@@ -4973,10 +5588,10 @@ function addShift() {
   const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
   const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, currentUser.rate) : 0;
-  pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay;
+  pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay + dumpPay;
 
   const d = getUserData(currentUser.id);
-  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential, nightDiffPay });
+  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential, nightDiffPay, dumpedOnShift, dumpPay });
   saveUserData(currentUser.id, d);
   closeModal('shiftModal');
   showToast('✅ Shift logged!');
@@ -5062,6 +5677,8 @@ function openEditShift(id) {
   document.getElementById('editShiftLocation').value = s.location || '';
   document.getElementById('editTruckDowned').value = s.truckDowned || 0;
   document.getElementById('editShiftNotes').value = s.notes || '';
+  const editDumpEl = document.getElementById('editDumpedOnShift');
+  if (editDumpEl) editDumpEl.checked = s.dumpedOnShift || false;
   // Restore start time preset button
   const start = s.start || '';
   document.getElementById('editShiftStart').value = start;
@@ -5108,6 +5725,8 @@ function saveEditShift() {
   const end = document.getElementById('editShiftEnd').value;
   const type = document.getElementById('editShiftType').value;
   const fraction = document.getElementById('editShiftFraction').value;
+  const dumpedOnShift = document.getElementById('editDumpedOnShift') && document.getElementById('editDumpedOnShift').checked ? true : false;
+  const dumpPay = dumpedOnShift ? 8 : 0;
   const chartDay = (function() {
     const mk = date.slice(0,7);
     const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
@@ -5132,9 +5751,9 @@ function saveEditShift() {
   const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
   const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, currentUser.rate) : 0;
-  pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay;
+  pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay + dumpPay;
 
-  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, location, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential, nightDiffPay };
+  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, location, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential, nightDiffPay, dumpedOnShift, dumpPay };
   saveUserData(currentUser.id, d);
   closeModal('editShiftModal');
   editingShiftId = null;
@@ -5175,6 +5794,9 @@ function renderShiftItem(s) {
   const truckDiffLine = s.truckDifferential > 0
     ? `<div style="font-size:11px;color:#ffd100;font-weight:700;"><span class="tilde">~</span>+$${s.truckDifferential.toFixed(2)} truck differential</div>`
     : '';
+  const dumpPayLine = s.dumpedOnShift
+    ? `<div style="font-size:11px;color:#ffd100;font-weight:700;">+$8.00 dumped on shift</div>`
+    : '';
   const hasExact = s.truckMoney > 0 || s.saturdayPay > 0 || s.truckDifferential > 0;
   return `<div class="shift-item">
     <div class="shift-left">
@@ -5184,6 +5806,7 @@ function renderShiftItem(s) {
       ${truckMoneyLine}
       ${saturdayPayLine}
       ${truckDiffLine}
+      ${dumpPayLine}
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
       <div class="shift-pay">${hasExact ? '' : '<span class="tilde">~</span>'}$${s.pay.toFixed(2)}</div>
@@ -5926,10 +6549,16 @@ function populateTruckBreakdown(shifts) {
           <span style="color:#FFD100;font-weight:700;"><span class="tilde">~</span>+$${s.truckDifferential.toFixed(2)}</span>
         </div>`
       : '';
+    const dumpLine = s.dumpedOnShift
+      ? `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0 4px 12px;font-size:11px;">
+          <span style="color:var(--text3);">↳ Dumped on Shift</span>
+          <span style="color:#FFD100;font-weight:700;">+$8.00</span>
+        </div>`
+      : '';
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--dark3);font-size:12px;">
       <span style="color:var(--text2);">${dt} &nbsp;—&nbsp; <span style="color:#FFD100;font-weight:700;">${label}</span></span>
       <span style="color:#FFD100;font-weight:700;">+$${s.truckMoney.toFixed(2)}</span>
-    </div>${diffLine}`;
+    </div>${diffLine}${dumpLine}`;
   }).join('');
 }
 
@@ -5995,8 +6624,9 @@ function updatePayPage() {
   satP = shifts.reduce((a, s) => a + (s.saturdayPay || 0), 0);
   truckDiffP = shifts.reduce((a, s) => a + (s.truckDifferential || 0), 0);
   diffP = shifts.reduce((a, s) => a + (s.nightDiffPay || 0), 0);
+  const dumpP = shifts.reduce((a, s) => a + (s.dumpPay || 0), 0);
 
-  const total = regP + otP + holP + diffP + chartP + sundayP + truckP + satP + truckDiffP;
+  const total = regP + otP + holP + diffP + chartP + sundayP + truckP + satP + truckDiffP + dumpP;
 
   const hoursTarget = (period === 'month') ? '~173' : (period === 'year') ? '~2080' : (period === 'all') ? '~46800' : 40;
   document.getElementById('payRegHours').textContent = Math.round(regH) + '/' + hoursTarget;
@@ -6005,7 +6635,7 @@ function updatePayPage() {
   document.getElementById('chartBreakdownList').style.display = 'none';
   document.getElementById('chartChevron').style.transform = '';
   populateChartBreakdown(shifts, period);
-  document.getElementById('payTruckMoney').textContent = '$' + (truckP + truckDiffP).toFixed(2);
+  document.getElementById('payTruckMoney').textContent = '$' + (truckP + truckDiffP + dumpP).toFixed(2);
   // Reset truck dropdown on period change
   document.getElementById('truckBreakdownList').style.display = 'none';
   document.getElementById('truckChevron').style.transform = '';
@@ -6164,7 +6794,7 @@ function refreshAll() {
   const totalDeductions = (weekP * (0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331)) + health + disability + pension + unionAssn + (weekP * contrib457Pct / 100);
   const netPay = Math.round(weekP - totalDeductions);
 
-  document.getElementById('weekOT').textContent = '';
+  const weekOTEl = document.getElementById('weekOT'); if (weekOTEl) weekOTEl.textContent = '';
   document.getElementById('weekPay').innerHTML = '<span class="tilde">~</span>$' + Math.round(weekP).toLocaleString();
   const weekPayNetSubEl = document.getElementById('weekPayNetSub');
   if (weekPayNetSubEl) weekPayNetSubEl.innerHTML = 'net: <span class="tilde">~</span>$' + netPay.toLocaleString();
@@ -6426,10 +7056,11 @@ function starsHtml(avg, size) {
   return html;
 }
 
-function renderLocCard(loc) {
-  const avg = getAvgRating(loc);
-  const ratingCount = (loc.ratings || []).length;
+function renderLocCard(loc, sbReview) {
   const isGarage = loc.category === 'garages';
+  // For garages use Supabase citywide data; for others use local data
+  const avg = isGarage && sbReview ? parseFloat(sbReview.avg_rating) || 0 : getAvgRating(loc);
+  const ratingCount = isGarage && sbReview ? parseInt(sbReview.total_reviews) || 0 : (loc.ratings || []).length;
 
   // Calculate per-slider averages for garages
   let sliderBreakdown = '';
@@ -6474,11 +7105,21 @@ function renderLocCard(loc) {
       <div style="text-align:right;flex-shrink:0;">
         <div style="display:flex;align-items:center;gap:6px;"><span style="font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;color:#ffffff;">${avg > 0 ? avg.toFixed(1) : ''}</span>${starsHtml(avg, 14)}</div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px;">${ratingCount} rating${ratingCount !== 1 ? 's' : ''}</div>
-        <button onclick="event.stopPropagation();openRateLocation('${loc.id}')" style="margin-top:6px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:8px;padding:5px 12px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">★ Rate</button>
+        <button onclick="event.stopPropagation();${isGarage ? `openGarageReviewModal('${loc.id}','${loc.name}')` : `openRateLocation('${loc.id}')`}" style="margin-top:6px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:8px;padding:5px 12px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">★ Rate</button>
       </div>
     </div>
     ${loc.notes ? `<div style="font-size:12px;color:var(--text2);font-style:italic;margin-bottom:8px;">"${loc.notes}"</div>` : ''}
-    <div id="locdetail-${loc.id}" style="display:none;">${sliderBreakdown}</div>
+    <div id="locdetail-${loc.id}" style="display:none;">
+      ${sliderBreakdown}
+      ${isGarage && sbReview && parseFloat(sbReview.avg_cleanliness) ? `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--dark3);">
+        <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Citywide Rating Breakdown <span style="font-weight:400;">(${sbReview.total_reviews} review${sbReview.total_reviews!=1?'s':''})</span></div>
+        ${[['Cleanliness',sbReview.avg_cleanliness],['Management',sbReview.avg_management],['Safety',sbReview.avg_safety],['Equipment',sbReview.avg_equipment]].filter(([,v])=>v).map(([label,val])=>{
+          const pct = ((parseFloat(val)-1)/4)*100;
+          return `<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:12px;color:#fff;font-weight:600;">${label}</span><span style="font-size:12px;color:#FFD100;font-weight:700;">${parseFloat(val).toFixed(1)}/5</span></div><div style="height:6px;border-radius:100px;background:var(--dark4);"><div style="height:6px;border-radius:100px;background:linear-gradient(to right,#f85149,#FFD100,#54a55a);width:${pct}%;"></div></div></div>`;
+        }).join('')}
+      </div>` : ''}
+    </div>
   </div>`;
 }
 
@@ -6547,6 +7188,7 @@ function toggleBorough(id) {
 function renderLocations(filter) {
   const el = document.getElementById('locationsList');
   if (!el) return;
+  if (currentLocTab === 'garages') seedGarages(); // always ensure garages are seeded
   let locs = getLocations().filter(l => l.category === currentLocTab);
   if (filter) {
     const f = filter.toLowerCase();
@@ -6558,30 +7200,43 @@ function renderLocations(filter) {
     return;
   }
 
-  // For garages — group by borough
+  // For garages — fetch Supabase reviews then group by borough
   if (currentLocTab === 'garages') {
-    const boroughOrder = ['Staten Island','Brooklyn North','Brooklyn South','Queens East','Queens West','Manhattan','Bronx'];
-    const grouped = {};
-    boroughOrder.forEach(b => grouped[b] = []);
-    locs.forEach(loc => {
-      const b = loc.address.replace(', NYC','').trim();
-      if (grouped[b]) grouped[b].push(loc);
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);">Loading...</div>';
+    fetchGarageReviews().catch(() => []).then(reviews => {
+      const reviewMap = {};
+      (reviews || []).forEach(r => { reviewMap[r.garage_id] = r; });
+
+      const boroughOrder = ['Staten Island','Brooklyn North','Brooklyn South','Queens East','Queens West','Manhattan','Bronx'];
+      const grouped = {};
+      boroughOrder.forEach(b => grouped[b] = []);
+      locs.forEach(loc => {
+        const b = loc.address.replace(', NYC','').trim();
+        if (grouped[b]) grouped[b].push(loc);
+      });
+
+      el.innerHTML = boroughOrder.map(borough => {
+        const items = grouped[borough] || [];
+        if (!items.length) return '';
+        // Sort by citywide avg rating descending
+        items.sort((a, b) => {
+          const ra = reviewMap[a.id] ? parseFloat(reviewMap[a.id].avg_rating) : 0;
+          const rb = reviewMap[b.id] ? parseFloat(reviewMap[b.id].avg_rating) : 0;
+          return rb - ra;
+        });
+        const boroughId = borough.replace(/\s+/g, '_');
+        return `<div style="margin-bottom:8px;">
+          <button onclick="toggleBorough('${boroughId}')" style="width:100%;background:var(--dark2);border:1px solid var(--dark3);border-radius:10px;padding:12px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;">
+            <span>${borough} <span style="font-size:11px;color:var(--text3);font-weight:400;text-transform:none;">${items.length} garage${items.length !== 1 ? 's' : ''}</span></span>
+            <svg id="chevron-${boroughId}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div id="borough-${boroughId}" style="display:none;padding-top:8px;">
+            ${items.map(loc => renderLocCard(loc, reviewMap[loc.id])).join('')}
+          </div>
+        </div>`;
+      }).join('');
     });
-    el.innerHTML = boroughOrder.map(borough => {
-      const items = grouped[borough] || [];
-      if (!items.length) return '';
-      items.sort((a, b) => getAvgRating(b) - getAvgRating(a));
-      const boroughId = borough.replace(/\s+/g, '_');
-      return `<div style="margin-bottom:8px;">
-        <button onclick="toggleBorough('${boroughId}')" style="width:100%;background:var(--dark2);border:1px solid var(--dark3);border-radius:10px;padding:12px 16px;color:#fff;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;">
-          <span>${borough} <span style="font-size:11px;color:var(--text3);font-weight:400;text-transform:none;">${items.length} garage${items.length !== 1 ? 's' : ''}</span></span>
-          <svg id="chevron-${boroughId}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div id="borough-${boroughId}" style="display:none;padding-top:8px;">
-          ${items.map(renderLocCard).join('')}
-        </div>
-      </div>`;
-    }).join('');
+    return;
   } else {
     // Non-garage — flat sorted list
     locs.sort((a, b) => getAvgRating(b) - getAvgRating(a));
@@ -6890,7 +7545,13 @@ const COMP_ZONES = {
 };
 const NO_COMP_GARAGES = ['BK9','BK13','BK14','BK15','BK16','BK17','BK18','FBF','BKNBO'];
 
+function normalizeGarage(g) {
+  if (!g) return g;
+  return g.replace(/^BKN(\d)/,'BK$1').replace(/^BKS(\d)/,'BK$1').replace(/^QE(\d)/,'Q$1').replace(/^QW(\d)/,'Q$1');
+}
+
 function getGarageZone(garage) {
+  garage = normalizeGarage(garage);
   for (const [zone, garages] of Object.entries(COMP_ZONES)) {
     if (garages.includes(garage)) return zone;
   }
@@ -6928,6 +7589,7 @@ function calcCompHours() {
 
   let totalComp = 0;
   let lastWorkedZone = null;
+  let lastWorkedGarage = null;
   const events = [];
 
   const shiftByDate = {};
@@ -6947,24 +7609,25 @@ function calcCompHours() {
 
     if (chartDay && holiday && !shift) {
       totalComp += 8;
-      events.push({ date: dateStr, hours: 8, garage: '—', reason: 'Chart Day fell on a Holiday — not worked', zone: '—' });
+      events.push({ date: dateStr, hours: 8, garage: '—', prevGarage: '—', reason: 'Chart Day fell on a Holiday — not worked', zone: '—' });
       continue;
     }
 
     if (!shift || !shift.start) continue;
 
-    const assignedGarage = shift.location || homeGarage;
+    const assignedGarage = normalizeGarage(shift.location || homeGarage);
     const assignedZone = getGarageZone(assignedGarage) || homeZone;
     const isOOT = shift.location && shift.location !== homeGarage;
 
     if (isOOT && !NO_COMP_GARAGES.includes(assignedGarage)) {
       if (lastWorkedZone && assignedZone !== lastWorkedZone) {
         totalComp += 4;
-        events.push({ date: dateStr, hours: 4, garage: assignedGarage, reason: `OOT from ${homeGarage} → ${assignedGarage} (zone change: ${lastWorkedZone} → ${assignedZone})`, zone: assignedZone });
+        events.push({ date: dateStr, hours: 4, garage: assignedGarage, prevGarage: lastWorkedGarage || homeGarage, reason: `OOT from ${homeGarage} → ${assignedGarage} (zone change: ${lastWorkedZone} → ${assignedZone})`, zone: assignedZone });
       }
     }
 
     lastWorkedZone = assignedZone;
+    lastWorkedGarage = assignedGarage;
   }
 
   return { total: totalComp, events };
@@ -7006,15 +7669,17 @@ function showCompHoursPage() {
           ${withTotals.map((e, i) => {
             const d = new Date(e.date + 'T12:00:00');
             const dateLabel = `${d.getMonth()+1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
-            const fromGarage = currentUser.district || '';
+            const homeZoneForDisplay = getGarageZone(currentUser.district || '');
+            const prevZoneForDisplay = getGarageZone(e.prevGarage);
+            const prevIsHomeZone = !prevZoneForDisplay || !homeZoneForDisplay || prevZoneForDisplay === homeZoneForDisplay;
             const movement = e.garage === '—'
               ? `<span style="color:#fff;">Chart Day on Holiday (+${e.hours}h)</span>`
-              : `<span style="color:#54a55a;font-weight:700;">${fromGarage}</span><span style="color:#fff;"> → </span><span style="color:#FFD100;font-weight:700;">${e.garage}</span><span style="color:var(--text3);"> (+${e.hours}h)</span>`;
+              : `<span style="color:${prevIsHomeZone ? '#fff' : '#FFD100'};font-weight:700;">${e.prevGarage}</span><span style="color:#fff;"> → </span><span style="color:#FFD100;font-weight:700;">${e.garage}</span><span style="color:var(--text3);"> (+${e.hours}h)</span>`;
             const rowBg = i % 2 === 0 ? 'var(--dark2)' : 'rgba(255,255,255,0.02)';
             return `<tr style="background:${rowBg};border-bottom:1px solid rgba(255,255,255,0.04);">
               <td style="padding:10px 12px;color:#fff;white-space:nowrap;">${dateLabel}</td>
               <td style="padding:10px 12px;">${movement}</td>
-              <td style="padding:10px 12px;text-align:right;color:#FFD100;font-weight:700;">${e.runningTotal}h</td>
+              <td style="padding:10px 12px;text-align:right;color:#fff;font-weight:700;">${e.runningTotal}h</td>
             </tr>`;
           }).join('')}
         </tbody>
@@ -7072,7 +7737,7 @@ initBiometricButton();
     const users = getUsers();
     if (users[savedId]) {
       currentUser = users[savedId];
-      startApp();
+      showSplash(() => startApp());
       return;
     }
   }
@@ -7086,22 +7751,489 @@ initBiometricButton();
     document.getElementById('rememberMe').checked = true;
   }
 })();
-// ── BYPASS LOGIN DISABLED ──
-// (function() {
-//   const users = getUsers();
-//   const ids = Object.keys(users);
-//   if (ids.length > 0) {
-//     currentUser = users[ids[0]];
-//   } else {
-//     currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
-//     const u = getUsers();
-//     u['guest'] = currentUser;
-//     saveUsers(u);
-//     saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
-//   }
-//   startApp();
-// })();
+// ── BYPASS LOGIN ENABLED ──
+(function() {
+  const users = getUsers();
+  const ids = Object.keys(users);
+  if (ids.length > 0) {
+    currentUser = users[ids[0]];
+  } else {
+    currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
+    const u = getUsers();
+    u['guest'] = currentUser;
+    saveUsers(u);
+    saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
+  }
+  startApp();
+})();
+
+
+// ── SPLASH SCREEN ──
+function showSplash(callback) {
+  const splash = document.getElementById('splashScreen');
+  const logo   = document.getElementById('splashLogo');
+  const sub    = document.getElementById('splashSub');
+  if (!splash) { callback(); return; }
+  requestAnimationFrame(() => {
+    logo.style.opacity = '1';
+    logo.style.transform = 'scale(1)';
+    sub.style.opacity = '1';
+  });
+  setTimeout(() => {
+    splash.style.transition = 'opacity 0.4s ease';
+    splash.style.opacity = '0';
+    setTimeout(() => { splash.style.display = 'none'; callback(); }, 400);
+  }, 1100);
+}
+
+
+function openGarageReviewModal(garageId, garageName) {
+  document.getElementById('garageReviewGarageId').value = garageId;
+  document.getElementById('garageReviewGarageName').value = garageName;
+  document.getElementById('garageReviewModalTitle').textContent = 'Rate: ' + garageName;
+  // Reset stars
+  setGarageStarRating(0);
+  ['grCleanliness','grManagement','grSafety','grEquipment'].forEach(id => setGarageCatRating(id, 0));
+  document.getElementById('garageReviewComment').value = '';
+  document.getElementById('garageReviewStatus').textContent = '';
+  document.getElementById('garageReviewModal').classList.add('open');
+}
+
+async function submitGarageReviewForm() {
+  const garageId = document.getElementById('garageReviewGarageId').value;
+  const garageName = document.getElementById('garageReviewGarageName').value;
+  const rating = parseInt(document.getElementById('garageStarValue').value);
+  const cleanliness = parseInt(document.getElementById('grCleanlinessValue').value) || null;
+  const management = parseInt(document.getElementById('grManagementValue').value) || null;
+  const safety = parseInt(document.getElementById('grSafetyValue').value) || null;
+  const equipment = parseInt(document.getElementById('grEquipmentValue').value) || null;
+  const comment = document.getElementById('garageReviewComment').value.trim();
+  const statusEl = document.getElementById('garageReviewStatus');
+
+  if (!rating) { statusEl.textContent = 'Please select an overall rating.'; statusEl.style.color = '#f85149'; return; }
+
+  statusEl.textContent = 'Submitting...'; statusEl.style.color = 'var(--text3)';
+  try {
+    await submitGarageReview(garageId, garageName, rating, cleanliness, management, safety, equipment, comment || null);
+    statusEl.textContent = '✅ Review submitted!'; statusEl.style.color = 'var(--green)';
+    _garageReviewsCache = null;
+    setTimeout(() => {
+      closeModal('garageReviewModal');
+      renderLocations();
+    }, 1000);
+  } catch(e) {
+    statusEl.textContent = 'Error: ' + e.message.slice(0, 80);
+    statusEl.style.color = '#f85149';
+  }
+}
+
+function setGarageStarRating(val) {
+  document.getElementById('garageStarValue').value = val;
+  [1,2,3,4,5].forEach(i => {
+    document.getElementById('garageStar' + i).style.color = i <= val ? '#FFD100' : 'var(--dark4)';
+  });
+}
+
+function setGarageCatRating(id, val) {
+  document.getElementById(id + 'Value').value = val;
+  const labels = ['','Poor','Fair','Good','Great','Excellent'];
+  document.getElementById(id + 'Val').textContent = val > 0 ? labels[val] : '—';
+  [1,2,3,4,5].forEach(i => {
+    document.getElementById(id + 'Star' + i).style.color = i <= val ? '#FFD100' : 'var(--dark4)';
+  });
+}
+
+function showOnboarding() {
+  const modal = document.getElementById('onboardingModal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+  // Pre-fill from existing profile
+  try {
+    const users = getUsers();
+    const u = currentUser ? users[currentUser.id] : null;
+    if (u && u.garage) { const el = document.getElementById('ob-garage'); if (el) el.value = u.garage; }
+    if (u && u.hireDate) { const el = document.getElementById('ob-hiredate'); if (el) el.value = u.hireDate; }
+    if (u && u.annualSalary) { const el = document.getElementById('ob-paystep'); if (el) el.value = String(u.annualSalary); }
+  } catch(e) {}
+}
+
+function obNext(step) {
+  if (step === 1) {
+    const garage = document.getElementById('ob-garage').value;
+    if (!garage) { showToast('Please select your garage'); return; }
+    document.getElementById('ob-step-1').style.display = 'none';
+    document.getElementById('ob-step-2').style.display = 'block';
+    document.getElementById('ob-step-bar-2').style.background = 'var(--green)';
+  } else if (step === 2) {
+    document.getElementById('ob-step-2').style.display = 'none';
+    document.getElementById('ob-step-3').style.display = 'block';
+    document.getElementById('ob-step-bar-3').style.background = 'var(--green)';
+  }
+}
+
+function obBack(step) {
+  if (step === 2) {
+    document.getElementById('ob-step-2').style.display = 'none';
+    document.getElementById('ob-step-1').style.display = 'block';
+    document.getElementById('ob-step-bar-2').style.background = 'var(--dark4)';
+  } else if (step === 3) {
+    document.getElementById('ob-step-3').style.display = 'none';
+    document.getElementById('ob-step-2').style.display = 'block';
+    document.getElementById('ob-step-bar-3').style.background = 'var(--dark4)';
+  }
+}
+
+function obFinish() {
+  const garage = document.getElementById('ob-garage').value;
+  const hiredate = document.getElementById('ob-hiredate').value;
+  const paystep = document.getElementById('ob-paystep').value;
+
+  if (currentUser) {
+    const users = getUsers();
+    if (users[currentUser.id]) {
+      if (garage) {
+        users[currentUser.id].garage = garage;
+        users[currentUser.id].district = garage; // district is what the app uses
+      }
+      if (hiredate) users[currentUser.id].hireDate = hiredate;
+      if (paystep) {
+        users[currentUser.id].annualSalary = parseFloat(paystep);
+        users[currentUser.id].rate = parseFloat(paystep); // rate is what pay calc uses
+      }
+      localStorage.setItem('dsny_users', JSON.stringify(users));
+      currentUser = users[currentUser.id];
+    }
+  }
+
+  localStorage.setItem('santrack_onboarding_done_' + (currentUser?.id || 'guest'), '1');
+  document.getElementById('onboardingModal').style.display = 'none';
+  showToast('✅ Profile set up! Welcome to SanTrack.');
+  refreshAll();
+  scheduleSync(); // push to cloud
+}
+
+function checkOnboarding() {
+  try {
+    const key = 'santrack_onboarding_done_' + (currentUser?.id || 'guest');
+    if (!localStorage.getItem(key)) {
+      setTimeout(showOnboarding, 800);
+    }
+  } catch(e) {}
+}
+
+
+// ── CLOUD SYNC ──
+let _syncInProgress = false;
+
+async function cloudSync() {
+  if (_syncInProgress || !currentUser) return;
+  _syncInProgress = true;
+  try {
+    const userData = getUserData(currentUser.id);
+    const users = getUsers();
+    const userProfile = users[currentUser.id] || {};
+    const passHash = userProfile.pass ? await hashUserId(currentUser.id + userProfile.pass) : undefined;
+    const secAHash = userProfile.secA ? await hashUserId(userProfile.secA.toLowerCase()) : undefined;
+    const payload = {
+      user_hash: await hashUserId(currentUser.id),
+      email: currentUser.id,
+      password_hash: passHash,
+      display_name: userProfile.name || 'San Worker',
+      display_name_full: userProfile.name || 'San Worker',
+      garage: userProfile.garage || null,
+      hire_date: userProfile.hireDate || null,
+      annual_salary: userProfile.annualSalary || null,
+      sec_question: userProfile.secQ || null,
+      sec_answer_hash: secAHash,
+      shifts: JSON.stringify(userData.shifts || []),
+      tasks: JSON.stringify(userData.tasks || []),
+      routes: JSON.stringify(userData.routes || []),
+      synced_at: new Date().toISOString()
+    };
+    await sbFetch('/rest/v1/user_sync', {
+      method: 'POST',
+      headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify(payload)
+    });
+    localStorage.setItem('santrack_last_sync', new Date().toISOString());
+    console.log('SanTrack: Cloud sync complete');
+  } catch(e) {
+    // Silently fail in sandbox/offline environments
+  } finally {
+    _syncInProgress = false;
+  }
+}
+
+async function cloudRestore() {
+  if (!currentUser) return;
+  try {
+    const userHash = await hashUserId(currentUser.id);
+    const data = await sbFetch('/rest/v1/user_sync?user_hash=eq.' + userHash + '&select=*');
+    if (!data || !data.length) { showToast('No cloud backup found.'); return; }
+    const row = data[0];
+    // Restore shifts, tasks, routes
+    const restored = {
+      shifts: JSON.parse(row.shifts || '[]'),
+      tasks: JSON.parse(row.tasks || '[]'),
+      routes: JSON.parse(row.routes || '[]'),
+    };
+    const existing = getUserData(currentUser.id);
+    // Merge: deduplicate by id, prefer cloud data
+    const mergeById = (arr1, arr2) => {
+      const map = {};
+      [...arr1, ...arr2].forEach(item => { if (item.id) map[item.id] = item; });
+      return Object.values(map);
+    };
+    existing.shifts = mergeById(existing.shifts || [], restored.shifts);
+    existing.tasks  = mergeById(existing.tasks  || [], restored.tasks);
+    existing.routes = mergeById(existing.routes || [], restored.routes);
+    localStorage.setItem('dsny_data_' + currentUser.id, JSON.stringify(existing));
+    // Restore profile fields if missing
+    const users = getUsers();
+    if (users[currentUser.id]) {
+      if (!users[currentUser.id].garage && row.garage) { users[currentUser.id].garage = row.garage; users[currentUser.id].district = row.garage; }
+      if (!users[currentUser.id].hireDate && row.hire_date) users[currentUser.id].hireDate = row.hire_date;
+      if (!users[currentUser.id].annualSalary && row.annual_salary) { users[currentUser.id].annualSalary = parseFloat(row.annual_salary); users[currentUser.id].rate = parseFloat(row.annual_salary); }
+      localStorage.setItem('dsny_users', JSON.stringify(users));
+    }
+    showToast('✅ Data restored from cloud! Last synced: ' + new Date(row.synced_at).toLocaleDateString());
+    refreshAll();
+    renderCalendar();
+  } catch(e) {
+    showToast('Cloud restore failed: ' + e.message.slice(0, 60));
+  }
+}
+
+// Auto-sync on key events (debounced)
+let _syncTimer = null;
+function scheduleSync() {
+  clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(cloudSync, 3000);
+}
+
+// Show last sync time
+function getLastSyncLabel() {
+  const t = localStorage.getItem('santrack_last_sync');
+  if (!t) return 'Never synced';
+  const d = new Date(t);
+  const diff = Math.round((Date.now() - d) / 60000);
+  if (diff < 1) return 'Synced just now';
+  if (diff < 60) return 'Synced ' + diff + 'm ago';
+  if (diff < 1440) return 'Synced ' + Math.round(diff/60) + 'h ago';
+  return 'Synced ' + d.toLocaleDateString();
+}
+
+
+function openBugReport() {
+  document.getElementById('bugSubject').value = '';
+  document.getElementById('bugDescription').value = '';
+  document.getElementById('bugCharCount').textContent = '0';
+  document.getElementById('bugReportError').style.display = 'none';
+  document.getElementById('bugReportModal').classList.add('open');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const desc = document.getElementById('bugDescription');
+  if (desc) desc.addEventListener('input', function() {
+    document.getElementById('bugCharCount').textContent = this.value.length;
+  });
+});
+
+const BUG_KEYWORDS = ['bug','crash','error','broken','wrong','not working','issue','problem','fail','freeze','glitch','fix','incorrect','missing','doesn\'t','wont','won\'t','can\'t','cant','doesn\'t work','not showing','disappear','stuck'];
+
+function submitBugReport() {
+  const subject = document.getElementById('bugSubject').value.trim();
+  const description = document.getElementById('bugDescription').value.trim();
+  const errorEl = document.getElementById('bugReportError');
+
+  errorEl.style.display = 'none';
+
+  if (!subject) {
+    errorEl.textContent = 'Please enter a subject.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (!description) {
+    errorEl.textContent = 'Please describe the bug.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (subject.length < 5) {
+    errorEl.textContent = 'Subject is too short. Please be more specific.';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (description.length < 20) {
+    errorEl.textContent = 'Description is too short. Please provide more detail.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  // Check if it looks like a bug report
+  const combined = (subject + ' ' + description).toLowerCase();
+  const isBugRelated = BUG_KEYWORDS.some(k => combined.includes(k));
+  if (!isBugRelated) {
+    errorEl.textContent = 'This doesn\'t appear to be a bug report. Please describe a specific issue you encountered in the app.';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  const version = 'v0.0.8';
+  const device = navigator.userAgent.slice(0, 80);
+  const body = 'Bug Report — SanTrack ' + version + '\n\nSubject: ' + subject + '\n\nDescription:\n' + description + '\n\nDevice: ' + device;
+  const mailto = 'mailto:santrackdev@gmail.com?subject=' + encodeURIComponent('Bug Report — SanTrack ' + version + ': ' + subject) + '&body=' + encodeURIComponent(body);
+
+  window.location.href = mailto;
+  closeModal('bugReportModal');
+  showToast('Opening your mail app...');
+}
 
 </script>
+<!-- GARAGE REVIEW MODAL -->
+<div id="garageReviewModal" class="modal-overlay" onclick="if(event.target===this)closeModal('garageReviewModal')">
+  <div class="modal" style="max-width:400px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;" id="garageReviewModalTitle">Rate Garage</div>
+      <button onclick="closeModal('garageReviewModal')" style="background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;">×</button>
+    </div>
+    <input type="hidden" id="garageReviewGarageId">
+    <input type="hidden" id="garageReviewGarageName">
+
+    <!-- Overall star rating -->
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Overall Rating</div>
+      <div style="display:flex;gap:6px;" id="garageStarRow">
+        ${[1,2,3,4,5].map(i => `<span onclick="setGarageStarRating(${i})" id="garageStar${i}" style="font-size:28px;cursor:pointer;color:var(--dark4);transition:color 0.1s;">★</span>`).join('')}
+      </div>
+      <input type="hidden" id="garageStarValue" value="0">
+    </div>
+
+    <!-- Category sliders -->
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Category Ratings</div>
+      ${[
+        {id:'grCleanliness', label:'Cleanliness'},
+        {id:'grManagement', label:'Management'},
+        {id:'grSafety', label:'Safety'},
+        {id:'grEquipment', label:'Equipment'},
+      ].map(c => `<div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:13px;color:#fff;font-weight:600;">${c.label}</span>
+          <span id="${c.id}Val" style="font-size:12px;color:var(--text3);">—</span>
+        </div>
+        <div style="display:flex;gap:4px;" id="${c.id}Stars">
+          ${[1,2,3,4,5].map(i => `<span onclick="setGarageCatRating('${c.id}',${i})" style="font-size:20px;cursor:pointer;color:var(--dark4);" id="${c.id}Star${i}">★</span>`).join('')}
+        </div>
+        <input type="hidden" id="${c.id}Value" value="0">
+      </div>`).join('')}
+    </div>
+
+    <!-- Comment -->
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Comment <span style="font-weight:400;text-transform:none;">(optional)</span></div>
+      <textarea id="garageReviewComment" placeholder="Share your experience..." rows="3" style="width:100%;padding:10px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;resize:none;box-sizing:border-box;"></textarea>
+    </div>
+
+    <button onclick="submitGarageReviewForm()" class="btn btn-primary" style="width:100%;">Submit Review</button>
+    <div id="garageReviewStatus" style="text-align:center;margin-top:10px;font-size:12px;color:var(--text3);"></div>
+  </div>
+</div>
+
+<!-- ONBOARDING MODAL -->
+<div id="onboardingModal" class="modal-overlay" style="z-index:9999;background:rgba(0,0,0,0.92);">
+  <div class="modal" style="max-width:420px;padding:0;overflow:hidden;">
+
+    <!-- Step indicator -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--dark3);">
+      <div id="ob-step-bar-1" style="flex:1;height:3px;background:var(--green);transition:background 0.3s;"></div>
+      <div id="ob-step-bar-2" style="flex:1;height:3px;background:var(--dark4);transition:background 0.3s;"></div>
+      <div id="ob-step-bar-3" style="flex:1;height:3px;background:var(--dark4);transition:background 0.3s;"></div>
+    </div>
+
+    <!-- Step 1: Garage -->
+    <div id="ob-step-1" style="padding:28px 24px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Step 1 of 3</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#fff;margin-bottom:6px;">What's your garage?</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">This is used to calculate comp hours and OOT assignments.</div>
+      <select id="ob-garage" style="width:100%;padding:12px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:15px;margin-bottom:20px;">
+        <option value="">Select your home garage...</option>
+        <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX3A</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX6A</option><option>BX7</option><option>BX7A</option><option>BX8</option><option>BX8A</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
+        <optgroup label="Brooklyn North"><option>BK1</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
+        <optgroup label="Brooklyn South"><option>BK2</option><option>BK6</option><option>BK6A</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15-49th St</option><option>BK16</option><option>BK18</option></optgroup>
+        <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M3A</option><option>M4</option><option>M4A</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M8A</option><option>M9</option><option>M10</option><option>M11</option><option>M11A</option><option>M12</option></optgroup>
+        <optgroup label="Queens East"><option>Q7</option><option>Q7A</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q13J</option><option>Q13W</option><option>Q14</option></optgroup>
+        <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
+        <optgroup label="Staten Island"><option>SI1</option><option>SI1 Annex</option><option>SI2</option><option>SI3</option></optgroup>
+      </select>
+      <button onclick="obNext(1)" class="btn btn-primary" style="width:100%;padding:14px;font-size:16px;">Continue →</button>
+    </div>
+
+    <!-- Step 2: Hire Date -->
+    <div id="ob-step-2" style="padding:28px 24px;display:none;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Step 2 of 3</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#fff;margin-bottom:6px;">When did you start?</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">Your hire date is used to calculate your seniority and list number.</div>
+      <input type="date" id="ob-hiredate" style="width:100%;padding:12px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:15px;margin-bottom:8px;box-sizing:border-box;">
+      <div style="font-size:11px;color:var(--text3);margin-bottom:20px;">Don't know the exact date? Approximate is fine.</div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="obBack(2)" style="flex:1;padding:14px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">← Back</button>
+        <button onclick="obNext(2)" class="btn btn-primary" style="flex:2;padding:14px;font-size:16px;">Continue →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Pay Step -->
+    <div id="ob-step-3" style="padding:28px 24px;display:none;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--green);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;">Step 3 of 3</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#fff;margin-bottom:6px;">What's your pay step?</div>
+      <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">Used to calculate your shift pay. You can change this anytime in Profile.</div>
+      <select id="ob-paystep" style="width:100%;padding:12px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:15px;margin-bottom:8px;">
+        <option value="">Select your pay step...</option>
+        <option value="51680">Step 1 — $51,680/yr (~$24.85/hr)</option>
+        <option value="55155">Step 2 — $55,155/yr (~$26.52/hr)</option>
+        <option value="59516">Step 3 — $59,516/yr (~$28.61/hr)</option>
+        <option value="64095">Step 4 — $64,095/yr (~$30.82/hr)</option>
+        <option value="69493">Step 5 — $69,493/yr (~$33.41/hr)</option>
+        <option value="77873">Step 6 — $77,873/yr (~$37.44/hr)</option>
+        <option value="85292">Step 7 — $85,292/yr (~$41.01/hr)</option>
+      </select>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:20px;">Not sure? Check your last pay stub or ask your supervisor.</div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="obBack(3)" style="flex:1;padding:14px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;cursor:pointer;">← Back</button>
+        <button onclick="obFinish()" class="btn btn-primary" style="flex:2;padding:14px;font-size:16px;">Let's Go 🚛</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BUG REPORT MODAL -->
+<div id="bugReportModal" class="modal-overlay" onclick="if(event.target===this)closeModal('bugReportModal')">
+  <div class="modal" style="max-width:420px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;">Report a Bug</div>
+      <button onclick="closeModal('bugReportModal')" style="background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">This form is for bug reports only. Off-topic submissions will not be reviewed.</div>
+
+    <div style="margin-bottom:12px;">
+      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Subject</div>
+      <input type="text" id="bugSubject" placeholder="e.g. Pay calculation wrong on chart days" maxlength="100"
+        style="width:100%;padding:10px 12px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:14px;box-sizing:border-box;outline:none;">
+    </div>
+
+    <div style="margin-bottom:6px;">
+      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Description</div>
+      <textarea id="bugDescription" placeholder="Describe what happened, what you expected, and how to reproduce it..." rows="5" maxlength="1000"
+        style="width:100%;padding:10px 12px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:14px;resize:none;box-sizing:border-box;outline:none;"></textarea>
+      <div style="text-align:right;font-size:10px;color:var(--text3);margin-top:2px;"><span id="bugCharCount">0</span>/1000</div>
+    </div>
+
+    <div id="bugReportError" style="font-size:12px;color:#f85149;margin-bottom:10px;display:none;"></div>
+
+    <button onclick="submitBugReport()" class="btn btn-primary" style="width:100%;background:rgba(248,81,73,0.15);border:1px solid rgba(248,81,73,0.5);color:#fff;">
+      Send Bug Report
+    </button>
+  </div>
+</div>
 </body>
 </html>
