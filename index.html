@@ -794,7 +794,7 @@ document.currentScript.parentNode.appendChild(_link);
 <div id="splashScreen" style="
   position:fixed;inset:0;z-index:9999;
   background:#2e2e2e;
-  display:flex;flex-direction:column;
+  display:none;flex-direction:column;
   align-items:center;justify-content:center;
   pointer-events:none;
 ">
@@ -1660,7 +1660,8 @@ document.currentScript.parentNode.appendChild(_link);
         <div class="bugs-body" style="padding:0 20px 16px;font-size:13px;color:var(--text2);line-height:1.6;">
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Pay breakdown totals may not be 100% accurate in all edge cases</div>
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Night Differential auto-calculation has known issues</div>
-          <div style="padding:6px 0;">• Snow pay not yet functional</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Snow pay not yet functional</div>
+          <div style="padding:6px 0;">• Working on automatic chart numbers so you don't have to manually select them</div>
         </div>
       </div>
 
@@ -7774,6 +7775,10 @@ function showSplash(callback) {
   const logo   = document.getElementById('splashLogo');
   const sub    = document.getElementById('splashSub');
   if (!splash) { callback(); return; }
+  splash.style.display = 'flex';
+  logo.style.opacity = '0';
+  logo.style.transform = 'scale(0.85)';
+  sub.style.opacity = '0';
   requestAnimationFrame(() => {
     logo.style.opacity = '1';
     logo.style.transform = 'scale(1)';
@@ -7782,7 +7787,7 @@ function showSplash(callback) {
   setTimeout(() => {
     splash.style.transition = 'opacity 0.4s ease';
     splash.style.opacity = '0';
-    setTimeout(() => { splash.style.display = 'none'; callback(); }, 400);
+    setTimeout(() => { splash.style.display = 'none'; splash.style.opacity = '1'; callback(); }, 400);
   }, 1100);
 }
 
@@ -7847,6 +7852,8 @@ function showOnboarding() {
   const modal = document.getElementById('onboardingModal');
   if (!modal) return;
   modal.style.display = 'flex';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
   // Pre-fill from existing profile
   try {
     const users = getUsers();
@@ -7906,7 +7913,7 @@ function obFinish() {
   }
 
   localStorage.setItem('santrack_onboarding_done_' + (currentUser?.id || 'guest'), '1');
-  document.getElementById('onboardingModal').style.display = 'none';
+  const obModal = document.getElementById('onboardingModal'); if (obModal) obModal.style.display = 'none';
   showToast('✅ Profile set up! Welcome to SanTrack.');
   refreshAll();
   scheduleSync(); // push to cloud
@@ -8140,7 +8147,7 @@ function submitBugReport() {
 </div>
 
 <!-- ONBOARDING MODAL -->
-<div id="onboardingModal" class="modal-overlay" style="z-index:9999;background:rgba(0,0,0,0.92);">
+<div id="onboardingModal" class="modal-overlay" style="z-index:9999;background:rgba(0,0,0,0.92);display:none;">
   <div class="modal" style="max-width:420px;padding:0;overflow:hidden;">
 
     <!-- Step indicator -->
@@ -8188,13 +8195,13 @@ function submitBugReport() {
       <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">Used to calculate your shift pay. You can change this anytime in Profile.</div>
       <select id="ob-paystep" style="width:100%;padding:12px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:15px;margin-bottom:8px;">
         <option value="">Select your pay step...</option>
-        <option value="51680">Step 1 — $51,680/yr (~$24.85/hr)</option>
-        <option value="55155">Step 2 — $55,155/yr (~$26.52/hr)</option>
-        <option value="59516">Step 3 — $59,516/yr (~$28.61/hr)</option>
-        <option value="64095">Step 4 — $64,095/yr (~$30.82/hr)</option>
-        <option value="69493">Step 5 — $69,493/yr (~$33.41/hr)</option>
-        <option value="77873">Step 6 — $77,873/yr (~$37.44/hr)</option>
-        <option value="85292">Step 7 — $85,292/yr (~$41.01/hr)</option>
+        <option value="46390">$46,390 — First 6 Months</option>
+        <option value="50320">$50,320 — After 6 Months</option>
+        <option value="51493">$51,493 — After 1.5 Years</option>
+        <option value="55047">$55,047 — After 2.5 Years</option>
+        <option value="61853">$61,853 — After 3.5 Years</option>
+        <option value="78860">$78,860 — After 4.5 Years</option>
+        <option value="95316">$95,316 — After 5.5 Years</option>
       </select>
       <div style="font-size:11px;color:var(--text3);margin-bottom:20px;">Not sure? Check your last pay stub or ask your supervisor.</div>
       <div style="display:flex;gap:10px;">
