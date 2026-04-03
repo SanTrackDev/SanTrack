@@ -7752,21 +7752,6 @@ initBiometricButton();
     document.getElementById('rememberMe').checked = true;
   }
 })();
-// ── BYPASS LOGIN ENABLED ──
-(function() {
-  const users = getUsers();
-  const ids = Object.keys(users);
-  if (ids.length > 0) {
-    currentUser = users[ids[0]];
-  } else {
-    currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
-    const u = getUsers();
-    u['guest'] = currentUser;
-    saveUsers(u);
-    saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
-  }
-  startApp();
-})();
 
 
 // ── SPLASH SCREEN ──
