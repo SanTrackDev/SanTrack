@@ -8371,6 +8371,12 @@ initBiometricButton();
 (function() {
   const savedId = localStorage.getItem('dsny_session');
   const expiry = parseInt(localStorage.getItem('dsny_session_expiry') || '0');
+  // Force guest accounts back to login screen
+  if (savedId === 'guest@santrack.app' || savedId === 'guest') {
+    localStorage.removeItem('dsny_session');
+    localStorage.removeItem('dsny_session_expiry');
+    return;
+  }
   if (savedId && Date.now() < expiry) {
     const users = getUsers();
     if (users[savedId]) {
@@ -8392,15 +8398,17 @@ initBiometricButton();
 // ── BYPASS LOGIN ENABLED ──
 (function() {
   const users = getUsers();
-  const ids = Object.keys(users);
-  if (ids.length > 0) {
-    currentUser = users[ids[0]];
+  const PREFERRED = ['santrackdev@gmail.com', 'test@santrack.app'];
+  const preferred = PREFERRED.find(id => users[id]);
+  if (preferred) {
+    currentUser = users[preferred];
   } else {
-    currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
-    const u = getUsers();
-    u['guest'] = currentUser;
-    saveUsers(u);
-    saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
+    const ids = Object.keys(users).filter(id => id !== 'guest@santrack.app' && id !== 'guest');
+    if (ids.length > 0) {
+      currentUser = users[ids[0]];
+    } else {
+      return; // No valid account — stay on login screen
+    }
   }
   startApp();
 })();
