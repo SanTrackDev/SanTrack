@@ -1668,6 +1668,7 @@ document.currentScript.parentNode.appendChild(_link);
         <button onclick="showPage('tasks')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
         <div class="section-title" style="margin-bottom:0;">Updates</div>
         <button onclick="openBugReport()" style="margin-left:auto;background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:8px;padding:7px 14px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">Report a Bug</button>
+        <button id="adminPanelBtn" onclick="showAdminPanel()" style="display:none;background:rgba(255,209,0,0.12);border:1px solid rgba(255,209,0,0.4);border-radius:8px;padding:7px 14px;color:#FFD100;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">⚙ Admin</button>
       </div>
 
       <!-- Known Bugs -->
@@ -1977,6 +1978,15 @@ document.currentScript.parentNode.appendChild(_link);
       <div id="seniorityList">
         <div class="empty-state"><div class="icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><p>No one added yet. Add a San Man above.</p></div>
       </div>
+    </div>
+
+    <!-- ADMIN PAGE -->
+    <div id="adminPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="showChangelogPage()" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;color:#FFD100;">⚙ Admin Panel</div>
+      </div>
+      <div id="adminPageContent"></div>
     </div>
 
     <!-- EDIT SAN MAN MODAL -->
@@ -2956,6 +2966,12 @@ function _completeLogin(user, userKey, remember) {
   const expiry = Date.now() + 24 * 60 * 60 * 1000;
   localStorage.setItem('dsny_session', userKey);
   localStorage.setItem('dsny_session_expiry', expiry);
+  // Track login date for admin trend chart
+  const loginKey = 'santrack_logins';
+  const logins = JSON.parse(localStorage.getItem(loginKey) || '[]');
+  logins.push({ id: userKey, date: new Date().toISOString().slice(0,10) });
+  if (logins.length > 5000) logins.splice(0, logins.length - 5000); // cap
+  localStorage.setItem(loginKey, JSON.stringify(logins));
   if (remember) {
     localStorage.setItem('dsny_saved_email', userKey);
     localStorage.setItem('dsny_saved_pass', user.pass);
@@ -3280,6 +3296,7 @@ function startApp() {
   renderCalendar();
   refreshAll();
   checkOnboarding();
+  checkAnnouncements();
   // Auto-restore from cloud silently on login, then sync back
   cloudRestoreOnLogin().then(() => cloudSync());
 
@@ -4736,6 +4753,8 @@ function showChangelogPage() {
   document.getElementById('changelogPage').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-tasks').classList.add('active');
+  const adminBtn = document.getElementById('adminPanelBtn');
+  if (adminBtn) adminBtn.style.display = (currentUser && ['santrackdev@gmail.com','test@santrack.app'].includes(currentUser.id)) ? 'block' : 'none';
 }
 
 function getSalaryPeriods() {
@@ -8597,6 +8616,290 @@ function getLastSyncLabel() {
   return 'Synced ' + d.toLocaleDateString();
 }
 
+
+function showAdminPanel() {
+  if (!currentUser || !['santrackdev@gmail.com','test@santrack.app'].includes(currentUser.id)) return;
+  currentPage = 'admin';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('adminPage').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('nav-tasks').classList.add('active');
+  renderAdminPage();
+}
+
+function renderAdminPage() {
+  const ADMIN_IDS = ['santrackdev@gmail.com','test@santrack.app'];
+  const users = getUsers();
+  const userList = Object.values(users).filter(u => !ADMIN_IDS.includes(u.id));
+  const now = new Date();
+  const oneWeekAgo = new Date(now - 7*24*60*60*1000);
+  const oneMonthAgo = new Date(now - 30*24*60*60*1000);
+  let activeWeek = 0, activeMonth = 0;
+  const signupByDate = {};
+
+  const userStats = userList.map(u => {
+    const d = getUserData(u.id);
+    const shifts = d.shifts || [];
+    const lastShift = shifts.length ? shifts.slice().sort((a,b) => b.date > a.date ? 1 : -1)[0] : null;
+    const lastDate = lastShift ? new Date(lastShift.date + 'T12:00:00') : null;
+    if (lastDate && lastDate >= oneWeekAgo) activeWeek++;
+    if (lastDate && lastDate >= oneMonthAgo) activeMonth++;
+    const signupDate = u.hireDate || (lastShift ? lastShift.date.slice(0,7) : null);
+    if (signupDate) { const mo = signupDate.slice(0,7); signupByDate[mo] = (signupByDate[mo]||0)+1; }
+    return { u, shifts, lastDate };
+  });
+
+  // New users this week/month (approximated by first shift date or hire date)
+  let newThisWeek = 0, newThisMonth = 0;
+  userStats.forEach(({ u, shifts }) => {
+    const firstShift = shifts.length ? shifts.slice().sort((a,b) => a.date > b.date ? 1 : -1)[0] : null;
+    const joinDateStr = u.hireDate || (firstShift ? firstShift.date : null);
+    if (!joinDateStr) return;
+    const joinDate = new Date(joinDateStr + (joinDateStr.length === 7 ? '-01' : '') + 'T12:00:00');
+    if (joinDate >= oneWeekAgo) newThisWeek++;
+    if (joinDate >= oneMonthAgo) newThisMonth++;
+  });
+
+  // Top 10 most active users by shift count
+  const top10 = userStats.slice().sort((a,b) => b.shifts.length - a.shifts.length).slice(0,10);
+  const maxShifts = Math.max(...top10.map(s => s.shifts.length), 1);
+
+  const trendMonths = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    const label = d.toLocaleDateString('en-US',{month:'short',year:'2-digit'});
+    trendMonths.push({ key, label, signups: signupByDate[key]||0, logins: 0 });
+  }
+  const loginLog = JSON.parse(localStorage.getItem('santrack_logins') || '[]');
+  loginLog.forEach(l => {
+    if (!l.date) return;
+    const mo = l.date.slice(0,7);
+    const entry = trendMonths.find(m => m.key === mo);
+    if (entry) entry.logins++;
+  });
+  const maxTrend = Math.max(...trendMonths.map(m => Math.max(m.signups, m.logins)), 1);
+  const announcements = JSON.parse(localStorage.getItem('santrack_announcements') || '[]');
+  window._adminUserStats = userStats;
+
+  const trendBars = trendMonths.map(m => `
+    <div style="display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;">
+      <div style="width:100%;display:flex;gap:2px;height:56px;align-items:flex-end;">
+        <div style="flex:1;background:rgba(255,209,0,0.55);border-radius:3px 3px 0 0;height:${Math.round((m.signups/maxTrend)*100)}%;min-height:${m.signups?3:0}px;" title="${m.signups} sign-ups"></div>
+        <div style="flex:1;background:rgba(56,139,253,0.55);border-radius:3px 3px 0 0;height:${Math.round((m.logins/maxTrend)*100)}%;min-height:${m.logins?3:0}px;" title="${m.logins} logins"></div>
+      </div>
+      <div style="font-size:9px;color:var(--text3);text-align:center;">${m.label}</div>
+    </div>`).join('');
+
+  const top10Rows = top10.map(({ u, shifts }, i) => {
+    const barPct = Math.round((shifts.length / maxShifts) * 100);
+    const medal = i === 0 ? '&#x1F947;' : i === 1 ? '&#x1F948;' : i === 2 ? '&#x1F949;' : `${i+1}.`;
+    return `
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--dark3);">
+        <div style="font-size:13px;width:24px;text-align:center;flex-shrink:0;">${medal}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:12px;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${u.name||'—'}</div>
+          <div style="margin-top:3px;height:4px;background:var(--dark4);border-radius:2px;">
+            <div style="height:100%;width:${barPct}%;background:var(--green);border-radius:2px;"></div>
+          </div>
+        </div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--green);flex-shrink:0;">${shifts.length}</div>
+      </div>`;
+  }).join('');
+
+  const savedAnnouncements = announcements.map((a,i) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--dark3);border-radius:8px;padding:8px 10px;margin-bottom:6px;">
+      <div style="font-size:12px;color:#fff;flex:1;">${a.text}</div>
+      <button onclick="adminDeleteAnnouncement(${i})" style="background:none;border:none;color:var(--red);font-size:14px;cursor:pointer;margin-left:8px;">&#x2715;</button>
+    </div>`).join('');
+
+  document.getElementById('adminPageContent').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+      <div class="card" style="padding:10px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#fff;">${userList.length}</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:0.3px;">TOTAL USERS</div>
+      </div>
+      <div class="card" style="padding:10px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:var(--green);">${activeWeek}</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:0.3px;">ACTIVE 7 DAYS</div>
+      </div>
+      <div class="card" style="padding:10px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#82b8ff;">${activeMonth}</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:0.3px;">ACTIVE 30 DAYS</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px;">
+      <div class="card" style="padding:10px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#FFD100;">${newThisWeek}</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:0.3px;">NEW THIS WEEK</div>
+      </div>
+      <div class="card" style="padding:10px;text-align:center;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:800;color:#FFD100;">${newThisMonth}</div>
+        <div style="font-size:10px;color:var(--text3);letter-spacing:0.3px;">NEW THIS MONTH</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;">&#x1F4C8; TREND (6 MONTHS)</div>
+        <div style="display:flex;gap:10px;">
+          <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);"><div style="width:10px;height:10px;background:rgba(255,209,0,0.55);border-radius:2px;"></div>Sign-ups</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text3);"><div style="width:10px;height:10px;background:rgba(56,139,253,0.55);border-radius:2px;"></div>Logins</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:4px;align-items:flex-end;">${trendBars}</div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;margin-bottom:10px;">&#x1F3C6; TOP 10 MOST ACTIVE</div>
+      ${top10.length ? top10Rows : '<div style="font-size:12px;color:var(--text3);">No shift data yet.</div>'}
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;margin-bottom:10px;">&#x1F4E2; ANNOUNCEMENTS</div>
+      <div id="adminAnnouncementList">${savedAnnouncements || '<div style="font-size:12px;color:var(--text3);margin-bottom:8px;">No announcements.</div>'}</div>
+      <div style="display:flex;gap:6px;margin-top:8px;">
+        <input id="adminAnnouncementInput" type="text" placeholder="New announcement..." style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:#fff;font-size:12px;padding:8px 10px;">
+        <button onclick="adminPostAnnouncement()" style="background:rgba(255,209,0,0.15);border:1px solid rgba(255,209,0,0.4);border-radius:8px;color:#FFD100;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:8px 12px;cursor:pointer;">Post</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:var(--text2);letter-spacing:0.5px;">&#x1F465; USERS (${userList.length})</div>
+        <button onclick="var ul=document.getElementById('adminUserList');var show=ul.style.display==='none';ul.style.display=show?'block':'none';this.textContent=show?'&#9650; Collapse':'&#9660; Expand';" style="background:none;border:none;color:var(--text3);font-size:11px;font-weight:700;cursor:pointer;font-family:'Barlow Condensed',sans-serif;">&#9650; Collapse</button>
+      </div>
+      <div id="adminUserList">
+        <input id="adminUserSearch" type="text" placeholder="Search by name..." oninput="adminFilterUsers(this.value)" style="width:100%;box-sizing:border-box;background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:#fff;font-size:12px;padding:8px 10px;margin-bottom:8px;">
+        <div id="adminUserRows">${adminBuildUserRows(userStats)}</div>
+      </div>
+    </div>`;
+}
+
+
+function adminBuildUserRows(stats) {
+  if (!stats || !stats.length) return '<div style="color:var(--text3);font-size:13px;padding:8px 0;">No users yet.</div>';
+  return stats.map(({ u, shifts, lastDate }) => {
+    const lastStr = lastDate ? lastDate.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'No shifts';
+    const safe = u.id.replace(/[^a-zA-Z0-9]/g,'_');
+    return `
+      <div id="adminRow_${safe}" data-name="${(u.name||'').toLowerCase()}" style="background:var(--dark3);border-radius:10px;padding:10px 12px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div style="flex:1;min-width:0;">
+            <div style="color:#fff;font-weight:700;font-size:13px;">${u.name||'—'}</div>
+            <div style="color:var(--text3);font-size:11px;word-break:break-all;">${u.id}</div>
+            <div style="color:var(--text3);font-size:11px;">${u.district||'—'} &bull; ${shifts.length} shift${shifts.length!==1?'s':''} &bull; Last: ${lastStr}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;margin-left:8px;flex-shrink:0;">
+            <button onclick="adminResetPassword('${safe}','${u.id}')" style="background:rgba(56,139,253,0.15);border:1px solid rgba(56,139,253,0.4);border-radius:6px;color:#82b8ff;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 8px;cursor:pointer;">Reset PW</button>
+            <button onclick="adminDeleteUser('${safe}','${u.id}')" style="background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:6px;color:#ff9d9a;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;padding:4px 8px;cursor:pointer;">Delete</button>
+          </div>
+        </div>
+        <div id="adminConfirm_${safe}" style="display:none;margin-top:8px;background:rgba(248,81,73,0.08);border:1px solid rgba(248,81,73,0.3);border-radius:8px;padding:8px;">
+          <div style="font-size:11px;color:#ff9d9a;font-weight:700;margin-bottom:6px;">Are you sure? This cannot be undone.</div>
+          <div style="display:flex;gap:6px;">
+            <button onclick="adminDeleteUserConfirm('${u.id}','${safe}')" style="flex:1;background:rgba(248,81,73,0.8);border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px;cursor:pointer;">Yes, Delete</button>
+            <button onclick="document.getElementById('adminConfirm_${safe}').style.display='none'" style="flex:1;background:var(--dark4);border:1px solid var(--dark4);border-radius:6px;color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px;cursor:pointer;">Cancel</button>
+          </div>
+        </div>
+        <div id="adminResetConfirm_${safe}" style="display:none;margin-top:8px;background:rgba(56,139,253,0.08);border:1px solid rgba(56,139,253,0.3);border-radius:8px;padding:8px;">
+          <div style="font-size:11px;color:#82b8ff;font-weight:700;margin-bottom:6px;">Reset password for ${u.name||u.id}?</div>
+          <div style="display:flex;gap:6px;">
+            <input id="adminNewPw_${safe}" type="text" placeholder="New password" style="flex:1;background:var(--dark1);border:1px solid var(--dark4);border-radius:6px;color:#fff;font-size:12px;padding:5px 8px;">
+            <button onclick="adminResetPasswordConfirm('${u.id}','${safe}')" style="background:rgba(56,139,253,0.8);border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;">Save</button>
+            <button onclick="document.getElementById('adminResetConfirm_${safe}').style.display='none'" style="background:var(--dark4);border:1px solid var(--dark4);border-radius:6px;color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px 8px;cursor:pointer;">✕</button>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function adminFilterUsers(query) {
+  const q = query.toLowerCase().trim();
+  document.querySelectorAll('#adminUserRows [data-name]').forEach(row => {
+    row.style.display = (!q || row.dataset.name.includes(q)) ? 'block' : 'none';
+  });
+}
+
+function adminDeleteUser(safe, id) {
+  const el = document.getElementById('adminConfirm_' + safe);
+  if (el) el.style.display = 'block';
+}
+
+function adminDeleteUserConfirm(id, safe) {
+  const users = getUsers();
+  delete users[id];
+  localStorage.setItem('dsny_users', JSON.stringify(users));
+  localStorage.removeItem('dsny_data_' + id);
+  const row = document.getElementById('adminRow_' + safe);
+  if (row) row.remove();
+  showToast('User deleted.');
+  showAdminPanel();
+}
+
+function adminResetPassword(safe, id) {
+  const el = document.getElementById('adminResetConfirm_' + safe);
+  if (el) el.style.display = 'block';
+}
+
+function adminResetPasswordConfirm(id, safe) {
+  const input = document.getElementById('adminNewPw_' + safe);
+  const newPw = input ? input.value.trim() : '';
+  if (!newPw) { showToast('Enter a new password.'); return; }
+  const users = getUsers();
+  if (!users[id]) { showToast('User not found.'); return; }
+  users[id].pass = newPw;
+  localStorage.setItem('dsny_users', JSON.stringify(users));
+  const el = document.getElementById('adminResetConfirm_' + safe);
+  if (el) el.style.display = 'none';
+  showToast('Password reset for ' + (users[id].name || id));
+}
+
+function adminPostAnnouncement() {
+  const input = document.getElementById('adminAnnouncementInput');
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+  const announcements = JSON.parse(localStorage.getItem('santrack_announcements') || '[]');
+  announcements.unshift({ text, date: new Date().toISOString() });
+  localStorage.setItem('santrack_announcements', JSON.stringify(announcements));
+  input.value = '';
+  showToast('Announcement posted!');
+  showAdminPanel();
+}
+
+function adminDeleteAnnouncement(index) {
+  const announcements = JSON.parse(localStorage.getItem('santrack_announcements') || '[]');
+  announcements.splice(index, 1);
+  localStorage.setItem('santrack_announcements', JSON.stringify(announcements));
+  showAdminPanel();
+}
+
+
+function checkAnnouncements() {
+  const announcements = JSON.parse(localStorage.getItem('santrack_announcements') || '[]');
+  if (!announcements.length) return;
+  const seenKey = 'santrack_seen_announcements_' + (currentUser ? currentUser.id : 'guest');
+  const seen = JSON.parse(localStorage.getItem(seenKey) || '[]');
+  const unseen = announcements.filter((a, i) => !seen.includes(i));
+  if (!unseen.length) return;
+  // Show the most recent unseen one as a toast-style banner
+  const latest = unseen[0];
+  const banner = document.createElement('div');
+  banner.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1a2a1a;border:1px solid rgba(66,130,71,0.6);border-radius:12px;padding:12px 16px;z-index:9998;max-width:340px;width:90%;box-shadow:0 4px 20px rgba(0,0,0,0.5);';
+  banner.innerHTML = `
+    <div style="display:flex;align-items:flex-start;gap:10px;">
+      <div style="font-size:18px;flex-shrink:0;">📢</div>
+      <div style="flex:1;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--green);letter-spacing:0.5px;margin-bottom:3px;">ANNOUNCEMENT</div>
+        <div style="font-size:13px;color:#fff;line-height:1.4;">${latest.text}</div>
+      </div>
+      <button onclick="this.closest('div[style]').remove()" style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;flex-shrink:0;padding:0;">✕</button>
+    </div>`;
+  document.body.appendChild(banner);
+  // Mark all as seen
+  localStorage.setItem(seenKey, JSON.stringify(announcements.map((_, i) => i)));
+  setTimeout(() => { if (banner.parentNode) banner.remove(); }, 8000);
+}
 
 function openBugReport() {
   document.getElementById('bugSubject').value = '';
