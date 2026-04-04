@@ -3223,6 +3223,9 @@ function startApp() {
   document.getElementById('loginScreen').classList.remove('active');
   document.getElementById('appScreen').classList.add('active');
   checkFridayReminder();
+  // Show admin button for admin accounts
+  const adminBtn = document.getElementById('adminPanelBtn');
+  if (adminBtn) adminBtn.style.display = ((['santrackdev@gmail.com','test@santrack.app'].includes((currentUser&&(currentUser.id||currentUser.email||'')).toLowerCase().trim()))) ? 'block' : 'none';
 
   // Migrate: sync chartDay on all shifts with calendar-selected chart days
   (function migrateChartDays() {
@@ -4754,7 +4757,7 @@ function showChangelogPage() {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById('nav-tasks').classList.add('active');
   const adminBtn = document.getElementById('adminPanelBtn');
-  if (adminBtn) adminBtn.style.display = (currentUser && ['santrackdev@gmail.com','test@santrack.app'].includes(currentUser.id)) ? 'block' : 'none';
+  if (adminBtn) adminBtn.style.display = ((['santrackdev@gmail.com','test@santrack.app'].includes((currentUser&&(currentUser.id||currentUser.email||'')).toLowerCase().trim()))) ? 'block' : 'none';
 }
 
 function getSalaryPeriods() {
@@ -8618,7 +8621,12 @@ function getLastSyncLabel() {
 
 
 function showAdminPanel() {
-  if (!currentUser || !['santrackdev@gmail.com','test@santrack.app'].includes(currentUser.id)) return;
+  const adminIds = ['santrackdev@gmail.com','test@santrack.app'];
+  const uid = (currentUser && (currentUser.id || currentUser.email || '')).toLowerCase().trim();
+  if (!uid || !adminIds.includes(uid)) {
+    showToast('Admin access only.');
+    return;
+  }
   currentPage = 'admin';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('adminPage').classList.add('active');
