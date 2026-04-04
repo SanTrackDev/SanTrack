@@ -1697,8 +1697,16 @@ document.currentScript.parentNode.appendChild(_link);
           </div>
           <div id="cl-v009" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
             &bull; SW Chart Day selector added to the Chart Days dropdown on the Shift Calendar — pick your SW number (SW1–SW25) and tap Auto-fill to automatically populate all your chart days for the year based on the official 2026 DSNY AABS calendar<br>
+            &bull; All chart numbers now display on calendar boxes and should be 100% accurate per the AABS calendar<br>
             &bull; Clear All button added to Chart Days dropdown — clears all chart days for the current year with an are-you-sure confirmation step<br>
-            &bull; Night Differential implemented — +10% regular pay automatically applied to the 4 eligible tours: 1100, 1600, 1900, 2400/0000
+            &bull; Added salary per period button in the Pay section — lock in a specific period's salary for accurate comparisons<br>
+            &bull; Compare Pay Stub feature enabled for testing<br>
+            &bull; Fixed rate button in Locations<br>
+            &bull; Added "Used Hours" dropdown — select how many comp hours you've used and they are automatically subtracted from your total<br>
+            &bull; Editing profile fields now saves and persists correctly<br>
+            &bull; Clear button added to both the Log Shift and Edit Shift modals — resets all fields and selections including time presets<br>
+            &bull; Calendar box widths increased by 5%<br>
+            &bull; Various bug fixes and UI tweaks
           </div>
         </div>
 
@@ -2411,7 +2419,7 @@ document.currentScript.parentNode.appendChild(_link);
       <label>Did you dump on shift?</label>
       <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="checkbox" id="dumpedOnShift" style="width:auto;accent-color:var(--green);cursor:pointer;width:18px;height:18px;"> Yes &nbsp;<span style="color:var(--green);font-size:12px;font-weight:700;">(+$8.00)</span>
+          <input type="checkbox" id="dumpedOnShift" style="width:auto;accent-color:var(--green);cursor:pointer;width:18px;height:18px;" onchange="onDidDumpChange()"> Yes &nbsp;<span style="color:var(--green);font-size:12px;font-weight:700;">(+$8.00)</span>
         </label>
       </div>
     </div>
@@ -2470,17 +2478,6 @@ document.currentScript.parentNode.appendChild(_link);
         <optgroup label="Other"><option>FBF</option><option>BKNBO</option></optgroup>
       </select>
     </div>
-    <div class="form-group">
-      <label>Did you dump?</label>
-      <div style="display:flex;align-items:center;gap:10px;margin-top:4px;">
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="didDump" id="didDumpYes" value="yes" style="width:auto;" onchange="onDidDumpChange()"> Yes
-        </label>
-        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;text-transform:none;font-size:14px;font-weight:400;">
-          <input type="radio" name="didDump" id="didDumpNo" value="no" checked style="width:auto;" onchange="onDidDumpChange()"> No
-        </label>
-      </div>
-    </div>
     <div class="form-group" id="tonsGroup" style="display:none;">
       <label>Tons Dumped</label>
       <input type="number" id="shiftTons" placeholder="e.g. 8.5" min="0" step="0.1" oninput="onTonsInput()">
@@ -2516,7 +2513,10 @@ document.currentScript.parentNode.appendChild(_link);
       <label>Notes (optional)</label>
       <textarea id="shiftNotes" rows="2" placeholder="Any notes about this shift..."></textarea>
     </div>
-    <button class="btn btn-primary" onclick="addShift()">Log Shift</button>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-primary" onclick="addShift()" style="flex:1;">Log Shift</button>
+      <button type="button" onclick="clearShiftForm()" style="background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:var(--radius);color:#ff9d9a;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:10px 16px;cursor:pointer;white-space:nowrap;">Clear</button>
+    </div>
   </div>
 </div>
 
@@ -2657,7 +2657,10 @@ document.currentScript.parentNode.appendChild(_link);
       <label>Notes <span style="color:var(--text2);font-size:10px;text-transform:none;">(optional)</span></label>
       <textarea id="editShiftNotes" rows="2" placeholder="Any notes..."></textarea>
     </div>
-    <button onclick="saveEditShift()" class="btn btn-primary">Save Changes</button>
+    <div style="display:flex;gap:8px;">
+      <button onclick="saveEditShift()" class="btn btn-primary" style="flex:1;">Save Changes</button>
+      <button type="button" onclick="clearEditShiftForm()" style="background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.35);border-radius:var(--radius);color:#ff9d9a;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:10px 16px;cursor:pointer;white-space:nowrap;">Clear</button>
+    </div>
   </div>
 </div>
 
@@ -2767,7 +2770,7 @@ let calDate = new Date();
 function getUsers() { try { return JSON.parse(localStorage.getItem('dsny_users') || '{}'); } catch(e) { return {}; } }
 function saveUsers(u) { localStorage.setItem('dsny_users', JSON.stringify(u)); }
 function getUserData(id) { try { var data = JSON.parse(localStorage.getItem('dsny_data_' + id) || '{}'); if (!data.shifts) data.shifts = []; if (!data.tasks) data.tasks = []; if (!data.routes) data.routes = []; return data; } catch(e) { return {shifts:[], tasks:[], routes:[]}; } }
-function saveUserData(id, d) { localStorage.setItem('dsny_data_' + id, JSON.stringify(d)); }
+function saveUserData(id, d) { localStorage.setItem('dsny_data_' + id, JSON.stringify(d)); if (currentUser && id === currentUser.id) scheduleSync(); }
 
 // ── AUTH ──
 function showRegister() {
@@ -3215,6 +3218,20 @@ function startApp() {
       const day = s.date ? parseInt(s.date.slice(8)) : 0;
       const isCalChartDay = (saved[mk] || []).includes(day);
       if (s.chartDay !== isCalChartDay) { s.chartDay = isCalChartDay; changed = true; }
+    });
+    if (changed) saveUserData(currentUser.id, d);
+  })();
+
+  // Migrate: add dumpPay to pay for old shifts where dumpedOnShift=true but $8 wasn't counted
+  (function migrateDumpPay() {
+    const d = getUserData(currentUser.id);
+    let changed = false;
+    d.shifts.forEach(s => {
+      if (s.dumpedOnShift && !s.dumpPay) {
+        s.dumpPay = 8;
+        s.pay = (s.pay || 0) + 8;
+        changed = true;
+      }
     });
     if (changed) saveUserData(currentUser.id, d);
   })();
@@ -5489,7 +5506,7 @@ function onShiftTypeChange(type, groupId, fractionId) {
 }
 
 function onDidDumpChange() {
-  const yes = document.getElementById('didDumpYes').checked;
+  const yes = document.getElementById('dumpedOnShift') && document.getElementById('dumpedOnShift').checked;
   document.getElementById('tonsGroup').style.display = yes ? 'block' : 'none';
   if (!yes) {
     document.getElementById('shiftTons').value = '';
@@ -5690,7 +5707,6 @@ function openFab() {
     if (dumpEl) dumpEl.checked = false;
     const dumpGroup = document.getElementById('dumpOnShiftGroup');
     if (dumpGroup) dumpGroup.style.display = 'none';
-    document.getElementById('didDumpNo').checked = true;
     document.getElementById('tonsGroup').style.display = 'none';
     document.getElementById('shiftModal').classList.add('open');
   }
@@ -5814,6 +5830,49 @@ function calcTruckDifferential(type, fraction, chartDay, isSnow) {
   return TRUCK_DIFF_FULL * multiplier;
 }
 
+function clearShiftForm() {
+  const g = id => document.getElementById(id);
+  const hide = id => { const el = g(id); if (el) el.style.display = 'none'; };
+  const val = (id, v) => { const el = g(id); if (el) el.value = v; };
+  const chk = (id, v) => { const el = g(id); if (el) el.checked = v; };
+  // Time
+  val('shiftStart', ''); val('shiftEnd', '');
+  const etn = g('endTimeNote'); if (etn) etn.textContent = '';
+  document.querySelectorAll('#startTimePresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  // OT
+  chk('didOTNo', true); hide('otQuestionGroup'); hide('otStartGroup'); val('shiftOTEnd', '');
+  // Function & truck money
+  val('shiftType', ''); val('shiftFraction', '');
+  hide('truckMoneyGroup'); hide('dumpOnShiftGroup'); chk('dumpedOnShift', false);
+  // Dump
+  chk('dumpedOnShift', false); hide('tonsGroup'); hide('dumpReceiptGroup'); val('shiftTons', '');
+  // Receipt — manual reset in case clearDumpReceipt errors
+  try { clearDumpReceipt(); } catch(e) {
+    const prev = g('dumpReceiptPreview'); if (prev) prev.style.display = 'none';
+    val('dumpReceiptCam', ''); val('dumpReceiptLib', '');
+  }
+  // Other
+  val('shiftSection', ''); val('shiftRoute', ''); val('shiftPartner', '');
+  val('shiftLocation', ''); val('truckDowned', '0'); val('shiftNotes', '');
+}
+
+function clearEditShiftForm() {
+  const g = id => document.getElementById(id);
+  const hide = id => { const el = g(id); if (el) el.style.display = 'none'; };
+  const val = (id, v) => { const el = g(id); if (el) el.value = v; };
+  const chk = (id, v) => { const el = g(id); if (el) el.checked = v; };
+  val('editShiftStart', ''); val('editShiftEnd', '');
+  const etn = g('editEndTimeNote'); if (etn) etn.textContent = '';
+  document.querySelectorAll('#editStartTimePresets .time-preset-btn').forEach(b => b.classList.remove('selected'));
+  hide('editOTStartGroup'); val('editShiftOTEnd', '');
+  val('editShiftType', ''); val('editShiftFraction', '');
+  hide('editTruckMoneyGroup'); hide('editDumpOnShiftGroup'); chk('editDumpedOnShift', false);
+  hide('editTonsGroup'); hide('editDumpReceiptGroup');
+  val('editShiftSection', ''); val('editShiftRoute', '');
+  val('editShiftPartner', ''); val('editShiftLocation', '');
+  val('editTruckDowned', '0'); val('editShiftNotes', '');
+}
+
 function addShift() {
   const date = document.getElementById('shiftDate').value;
   const type = document.getElementById('shiftType').value;
@@ -5850,7 +5909,7 @@ function addShift() {
   pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay + dumpPay;
 
   const d = getUserData(currentUser.id);
-  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential, nightDiffPay, dumpedOnShift, dumpPay });
+  d.shifts.unshift({ id: Date.now(), date, type, start, end, hours, regHours, otHours, pay, fraction, chartDay, tons, dumpReceipt: dumpReceiptData, partner, location, truckDowned, route, section, notes, truckMoney, saturdayPay, truckDifferential, nightDiffPay, dumpedOnShift, dumpPay, updatedAt: Date.now() });
   saveUserData(currentUser.id, d);
   closeModal('shiftModal');
   showToast('✅ Shift logged!');
@@ -8520,7 +8579,7 @@ async function cloudRestore() {
 }
 
 // Auto-sync on key events (debounced)
-let _syncTimer = null;
+var _syncTimer = null;
 function scheduleSync() {
   clearTimeout(_syncTimer);
   _syncTimer = setTimeout(cloudSync, 3000);
