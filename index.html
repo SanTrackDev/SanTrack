@@ -817,7 +817,7 @@ document.currentScript.parentNode.appendChild(_link);
     letter-spacing:0.5px;
     opacity:0;
     transition:opacity 0.4s ease 0.15s;
-  ">v0.0.8</div>
+  ">v0.0.9</div>
 </div>
 
 <!-- WELCOME POPUP -->
@@ -839,7 +839,7 @@ document.currentScript.parentNode.appendChild(_link);
 <!-- LOGIN SCREEN -->
 <div id="loginScreen" class="screen active">
   <div class="login-box" style="position:relative;">
-    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.8</div>
+    <div style="position:absolute;top:12px;right:14px;font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.9</div>
     <div class="logo">
       <h1 style="-webkit-text-stroke: 2px #000; paint-order: stroke fill;">San<span style="color:var(--green);-webkit-text-stroke: 2px #000; paint-order: stroke fill;">Track</span></h1>
       <p>Track your pay, shifts, seniority, routes and more!</p>
@@ -1044,7 +1044,7 @@ document.currentScript.parentNode.appendChild(_link);
   <div class="app-header">
     <div style="display:flex;align-items:baseline;gap:8px;">
       <div class="header-logo">San<span>Track</span></div>
-      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.8</div>
+      <div style="font-size:10px;color:var(--text3);font-weight:600;letter-spacing:0.3px;">v0.0.9</div>
     </div>
   </div>
 
@@ -1116,10 +1116,25 @@ document.currentScript.parentNode.appendChild(_link);
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></svg>
               Chart Days <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div id="chartDayDropdown" style="display:none;position:absolute;left:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:220px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:800;color:var(--text2);margin-bottom:8px;letter-spacing:0.5px;">SELECT CHART DAYS</div>
-              <div id="chartDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
-              <button onclick="saveChartDays()" style="width:100%;margin-top:10px;background:#388BFD;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+            <div id="chartDayDropdown" style="display:none;position:absolute;left:0;top:calc(100% + 4px);background:#1e1e1e;border:1px solid var(--dark4);border-radius:10px;padding:10px;z-index:200;width:245px;box-shadow:0 8px 24px rgba(0,0,0,0.5);">
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text2);margin-bottom:6px;letter-spacing:0.5px;">YOUR CHART WEEK (SW)</div>
+              <div id="swSelectorGrid" style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:6px;"></div>
+              <button id="applySwBtn" onclick="applySwChartDays()" style="display:none;width:100%;margin-bottom:8px;background:rgba(56,139,253,0.15);border:1px solid #388BFD;border-radius:6px;color:#388BFD;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:6px;cursor:pointer;">Auto-fill Chart Days ↓</button>
+              <div style="border-top:1px solid var(--dark4);padding-top:8px;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;color:var(--text2);margin-bottom:6px;letter-spacing:0.5px;">SELECT CHART DAYS</div>
+                <div id="chartDayGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;"></div>
+              </div>
+              <div id="clearChartConfirm" style="display:none;background:rgba(248,81,73,0.1);border:1px solid rgba(248,81,73,0.4);border-radius:6px;padding:6px;margin-top:8px;text-align:center;">
+                <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#ff9d9a;font-weight:700;margin-bottom:5px;">Clear ALL chart days?</div>
+                <div style="display:flex;gap:4px;">
+                  <button onclick="confirmClearChartDays()" style="flex:1;background:rgba(248,81,73,0.8);border:none;border-radius:5px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px;cursor:pointer;">Yes, Clear</button>
+                  <button onclick="document.getElementById('clearChartConfirm').style.display='none';document.getElementById('clearChartBtn').style.display='block';" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:5px;color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:5px;cursor:pointer;">Cancel</button>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;margin-top:8px;">
+                <button onclick="saveChartDays()" style="flex:1;background:#388BFD;border:none;border-radius:6px;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:7px;cursor:pointer;">Save</button>
+                <button id="clearChartBtn" onclick="document.getElementById('clearChartConfirm').style.display='block';document.getElementById('clearChartBtn').style.display='none';" style="background:rgba(248,81,73,0.15);border:1px solid rgba(248,81,73,0.4);border-radius:6px;color:#ff9d9a;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:7px 10px;cursor:pointer;">Clear All</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1196,15 +1211,19 @@ document.currentScript.parentNode.appendChild(_link);
     <!-- PAY PAGE -->
     <div id="payPage" class="page">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-        <div class="section-title" style="margin-bottom:0;">Pay Summary</div>
+        <div class="section-title" style="margin-bottom:0;border-bottom:3px solid var(--green);padding-bottom:4px;">Pay Summary</div>
         <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="showSalaryPerPeriodPage()" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+            Salary Per Period
+          </button>
           <button onclick="showPayHistoryPage()" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             Pay History
           </button>
-          <button disabled style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:not-allowed;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;opacity:0.6;">
+          <button onclick="document.getElementById('payStubInput').click()" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:6px;letter-spacing:0.3px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            Compare Pay Stub <em style="font-size:10px;font-weight:400;">(Coming Soon)</em>
+            Compare Pay Stub
           </button>
         </div>
         <input type="file" id="payStubInput" accept="image/*" style="display:none;" onchange="comparePayStub(event)">
@@ -1659,9 +1678,7 @@ document.currentScript.parentNode.appendChild(_link);
         </div>
         <div class="bugs-body" style="padding:0 20px 16px;font-size:13px;color:var(--text2);line-height:1.6;">
           <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Pay breakdown totals may not be 100% accurate in all edge cases</div>
-          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Night Differential auto-calculation has known issues</div>
-          <div style="padding:6px 0;border-bottom:1px solid var(--dark3);">• Snow pay not yet functional</div>
-          <div style="padding:6px 0;">• Working on automatic chart numbers so you don't have to manually select them</div>
+          <div style="padding:6px 0;">• Snow pay not yet functional</div>
         </div>
       </div>
 
@@ -1672,6 +1689,18 @@ document.currentScript.parentNode.appendChild(_link);
           <svg class="cl-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;transform:rotate(180deg);"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="changelog-body" style="padding:0 20px 8px;">
+
+        <div style="border-bottom:1px solid var(--dark3);">
+          <div onclick="var b=document.getElementById('cl-v009');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#fff;">v0.0.9 <span style="font-size:11px;color:var(--text3);font-weight:400;">April 6, 2026</span></div>
+            <svg class="v-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;transform:rotate(180deg);;flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="cl-v009" style="display:none;font-size:12px;color:var(--text2);line-height:1.7;padding-bottom:12px;">
+            &bull; SW Chart Day selector added to the Chart Days dropdown on the Shift Calendar — pick your SW number (SW1–SW25) and tap Auto-fill to automatically populate all your chart days for the year based on the official 2026 DSNY AABS calendar<br>
+            &bull; Clear All button added to Chart Days dropdown — clears all chart days for the current year with an are-you-sure confirmation step<br>
+            &bull; Night Differential implemented — +10% regular pay automatically applied to the 4 eligible tours: 1100, 1600, 1900, 2400/0000
+          </div>
+        </div>
 
         <div style="border-bottom:1px solid var(--dark3);">
           <div onclick="var b=document.getElementById('cl-v008');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('.v-chev').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;cursor:pointer;">
@@ -1835,6 +1864,20 @@ document.currentScript.parentNode.appendChild(_link);
         <div class="section-title" style="margin-bottom:0;">Pay History</div>
       </div>
       <div id="payHistoryList"></div>
+    </div>
+
+    <!-- SALARY PER PERIOD PAGE -->
+    <div id="salaryPerPeriodPage" class="page">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <button onclick="showPage('pay')" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;color:var(--text);font-size:18px;padding:6px 12px;cursor:pointer;">&#8249;</button>
+        <div class="section-title" style="margin-bottom:0;">Salary Per Period</div>
+      </div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.5;">Track your salary for each pay step period. Used for accurate pay calculations.</div>
+      <div id="salaryPeriodsList"></div>
+      <button onclick="addSalaryPeriod()" style="width:100%;margin-top:12px;background:var(--dark3);border:1px dashed var(--dark4);border-radius:10px;color:var(--text2);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Period
+      </button>
     </div>
 
     <!-- CAREER STATS PAGE -->
@@ -2592,7 +2635,7 @@ document.currentScript.parentNode.appendChild(_link);
         <option value="">No — worked home garage</option>
         <optgroup label="Bronx"><option>BX1</option><option>BX2</option><option>BX3</option><option>BX4</option><option>BX5</option><option>BX6</option><option>BX7</option><option>BX8</option><option>BX9</option><option>BX10</option><option>BX11</option><option>BX12</option></optgroup>
         <optgroup label="Brooklyn North"><option>BK1</option><option>BK2</option><option>BK3</option><option>BK4</option><option>BK5</option><option>BK8</option><option>BK9</option><option>BK16</option><option>BK17</option></optgroup>
-        <optgroup label="Brooklyn South"><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK15A</option><option>BK18</option></optgroup>
+        <optgroup label="Brooklyn South"><option>BK6</option><option>BK7</option><option>BK10</option><option>BK11</option><option>BK12</option><option>BK13</option><option>BK14</option><option>BK15</option><option>BK18</option></optgroup>
         <optgroup label="Manhattan"><option>M1</option><option>M2</option><option>M3</option><option>M4</option><option>M5</option><option>M6</option><option>M7</option><option>M8</option><option>M9</option><option>M10</option><option>M11</option><option>M12</option></optgroup>
         <optgroup label="Queens East"><option>Q7</option><option>Q8</option><option>Q10</option><option>Q11</option><option>Q12</option><option>Q13A</option><option>Q14</option></optgroup>
         <optgroup label="Queens West"><option>Q1</option><option>Q2</option><option>Q3</option><option>Q4</option><option>Q5</option><option>Q6</option><option>Q9</option></optgroup>
@@ -3232,9 +3275,20 @@ async function cloudRestoreOnLogin() {
     const data = await sbFetch('/rest/v1/user_sync?user_hash=eq.' + userHash + '&select=*');
     if (!data || !data.length) return;
     const row = data[0];
-    const mergeById = (arr1, arr2) => {
+    // Prefer whichever version of each shift is newer (local edits win if no updatedAt)
+    const mergeById = (local, cloud) => {
       const map = {};
-      [...arr1, ...arr2].forEach(item => { if (item && item.id) map[item.id] = item; });
+      // Put cloud in first
+      cloud.forEach(item => { if (item && item.id) map[item.id] = item; });
+      // Local overwrites — but if both have updatedAt, pick the newer one
+      local.forEach(item => {
+        if (!item || !item.id) return;
+        const existing = map[item.id];
+        if (!existing) { map[item.id] = item; return; }
+        const localTs = item.updatedAt || 0;
+        const cloudTs = existing.updatedAt || 0;
+        if (localTs >= cloudTs) map[item.id] = item; // local wins ties
+      });
       return Object.values(map);
     };
     const existing = getUserData(currentUser.id);
@@ -4667,6 +4721,206 @@ function showChangelogPage() {
   document.getElementById('nav-tasks').classList.add('active');
 }
 
+function getSalaryPeriods() {
+  try { return JSON.parse(localStorage.getItem('santrack_salary_periods_' + currentUser.id) || '[]'); } catch(e) { return []; }
+}
+function saveSalaryPeriods(periods) {
+  localStorage.setItem('santrack_salary_periods_' + currentUser.id, JSON.stringify(periods));
+}
+
+// Returns the locked salary for a given date if it falls within a saved period, otherwise falls back to currentUser.rate
+function getActiveSalaryForDate(dateStr) {
+  const fallback = parseFloat(currentUser.rate) || 0;
+  if (!dateStr) return fallback;
+  const periods = getSalaryPeriods();
+  for (const p of periods) {
+    if (!p.startDate || !p.endDate || !p.salary) continue;
+    if (dateStr >= p.startDate && dateStr <= p.endDate) {
+      return parseFloat(p.salary) || fallback;
+    }
+  }
+  return fallback;
+}
+
+function showSalaryPerPeriodPage() {
+  currentPage = 'salaryPerPeriod';
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('salaryPerPeriodPage').classList.add('active');
+  renderSalaryPeriods();
+}
+
+function showSalaryPerPeriodModal() { showSalaryPerPeriodPage(); }
+
+function renderSalaryPeriods() {
+  const periods = getSalaryPeriods();
+  const container = document.getElementById('salaryPeriodsList');
+  if (!container) return;
+
+  const presetValues = ['46390','50320','51493','55047','61853','78860','95316'];
+  const salaryOptions = [
+    { value: '46390', label: '$46,390 — First 6 Months' },
+    { value: '50320', label: '$50,320 — After 6 Months' },
+    { value: '51493', label: '$51,493 — After 1.5 Years' },
+    { value: '55047', label: '$55,047 — After 2.5 Years' },
+    { value: '61853', label: '$61,853 — After 3.5 Years' },
+    { value: '78860', label: '$78,860 — After 4.5 Years' },
+    { value: '95316', label: '$95,316 — After 5.5 Years' },
+    { value: 'custom', label: 'Custom...' },
+  ];
+
+  // Deduction constants (same as rest of app)
+  const deductRate = 0.062 + 0.0145 + 0.078 + 0.0435 + 0.0331;
+  const health = 7.42, disability = 18.89, pension = 40.48, unionAssn = 21.00;
+  const contrib457Pct = currentUser.contrib457 ? parseFloat(currentUser.contrib457) : 0;
+
+  const d = getUserData(currentUser.id);
+
+  container.innerHTML = periods.map((p, i) => {
+    const isCustom = p.salary === '' || p.salary === 'custom' || (p.salary !== undefined && p.salary !== '' && !presetValues.includes(String(Math.round(p.salary))));
+    const selectedVal = isCustom ? 'custom' : (p.salary ? String(Math.round(p.salary)) : '');
+
+    // Calculate stats for this period from logged shifts
+    let grossHtml = '';
+    if (p.startDate && p.endDate && p.salary) {
+      const start = new Date(p.startDate + 'T00:00:00');
+      const end = new Date(p.endDate + 'T23:59:59');
+      const periodShifts = d.shifts.filter(s => {
+        const sd = new Date(s.date + 'T12:00:00');
+        return sd >= start && sd <= end;
+      });
+      const gross = p.customPayAmount ? parseFloat(p.customPayAmount) : periodShifts.reduce((a, s) => a + (s.pay || 0), 0);
+      const totalDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+      const weeks = totalDays / 7;
+      const totalDeductions = (gross * deductRate) + (health + disability + pension + unionAssn) * weeks + (gross * contrib457Pct / 100);
+      const net = Math.max(0, gross - totalDeductions);
+      const shiftCount = periodShifts.length;
+
+      // OT
+      const otHours = periodShifts.reduce((a, s) => a + (s.otHours || 0), 0);
+      const otPay = periodShifts.reduce((a, s) => a + ((s.otHours || 0) * (parseFloat(p.salary) / 2080) * 1.5), 0);
+
+      // Chart day pay & hours
+      const chartShifts = periodShifts.filter(s => s.chartDay);
+      const chartHours = chartShifts.reduce((a, s) => a + (s.hours || 0), 0);
+      const chartPay = chartShifts.reduce((a, s) => a + (s.pay || 0), 0);
+
+      // Comp hours gained in period (from calcCompHours events)
+      const { events: compEvents } = calcCompHours();
+      const compGained = compEvents.filter(e => {
+        const ed = new Date(e.date + 'T12:00:00');
+        return ed >= start && ed <= end;
+      }).reduce((a, e) => a + (e.hours || 0), 0);
+
+      const stat = (label, val, sub, color, size) => `
+        <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">
+          <div style="font-size:9px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.4px;">${label}</div>
+          <div style="font-family:'Barlow',sans-serif;font-size:${size || '13px'};font-weight:700;color:${color || '#fff'};">${val}</div>
+          ${sub ? `<div style="font-size:9px;color:var(--text3);">${sub}</div>` : ''}
+        </div>`;
+
+      grossHtml = `
+        <div style="margin-top:8px;background:rgba(255,255,255,0.04);border-radius:8px;padding:10px 8px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
+          ${stat(p.customPayAmount ? 'Custom Gross' : 'Gross', (p.customPayAmount ? '' : '~') + '$' + gross.toFixed(0), '', p.customPayAmount ? '#FFD100' : '#fff', '19px')}
+          ${stat('Net', '~$' + net.toFixed(0), '', 'var(--green)', '19px')}
+          ${stat('Shifts', shiftCount, '', 'var(--text2)', '19px')}
+          ${stat('OT', otHours.toFixed(1) + 'h', '~$' + otPay.toFixed(0), '#a855f7')}
+          ${stat('Chart', chartHours.toFixed(1) + 'h', '~$' + chartPay.toFixed(0), '#388BFD')}
+          ${stat('Comp', '+' + compGained + 'h', 'gained', '#FFD100')}
+        </div>`;
+    } else if (p.startDate || p.endDate || p.salary) {
+      grossHtml = `<div style="margin-top:6px;font-size:11px;color:var(--text3);">Set salary and both dates to see totals</div>`;
+    }
+
+    return `
+    <div style="padding:10px 0;border-bottom:1px solid var(--dark3);">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <select id="salarySelect_${i}" onchange="onSalaryPeriodSalaryChange(${i},this)" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 10px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;width:100%;">
+            ${salaryOptions.map(o => `<option value="${o.value}"${selectedVal === o.value ? ' selected' : ''}>${selectedVal === o.value && p.title ? p.title : o.label}</option>`).join('')}
+          </select>
+          <div>
+            <button type="button" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none';this.querySelector('span').textContent=this.nextElementSibling.style.display==='none'?'▾ Edit Label':'▴ Edit Label';" style="background:none;border:none;color:var(--text3);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;cursor:pointer;padding:0;letter-spacing:0.3px;">
+              <span>▾ Edit Label</span>
+            </button>
+            <div style="display:none;margin-top:4px;">
+              <input type="text" value="${p.title || ''}" placeholder="Change the label of the period here..." onblur="onSalaryPeriodTitleChange(${i},this)" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 10px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;width:100%;box-sizing:border-box;">
+            </div>
+          </div>
+          <input type="number" id="salaryCustom_${i}" value="${isCustom && p.salary !== '' && p.salary !== 'custom' ? p.salary : ''}" placeholder="Enter custom amount..." onchange="onSalaryPeriodCustomChange(${i},this)" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 10px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;width:100%;box-sizing:border-box;display:${isCustom ? 'block' : 'none'};">
+          <div style="display:flex;gap:6px;align-items:center;">
+            <input type="date" value="${p.startDate || ''}" onchange="onSalaryPeriodDateChange(${i},'startDate',this.value)" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 8px;color:#fff;font-family:'Barlow',sans-serif;font-size:12px;">
+            <span style="color:var(--text3);font-size:12px;">→</span>
+            <input type="date" value="${p.endDate || ''}" onchange="onSalaryPeriodDateChange(${i},'endDate',this.value)" style="flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 8px;color:#fff;font-family:'Barlow',sans-serif;font-size:12px;">
+          </div>
+          <input type="number" id="customPayAmount_${i}" value="${p.customPayAmount || ''}" placeholder="Custom gross pay (optional override)..." onchange="onSalaryPeriodCustomPayChange(${i},this)" style="background:var(--dark3);border:1px dashed var(--dark4);border-radius:8px;padding:7px 10px;color:#FFD100;font-family:'Barlow',sans-serif;font-size:13px;width:100%;box-sizing:border-box;">
+        </div>
+        <button onclick="deleteSalaryPeriod(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;margin-top:2px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+      </div>
+      ${grossHtml}
+    </div>`;
+  }).join('');
+}
+
+function onSalaryPeriodSalaryChange(i, sel) {
+  const periods = getSalaryPeriods();
+  const customInput = document.getElementById('salaryCustom_' + i);
+  if (sel.value === 'custom') {
+    periods[i].salary = '';
+    if (customInput) customInput.style.display = 'block';
+  } else {
+    periods[i].salary = parseFloat(sel.value);
+    if (customInput) customInput.style.display = 'none';
+  }
+  saveSalaryPeriods(periods);
+  recalculateAllShiftPays();
+}
+
+function onSalaryPeriodTitleChange(i, input) {
+  const periods = getSalaryPeriods();
+  periods[i].title = input.value.trim();
+  saveSalaryPeriods(periods);
+  renderSalaryPeriods();
+}
+
+function onSalaryPeriodCustomPayChange(i, input) {
+  const periods = getSalaryPeriods();
+  periods[i].customPayAmount = parseFloat(input.value) || '';
+  saveSalaryPeriods(periods);
+  renderSalaryPeriods();
+}
+
+function onSalaryPeriodCustomChange(i, input) {
+  const periods = getSalaryPeriods();
+  periods[i].salary = parseFloat(input.value) || '';
+  saveSalaryPeriods(periods);
+  recalculateAllShiftPays();
+}
+
+function onSalaryPeriodDateChange(i, field, val) {
+  const periods = getSalaryPeriods();
+  periods[i][field] = val;
+  saveSalaryPeriods(periods);
+  recalculateAllShiftPays();
+  renderSalaryPeriods();
+}
+
+function addSalaryPeriod() {
+  const periods = getSalaryPeriods();
+  const rate = parseFloat(currentUser.rate) || 0;
+  periods.push({ salary: rate || '', startDate: '', endDate: '' });
+  saveSalaryPeriods(periods);
+  renderSalaryPeriods();
+}
+
+function deleteSalaryPeriod(i) {
+  const periods = getSalaryPeriods();
+  periods.splice(i, 1);
+  saveSalaryPeriods(periods);
+  renderSalaryPeriods();
+}
+
 function showPayHistoryPage() {
   currentPage = 'payHistory';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -5411,6 +5665,7 @@ function showPage(page) {
 
   if (page === 'shifts') renderCalendar();
   if (page === 'pay') { populateWeeklyOptions(); updatePayPage(); }
+  if (page === 'profile') populateProfileFields();
 }
 
 function openFab() {
@@ -5518,10 +5773,12 @@ const SAT_TRUCK   = 7.77;
 const TRUCK_DIFF_FULL = 18.17;
 
 function calcNightDiffPay(start, hours, rate) {
-  if (!start || !hours) return 0;
-  const [h] = start.split(':').map(Number);
-  const mins = h * 60 + parseInt(start.split(':')[1]);
-  if (mins < 660) return 0; // before 11:00 — no night diff
+  if (!start || !hours || !rate) return 0;
+  // Night differential applies ONLY to these 4 specific tours:
+  // 1100-1900, 1600-2400, 1900-0300, 2400-0800
+  const nightTourStarts = ['11:00', '16:00', '19:00', '00:00'];
+  if (!nightTourStarts.includes(start)) return 0;
+  // 10% of regular pay for the shift hours
   return hours * (rate / 2080) * 0.10;
 }
 
@@ -5582,13 +5839,14 @@ function addShift() {
   const hours = calcHours(start, end);
   const regHours = Math.min(hours, 8);
   const otHours = Math.max(hours - 8, 0);
-  let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
+  const shiftRate = getActiveSalaryForDate(date);
+  let pay = calcShiftPay({type, hours, date, start, end}, shiftRate);
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
-  if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, currentUser.rate);
+  if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, shiftRate);
   const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
   const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
-  const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, currentUser.rate) : 0;
+  const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, shiftRate) : 0;
   pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay + dumpPay;
 
   const d = getUserData(currentUser.id);
@@ -5746,15 +6004,16 @@ function saveEditShift() {
   const regHours = Math.min(hours, 8);
   const otHours = Math.max(hours - 8, 0);
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
-  let pay = calcShiftPay({type, hours, date, start, end}, currentUser.rate);
-  if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, currentUser.rate);
+  const shiftRate = getActiveSalaryForDate(date);
+  let pay = calcShiftPay({type, hours, date, start, end}, shiftRate);
+  if (start && end && chartDay && type) pay = calcChartDayPay(type, hours, shiftRate);
   const truckMoney = (start && end) ? calcTruckMoney(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
   const saturdayPay = (start && end) ? calcSaturdayPay(date, type, fraction, chartDay) : 0;
   const truckDifferential = (start && end) ? calcTruckDifferential(type, fraction, chartDay, snowFunctions.indexOf(type) !== -1) : 0;
-  const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, currentUser.rate) : 0;
+  const nightDiffPay = (start && end) ? calcNightDiffPay(start, hours, shiftRate) : 0;
   pay += truckMoney + saturdayPay + truckDifferential + nightDiffPay + dumpPay;
 
-  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, location, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential, nightDiffPay, dumpedOnShift, dumpPay };
+  d.shifts[idx] = { ...d.shifts[idx], date, start, end, type, fraction, chartDay, route, section, partner, location, truckDowned, notes, hours, regHours, otHours, pay, truckMoney, saturdayPay, truckDifferential, nightDiffPay, dumpedOnShift, dumpPay, updatedAt: Date.now() };
   saveUserData(currentUser.id, d);
   closeModal('editShiftModal');
   editingShiftId = null;
@@ -5923,7 +6182,7 @@ function toggleCalDropdown(id, e) {
   const isOpen = el.style.display !== 'none';
   el.style.display = isOpen ? 'none' : 'block';
   if (!isOpen) {
-    if (id === 'chartDayDropdown') renderCalDayPicker('chartDayGrid', 'chart_days');
+    if (id === 'chartDayDropdown') { renderSwSelector(); renderCalDayPicker('chartDayGrid', 'chart_days'); document.getElementById('clearChartConfirm').style.display='none'; document.getElementById('clearChartBtn').style.display='block'; }
     if (id === 'vacationDropdown') renderCalDayPicker('vacationDayGrid', 'vacation_days');
     if (id === 'sickDropdown') renderCalDayPicker('sickDayGrid', 'sick_days');
     if (id === 'lodiDropdown') renderCalDayPicker('lodiDayGrid', 'lodi_days');
@@ -5931,6 +6190,149 @@ function toggleCalDropdown(id, e) {
     if (id === 'fmlaDropdown') renderCalDayPicker('fmlaDayGrid', 'fmla_days');
     if (id === 'vacWeekDropdown') renderVacWeekGrid();
   }
+}
+
+// ── SW CHART DAY SCHEDULE 2026 (DSNY AABS official calendar, read row-by-row) ──
+// Format: [month, day, [sw, sw, ...]] — the sub-numbers listed under each date
+const SW_CHART_DAYS_2026 = (function() {
+  const raw = [
+    // JANUARY
+    [1,1,[3,9,13,19,23]],[1,2,[4,11,14,22,24]],[1,3,[5,10,15,20,25]],
+    [1,5,[5,15,20]],[1,6,[6,16,25]],[1,7,[1,7,11,17]],[1,8,[2,8,12,18,22]],[1,9,[3,10,13,21,23]],[1,10,[4,9,14,19,24]],
+    [1,12,[4,14,19]],[1,13,[5,15,24]],[1,14,[6,10,16,25]],[1,15,[1,7,11,17,21]],[1,16,[2,9,12,20,22]],[1,17,[3,8,13,18,23]],
+    [1,19,[3,13,18]],[1,20,[4,14,23]],[1,21,[5,9,15,24]],[1,22,[6,10,16,20,25]],[1,23,[1,8,11,19,21]],[1,24,[2,7,12,17,22]],
+    [1,26,[2,12,17]],[1,27,[3,13,22]],[1,28,[4,8,14,23]],[1,29,[5,9,15,19,24]],[1,30,[7,10,18,20,25]],[1,31,[1,6,11,16,21]],
+    // FEBRUARY
+    [2,2,[1,11,16]],[2,3,[2,12,21]],[2,4,[3,7,13,22]],[2,5,[4,8,14,18,23]],[2,6,[6,9,17,19,24]],[2,7,[5,10,15,20,25]],
+    [2,9,[10,15,25]],[2,10,[1,11,20]],[2,11,[2,6,12,21]],[2,12,[3,7,13,17,22]],[2,13,[5,8,16,18,23]],[2,14,[4,9,14,19,24]],
+    [2,16,[9,14,24]],[2,17,[10,19,25]],[2,18,[1,5,11,20]],[2,19,[2,6,12,16,21]],[2,20,[4,7,15,17,22]],[2,21,[3,8,13,18,23]],
+    [2,23,[8,13,23]],[2,24,[9,18,24]],[2,25,[4,10,19,25]],[2,26,[1,5,11,15,20]],[2,27,[3,6,14,16,21]],[2,28,[2,7,12,17,22]],
+    // MARCH
+    [3,2,[7,12,22]],[3,3,[8,17,23]],[3,4,[3,9,18,24]],[3,5,[4,10,14,19,25]],[3,6,[2,5,13,15,20]],[3,7,[1,6,11,16,21]],
+    [3,9,[6,11,21]],[3,10,[7,16,22]],[3,11,[2,8,17,23]],[3,12,[3,9,13,18,24]],[3,13,[1,4,12,14,19]],[3,14,[5,10,15,20,25]],
+    [3,16,[5,10,20]],[3,17,[6,15,21]],[3,18,[1,7,16,22]],[3,19,[2,8,12,17,23]],[3,20,[3,11,13,18,25]],[3,21,[4,9,14,19,24]],
+    [3,23,[4,9,19]],[3,24,[5,14,20]],[3,25,[6,15,21,25]],[3,26,[1,7,11,16,22]],[3,27,[2,10,12,17,24]],[3,28,[3,8,13,18,23]],
+    [3,30,[3,8,18]],[3,31,[4,13,19]],
+    // APRIL
+    [4,1,[5,14,20,24]],[4,2,[6,10,15,21,25]],[4,3,[1,9,11,16,23]],[4,4,[2,7,12,17,22]],
+    [4,6,[2,7,17]],[4,7,[3,12,18]],[4,8,[4,13,19,23]],[4,9,[5,9,14,20,24]],[4,10,[8,10,15,22,25]],[4,11,[1,6,11,16,21]],
+    [4,13,[1,6,16]],[4,14,[2,11,17]],[4,15,[3,12,18,22]],[4,16,[4,8,13,19,23]],[4,17,[7,9,14,21,24]],[4,18,[5,10,15,20,25]],
+    [4,20,[5,15,25]],[4,21,[1,10,16]],[4,22,[2,11,17,21]],[4,23,[3,7,12,18,22]],[4,24,[6,8,13,20,23]],[4,25,[4,9,14,19,24]],
+    [4,27,[4,14,24]],[4,28,[9,15,25]],[4,29,[1,10,16,20]],[4,30,[2,6,11,17,21]],
+    // MAY
+    [5,1,[5,7,12,19,22]],[5,2,[3,8,13,18,23]],
+    [5,4,[3,13,23]],[5,5,[8,14,24]],[5,6,[9,15,19,25]],[5,7,[1,5,10,16,20]],[5,8,[4,6,11,18,21]],[5,9,[2,7,12,17,22]],
+    [5,11,[2,12,22]],[5,12,[7,13,23]],[5,13,[8,14,18,24]],[5,14,[4,9,15,19,25]],[5,15,[3,5,10,17,20]],[5,16,[1,6,11,16,21]],
+    [5,18,[1,11,21]],[5,19,[6,12,22]],[5,20,[7,13,17,23]],[5,21,[3,8,14,18,24]],[5,22,[2,4,9,16,19]],[5,23,[5,10,15,20,25]],
+    [5,25,[10,20,25]],[5,26,[5,11,21]],[5,27,[6,12,16,22]],[5,28,[2,7,13,17,23]],[5,29,[1,3,8,15,18]],[5,30,[4,9,14,19,24]],
+    // JUNE
+    [6,1,[9,19,24]],[6,2,[4,10,20]],[6,3,[5,11,15,21]],[6,4,[1,6,12,16,22]],[6,5,[2,7,14,17,25]],[6,6,[3,8,13,18,23]],
+    [6,8,[8,18,23]],[6,9,[3,9,19]],[6,10,[4,10,14,20]],[6,11,[5,11,15,21,25]],[6,12,[1,6,13,16,24]],[6,13,[2,7,12,17,22]],
+    [6,15,[7,17,22]],[6,16,[2,8,18]],[6,17,[3,9,13,19]],[6,18,[4,10,14,20,24]],[6,19,[5,12,15,23,25]],[6,20,[1,6,11,16,21]],
+    [6,22,[6,16,21]],[6,23,[1,7,17]],[6,24,[2,8,12,18]],[6,25,[3,9,13,19,23]],[6,26,[4,11,14,22,24]],[6,27,[5,10,15,20,25]],
+    [6,29,[5,15,20]],[6,30,[6,16,25]],
+    // JULY
+    [7,1,[1,7,11,17]],[7,2,[2,8,12,18,22]],[7,3,[3,10,13,21,23]],[7,4,[4,9,14,19,24]],
+    [7,6,[4,14,19]],[7,7,[5,15,24]],[7,8,[6,10,16,25]],[7,9,[1,7,11,17,21]],[7,10,[2,9,12,20,22]],[7,11,[3,8,13,18,23]],
+    [7,13,[3,13,18]],[7,14,[4,14,23]],[7,15,[5,9,15,24]],[7,16,[6,10,16,20,25]],[7,17,[1,8,11,19,21]],[7,18,[2,7,12,17,22]],
+    [7,20,[2,12,17]],[7,21,[3,13,22]],[7,22,[4,8,14,23]],[7,23,[5,9,15,19,24]],[7,24,[7,10,18,20,25]],[7,25,[1,6,11,16,21]],
+    [7,27,[1,11,16]],[7,28,[2,12,21]],[7,29,[3,7,13,22]],[7,30,[4,8,14,18,23]],[7,31,[6,9,17,19,24]],
+    // AUGUST
+    [8,1,[5,10,15,20,25]],
+    [8,3,[10,15,25]],[8,4,[1,11,20]],[8,5,[2,6,12,21]],[8,6,[3,7,13,17,22]],[8,7,[5,8,16,18,23]],[8,8,[4,9,14,19,24]],
+    [8,10,[9,14,24]],[8,11,[10,19,25]],[8,12,[1,5,11,20]],[8,13,[2,6,12,16,21]],[8,14,[4,7,15,17,22]],[8,15,[3,8,13,18,23]],
+    [8,17,[8,13,23]],[8,18,[9,18,24]],[8,19,[4,10,19,25]],[8,20,[1,5,11,15,20]],[8,21,[3,6,14,16,21]],[8,22,[2,7,12,17,22]],
+    [8,24,[7,12,22]],[8,25,[8,17,23]],[8,26,[3,9,18,24]],[8,27,[4,10,14,19,25]],[8,28,[2,5,13,15,20]],[8,29,[1,6,11,16,21]],
+    [8,31,[6,11,21]],
+    // SEPTEMBER
+    [9,1,[7,16,22]],[9,2,[2,8,17,23]],[9,3,[3,9,13,18,24]],[9,4,[1,4,12,14,19]],[9,5,[5,10,15,20,25]],
+    [9,7,[5,10,20]],[9,8,[6,15,21]],[9,9,[1,7,16,22]],[9,10,[2,8,12,17,23]],[9,11,[3,11,13,18,25]],[9,12,[4,9,14,19,24]],
+    [9,14,[4,9,19]],[9,15,[5,14,20]],[9,16,[6,15,21,25]],[9,17,[1,7,11,16,22]],[9,18,[2,10,12,17,24]],[9,19,[3,8,13,18,23]],
+    [9,21,[3,8,18]],[9,22,[4,13,19]],[9,23,[5,14,20,24]],[9,24,[6,10,15,21,25]],[9,25,[1,9,11,16,23]],[9,26,[2,7,12,17,22]],
+    [9,28,[2,7,17]],[9,29,[3,12,18]],[9,30,[4,13,19,23]],
+    // OCTOBER
+    [10,1,[5,9,14,20,24]],[10,2,[8,10,15,22,25]],[10,3,[1,6,11,16,21]],
+    [10,5,[1,6,16]],[10,6,[2,11,17]],[10,7,[3,12,18,22]],[10,8,[4,8,13,19,23]],[10,9,[7,9,14,21,24]],[10,10,[5,10,15,20,25]],
+    [10,12,[5,15,25]],[10,13,[1,10,16]],[10,14,[2,11,17,21]],[10,15,[3,7,12,18,22]],[10,16,[6,8,13,20,23]],[10,17,[4,9,14,19,24]],
+    [10,19,[4,14,24]],[10,20,[9,15,25]],[10,21,[1,10,16,20]],[10,22,[2,6,11,17,21]],[10,23,[5,7,12,19,22]],[10,24,[3,8,13,18,23]],
+    [10,26,[3,13,23]],[10,27,[8,14,24]],[10,28,[9,15,19,25]],[10,29,[1,5,10,16,20]],[10,30,[4,6,11,18,21]],[10,31,[2,7,12,17,22]],
+    // NOVEMBER
+    [11,2,[2,12,22]],[11,3,[7,13,23]],[11,4,[8,14,18,24]],[11,5,[4,9,15,19,25]],[11,6,[3,5,10,17,20]],[11,7,[1,6,11,16,21]],
+    [11,9,[1,11,21]],[11,10,[6,12,22]],[11,11,[7,13,17,23]],[11,12,[3,8,14,18,24]],[11,13,[2,4,9,16,19]],[11,14,[5,10,15,20,25]],
+    [11,16,[10,20,25]],[11,17,[5,11,21]],[11,18,[6,12,16,22]],[11,19,[2,7,13,17,23]],[11,20,[1,3,8,15,18]],[11,21,[4,9,14,19,24]],
+    [11,23,[9,19,24]],[11,24,[4,10,20]],[11,25,[5,11,15,21]],[11,26,[1,6,12,16,22]],[11,27,[2,7,14,17,25]],[11,28,[3,8,13,18,23]],
+    [11,30,[8,18,23]],
+    // DECEMBER
+    [12,1,[3,9,19]],[12,2,[4,10,14,20]],[12,3,[5,11,15,21,25]],[12,4,[1,6,13,16,24]],[12,5,[2,7,12,17,22]],
+    [12,7,[7,17,22]],[12,8,[2,8,18]],[12,9,[3,9,13,19]],[12,10,[4,10,14,20,24]],[12,11,[5,12,15,23,25]],[12,12,[1,6,11,16,21]],
+    [12,14,[6,16,21]],[12,15,[1,7,17]],[12,16,[2,8,12,18]],[12,17,[3,9,13,19,23]],[12,18,[4,11,14,22,24]],[12,19,[5,10,15,20,25]],
+    [12,21,[5,15,20]],[12,22,[6,16,25]],[12,23,[1,7,11,17]],[12,24,[2,8,12,18,22]],[12,25,[3,10,13,21,23]],[12,26,[4,9,14,19,24]],
+    [12,28,[4,14,19]],[12,29,[5,15,24]],[12,30,[6,10,16,25]],[12,31,[1,7,11,17,21]],
+  ];
+  // Invert: sw → { month → [days] }
+  const bySW = {};
+  for (let sw = 1; sw <= 25; sw++) bySW[sw] = {};
+  raw.forEach(([month, day, sws]) => {
+    sws.forEach(sw => {
+      if (!bySW[sw][month]) bySW[sw][month] = [];
+      bySW[sw][month].push(day);
+    });
+  });
+  return bySW;
+})();
+
+function renderSwSelector() {
+  const grid = document.getElementById('swSelectorGrid');
+  if (!grid) return;
+  const savedSw = currentUser ? (currentUser.swNumber || null) : null;
+  grid.innerHTML = '';
+  for (let i = 1; i <= 25; i++) {
+    const btn = document.createElement('button');
+    btn.textContent = i;
+    const isSel = savedSw == i;
+    btn.style.cssText = `background:${isSel?'#388BFD':'var(--dark3)'};border:1px solid ${isSel?'transparent':'var(--dark4)'};border-radius:4px;color:${isSel?'#fff':'var(--text2)'};font-size:10px;font-weight:700;padding:4px 2px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;`;
+    btn.onclick = function() {
+      grid.querySelectorAll('button').forEach(b => { b.style.background='var(--dark3)'; b.style.color='var(--text2)'; b.style.border='1px solid var(--dark4)'; });
+      btn.style.background='#388BFD'; btn.style.color='#fff'; btn.style.border='1px solid transparent';
+      grid.dataset.selected = i;
+      document.getElementById('applySwBtn').style.display = 'block';
+    };
+    grid.appendChild(btn);
+  }
+  if (savedSw) { grid.dataset.selected = savedSw; document.getElementById('applySwBtn').style.display = 'block'; }
+}
+
+function applySwChartDays() {
+  const grid = document.getElementById('swSelectorGrid');
+  const swNum = parseInt(grid.dataset.selected);
+  if (!swNum) return;
+  const users = getUsers(); const u = users[currentUser.id];
+  u.swNumber = swNum; currentUser.swNumber = swNum;
+  saveUsers(users);
+  const monthData = SW_CHART_DAYS_2026[swNum];
+  if (!monthData) { showToast('No data for SW' + swNum); return; }
+  const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
+  const year = calDate ? calDate.getFullYear() : new Date().getFullYear();
+  Object.entries(monthData).forEach(([month, days]) => {
+    const mk = year + '-' + String(parseInt(month)).padStart(2,'0');
+    saved[mk] = days.slice().sort((a,b) => a-b);
+  });
+  localStorage.setItem('chart_days_' + currentUser.id, JSON.stringify(saved));
+  renderCalDayPicker('chartDayGrid', 'chart_days');
+  refreshAll(); renderCalendar();
+  showToast('✅ SW' + swNum + ' chart days applied!');
+}
+
+function confirmClearChartDays() {
+  const year = calDate ? calDate.getFullYear() : new Date().getFullYear();
+  const saved = JSON.parse(localStorage.getItem('chart_days_' + currentUser.id) || '{}');
+  for (let m = 1; m <= 12; m++) delete saved[year + '-' + String(m).padStart(2,'0')];
+  localStorage.setItem('chart_days_' + currentUser.id, JSON.stringify(saved));
+  document.getElementById('clearChartConfirm').style.display = 'none';
+  document.getElementById('clearChartBtn').style.display = 'block';
+  renderCalDayPicker('chartDayGrid', 'chart_days');
+  refreshAll(); renderCalendar();
+  showToast('Chart days cleared!');
 }
 
 function renderCalDayPicker(gridId, storageKey) {
@@ -6319,12 +6721,29 @@ function renderCalendar() {
       }
 
       const bgStyleInner = bgStyle.replace(' style="', '').replace('"', '');
+
+      // Get SW numbers for this date from the official 2026 calendar
+      let swLabel = '';
+      if (typeof SW_CHART_DAYS_2026 !== 'undefined') {
+        const swNums = [];
+        for (let sw = 1; sw <= 25; sw++) {
+          const mo = month + 1;
+          if (SW_CHART_DAYS_2026[sw] && SW_CHART_DAYS_2026[sw][mo] && SW_CHART_DAYS_2026[sw][mo].includes(day)) {
+            swNums.push(sw);
+          }
+        }
+        if (swNums.length > 0) {
+          swLabel = `<div style="font-size:8px;color:rgba(255,255,255,0.45);text-align:center;padding:1px 0 2px;line-height:1.2;letter-spacing:0.2px;">${swNums.join('-')}</div>`;
+        }
+      }
+
       html += `<div class="${cls}" style="${bgStyleInner}position:relative;" onclick="showCalDay('${dateStr}')">
         <div class="cal-day-num" style="display:flex;justify-content:space-between;align-items:center;">
           <span>${day}</span>
           ${vLabel ? `<span style="font-family:'Barlow',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.5);line-height:1;">${vLabel}</span>` : ''}
         </div>
         ${chipsHtml}
+        ${swLabel}
       </div>`;
     }
 
@@ -6695,10 +7114,10 @@ function updatePayPage() {
 // ── DASHBOARD REFRESH ──
 function recalculateAllShiftPays() {
   const d = getUserData(currentUser.id);
-  const rate = parseFloat(currentUser.rate) || 0;
   const snowFunctions = ['plow','salt_spreader','haulster','flow_dump','plow_chains','atv','quality_of_life','other_snow'];
   let changed = false;
   d.shifts.forEach(s => {
+    const rate = getActiveSalaryForDate(s.date);
     const hours = (s.start && s.end) ? calcHours(s.start, s.end) : (s.hours || 0);
     let pay = calcShiftPay({type: s.type, hours, date: s.date, start: s.start, end: s.end}, rate);
     if (s.chartDay && s.type && s.start && s.end) pay = calcChartDayPay(s.type, s.hours, rate);
@@ -6860,6 +7279,28 @@ function updateProbationDisplay() {
   } else {
     document.getElementById('profileProbation').textContent = '✅ Completed';
   }
+}
+
+function populateProfileFields() {
+  if (!currentUser) return;
+  const users = getUsers();
+  const u = users[currentUser.id] || {};
+  const nameEl = document.getElementById('updateName');
+  const badgeEl = document.getElementById('updateBadge');
+  const rateEl = document.getElementById('updateRate');
+  const garageEl = document.getElementById('updateGarage');
+  const titleEl = document.getElementById('updateTitle');
+  const hireDateEl = document.getElementById('updateHireDate');
+  const el457 = document.getElementById('update457');
+  const probationEl = document.getElementById('updateProbation');
+  if (nameEl && u.name) nameEl.value = u.name;
+  if (badgeEl && u.badge) badgeEl.value = u.badge;
+  if (rateEl && u.rate) { rateEl.value = u.rate; syncSalaryDropdown(u.rate); }
+  if (garageEl && u.district) garageEl.value = u.district;
+  if (titleEl && u.title) titleEl.value = u.title;
+  if (hireDateEl && u.hireDate) hireDateEl.value = u.hireDate;
+  if (el457 && u.contrib457) el457.value = u.contrib457;
+  if (probationEl && u.probation) probationEl.value = u.probation;
 }
 
 function updateProfile() {
@@ -7033,7 +7474,13 @@ function switchLocTab(tab) {
 function getLocations() {
   try {
     const raw = localStorage.getItem('santrack_locations');
-    return raw ? JSON.parse(raw) : [];
+    let locs = raw ? JSON.parse(raw) : [];
+    // Purge garages that have been removed from the app
+    const removedGarages = ['garage_BK15A'];
+    const before = locs.length;
+    locs = locs.filter(l => !removedGarages.includes(l.id));
+    if (locs.length !== before) localStorage.setItem('santrack_locations', JSON.stringify(locs));
+    return locs;
   } catch(e) { return []; }
 }
 
@@ -7106,7 +7553,7 @@ function renderLocCard(loc, sbReview) {
       <div style="text-align:right;flex-shrink:0;">
         <div style="display:flex;align-items:center;gap:6px;"><span style="font-family:'Barlow',sans-serif;font-size:14px;font-weight:700;color:#ffffff;">${avg > 0 ? avg.toFixed(1) : ''}</span>${starsHtml(avg, 14)}</div>
         <div style="font-size:10px;color:var(--text3);margin-top:2px;">${ratingCount} rating${ratingCount !== 1 ? 's' : ''}</div>
-        <button onclick="event.stopPropagation();${isGarage ? `openGarageReviewModal('${loc.id}','${loc.name}')` : `openRateLocation('${loc.id}')`}" style="margin-top:6px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:8px;padding:5px 12px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">★ Rate</button>
+        <button onclick="event.stopPropagation();openRateLocation('${loc.id}')" style="margin-top:6px;background:rgba(66,130,71,0.15);border:1px solid rgba(66,130,71,0.4);border-radius:8px;padding:5px 12px;color:#ffffff;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:0.3px;">★ Rate</button>
       </div>
     </div>
     ${loc.notes ? `<div style="font-size:12px;color:var(--text2);font-style:italic;margin-bottom:8px;">"${loc.notes}"</div>` : ''}
@@ -7538,7 +7985,7 @@ seedGarages();
 const COMP_ZONES = {
   'Bronx':          ['BX1','BX2','BX3','BX4','BX5','BX6','BX7','BX8','BX9','BX10','BX11','BX12'],
   'Brooklyn North': ['BK1','BK2','BK3','BK4','BK5','BK8','BK9','BK16','BK17'],
-  'Brooklyn South': ['BK6','BK7','BK10','BK11','BK12','BK13','BK14','BK15','BK15A','BK18'],
+  'Brooklyn South': ['BK6','BK7','BK10','BK11','BK12','BK13','BK14','BK15','BK18'],
   'Manhattan':      ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],
   'Queens West':    ['Q1','Q2','Q3','Q4','Q5','Q6','Q9'],
   'Queens East':    ['Q7','Q8','Q10','Q11','Q12','Q13A','Q14'],
@@ -7634,58 +8081,167 @@ function calcCompHours() {
   return { total: totalComp, events };
 }
 
+function getUsedCompHours() {
+  try { return JSON.parse(localStorage.getItem('santrack_used_comp_' + currentUser.id) || '[]'); } catch(e) { return []; }
+}
+function saveUsedCompHours(arr) {
+  localStorage.setItem('santrack_used_comp_' + currentUser.id, JSON.stringify(arr));
+}
+function addUsedCompEntry() {
+  const dateEl = document.getElementById('usedCompDate');
+  const hoursEl = document.getElementById('usedCompHours');
+  const noteEl = document.getElementById('usedCompNote');
+  const date = dateEl.value;
+  const hours = parseFloat(hoursEl.value);
+  if (!date || !hours || hours <= 0) { showToast('Enter a date and hours'); return; }
+  const arr = getUsedCompHours();
+  arr.push({ date, hours, note: noteEl.value.trim(), id: Date.now() });
+  saveUsedCompHours(arr);
+  dateEl.value = ''; hoursEl.value = ''; noteEl.value = '';
+  showCompHoursPage();
+}
+function deleteUsedCompEntry(id) {
+  const arr = getUsedCompHours().filter(e => e.id !== id);
+  saveUsedCompHours(arr);
+  showCompHoursPage();
+}
+
 function showCompHoursPage() {
   currentPage = 'compHours';
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('compHoursPage').classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-  const { total, events } = calcCompHours();
-  document.getElementById('compHoursTotal').textContent = total + ' hrs';
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const todayStr = today.toISOString().split('T')[0];
+
+  const { total: rawTotal, events: rawEvents } = calcCompHours();
+
+  // Rule: don't count Chart Day on Holiday until the date has passed
+  const events = rawEvents.filter(e => {
+    if (e.garage === '—') {
+      // Chart Day on Holiday — only count if date is in the past
+      return e.date < todayStr;
+    }
+    return true;
+  });
+
+  const total = events.reduce((a, e) => a + e.hours, 0);
+  const usedArr = getUsedCompHours();
+  const usedTotal = usedArr.reduce((a, e) => a + (e.hours || 0), 0);
+  const remaining = total - usedTotal;
+
+  document.getElementById('compHoursTotal').innerHTML =
+    `${total}h earned &nbsp;<span style="color:#F85149;font-size:16px;">−${usedTotal}h used</span>&nbsp;<span style="color:var(--green);font-size:16px;">= ${remaining}h left</span>`;
 
   const el = document.getElementById('compHoursList');
-  if (!events.length) {
-    el.innerHTML = '<div class="card" style="text-align:center;padding:32px;color:var(--text3);">No comp hours earned yet.<br><span style="font-size:12px;margin-top:8px;display:block;">Comp hours are earned when sent OOT to a different zone, or when your Chart Day falls on a holiday.</span></div>';
-    return;
-  }
 
-  // Build running totals (chronological order, then display reversed)
+  // Group earned events by quarter
+  const quarters = { 'Q1': [], 'Q2': [], 'Q3': [], 'Q4': [] };
+  events.forEach(e => {
+    const m = parseInt(e.date.slice(5, 7));
+    const q = m <= 3 ? 'Q1' : m <= 6 ? 'Q2' : m <= 9 ? 'Q3' : 'Q4';
+    quarters[q].push(e);
+  });
+
+  // Build running totals across all events chronologically
   let running = 0;
-  const withTotals = events.map(e => {
+  const withTotals = events.slice().sort((a,b) => a.date < b.date ? -1 : 1).map(e => {
     running += e.hours;
     return { ...e, runningTotal: running };
-  }).reverse(); // most recent first
+  });
+  const totalMap = {};
+  withTotals.forEach(e => { totalMap[e.date + e.reason] = e.runningTotal; });
 
-  el.innerHTML = `
-    <div style="background:var(--dark2);border-radius:10px;overflow:hidden;border:1px solid var(--dark3);">
-      <table style="width:100%;border-collapse:collapse;font-family:'Barlow',sans-serif;font-size:13px;">
-        <thead>
-          <tr style="background:var(--dark3);">
-            <th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--dark4);">Date</th>
-            <th style="padding:10px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--dark4);">Garage Movement</th>
-            <th style="padding:10px 12px;text-align:right;font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--dark4);">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${withTotals.map((e, i) => {
-            const d = new Date(e.date + 'T12:00:00');
-            const dateLabel = `${d.getMonth()+1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
-            const homeZoneForDisplay = getGarageZone(currentUser.district || '');
-            const prevZoneForDisplay = getGarageZone(e.prevGarage);
-            const prevIsHomeZone = !prevZoneForDisplay || !homeZoneForDisplay || prevZoneForDisplay === homeZoneForDisplay;
-            const movement = e.garage === '—'
-              ? `<span style="color:#fff;">Chart Day on Holiday (+${e.hours}h)</span>`
-              : `<span style="color:${prevIsHomeZone ? '#fff' : '#FFD100'};font-weight:700;">${e.prevGarage}</span><span style="color:#fff;"> → </span><span style="color:#FFD100;font-weight:700;">${e.garage}</span><span style="color:var(--text3);"> (+${e.hours}h)</span>`;
-            const rowBg = i % 2 === 0 ? 'var(--dark2)' : 'rgba(255,255,255,0.02)';
-            return `<tr style="background:${rowBg};border-bottom:1px solid rgba(255,255,255,0.04);">
-              <td style="padding:10px 12px;color:#fff;white-space:nowrap;">${dateLabel}</td>
-              <td style="padding:10px 12px;">${movement}</td>
-              <td style="padding:10px 12px;text-align:right;color:#fff;font-weight:700;">${e.runningTotal}h</td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
+  const chevronSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><polyline points="6 9 12 15 18 9"/></svg>`;
+
+  const year = today.getFullYear();
+
+  let html = '';
+
+  // Used Hours dropdown — at the top
+  const usedId = 'compUsedSection';
+  html += `
+    <div style="margin-bottom:8px;background:var(--dark2);border-radius:10px;border:1px solid rgba(248,81,73,0.3);overflow:hidden;">
+      <div onclick="var b=document.getElementById('${usedId}');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('svg').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#F85149;">Used Hours <span style="font-size:12px;color:var(--text3);font-weight:400;">−${usedTotal}h</span></div>
+        ${chevronSvg.replace('stroke="currentColor"', 'stroke="#F85149"')}
+      </div>
+      <div id="${usedId}" style="display:none;padding:12px 14px;">
+        <div style="display:grid;grid-template-columns:1fr 80px 1fr auto;gap:6px;align-items:center;margin-bottom:10px;">
+          <input type="date" id="usedCompDate" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 8px;color:#fff;font-family:'Barlow',sans-serif;font-size:12px;">
+          <input type="number" id="usedCompHours" placeholder="Hours" min="0.5" step="0.5" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 8px;color:#fff;font-family:'Barlow',sans-serif;font-size:12px;text-align:center;">
+          <input type="text" id="usedCompNote" placeholder="Note (optional)" style="background:var(--dark3);border:1px solid var(--dark4);border-radius:8px;padding:7px 8px;color:#fff;font-family:'Barlow',sans-serif;font-size:12px;">
+          <button onclick="addUsedCompEntry()" style="background:rgba(248,81,73,0.15);border:1px solid rgba(248,81,73,0.4);border-radius:8px;color:#F85149;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;padding:7px 10px;cursor:pointer;">+ Add</button>
+        </div>
+        ${usedArr.length ? `
+        <table style="width:100%;border-collapse:collapse;font-family:'Barlow',sans-serif;font-size:13px;">
+          <tbody>
+            ${usedArr.slice().reverse().map((e, i) => {
+              const d = new Date(e.date + 'T12:00:00');
+              const dateLabel = `${d.getMonth()+1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
+              const rowBg = i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.02)';
+              return `<tr style="background:${rowBg};border-bottom:1px solid rgba(255,255,255,0.04);">
+                <td style="padding:8px 4px;color:#fff;white-space:nowrap;">${dateLabel}</td>
+                <td style="padding:8px 4px;color:#F85149;font-weight:700;">−${e.hours}h</td>
+                <td style="padding:8px 4px;color:var(--text3);">${e.note || '—'}</td>
+                <td style="padding:8px 4px;text-align:right;"><button onclick="deleteUsedCompEntry(${e.id})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;">×</button></td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>` : `<div style="font-size:12px;color:var(--text3);text-align:center;padding:8px 0;">No used hours logged yet.</div>`}
+      </div>
     </div>`;
+
+  // Earned Hours by Quarter
+  ['Q1','Q2','Q3','Q4'].forEach(q => {
+    const qEvents = quarters[q].slice().reverse(); // most recent first
+    if (!qEvents.length) return;
+    const qHours = qEvents.reduce((a,e) => a + e.hours, 0);
+    const qId = 'compQ_' + q;
+    html += `
+      <div style="margin-bottom:8px;background:var(--dark2);border-radius:10px;border:1px solid var(--dark3);overflow:hidden;">
+        <div onclick="var b=document.getElementById('${qId}');b.style.display=b.style.display==='none'?'block':'none';this.querySelector('svg').style.transform=b.style.display==='none'?'':'rotate(180deg)';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:800;color:#FFD100;">${q} ${year} <span style="font-size:12px;color:var(--text3);font-weight:400;">+${qHours}h earned</span></div>
+          ${chevronSvg}
+        </div>
+        <div id="${qId}" style="display:none;">
+          <table style="width:100%;border-collapse:collapse;font-family:'Barlow',sans-serif;font-size:13px;">
+            <thead><tr style="background:var(--dark3);">
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Date</th>
+              <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Movement</th>
+              <th style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px;">Total</th>
+            </tr></thead>
+            <tbody>
+              ${qEvents.map((e, i) => {
+                const d = new Date(e.date + 'T12:00:00');
+                const dateLabel = `${d.getMonth()+1}/${d.getDate()}/${String(d.getFullYear()).slice(2)}`;
+                const homeZoneForDisplay = getGarageZone(currentUser.district || '');
+                const prevZoneForDisplay = getGarageZone(e.prevGarage);
+                const prevIsHomeZone = !prevZoneForDisplay || !homeZoneForDisplay || prevZoneForDisplay === homeZoneForDisplay;
+                const movement = e.garage === '—'
+                  ? `<span style="color:#fff;">Chart Day on Holiday (+${e.hours}h)</span>`
+                  : `<span style="color:${prevIsHomeZone ? '#fff' : '#FFD100'};font-weight:700;">${e.prevGarage}</span><span style="color:#fff;"> → </span><span style="color:#FFD100;font-weight:700;">${e.garage}</span><span style="color:var(--text3);"> (+${e.hours}h)</span>`;
+                const rt = totalMap[e.date + e.reason] || '';
+                const rowBg = i % 2 === 0 ? 'var(--dark2)' : 'rgba(255,255,255,0.02)';
+                return `<tr style="background:${rowBg};border-bottom:1px solid rgba(255,255,255,0.04);">
+                  <td style="padding:9px 12px;color:#fff;white-space:nowrap;">${dateLabel}</td>
+                  <td style="padding:9px 12px;">${movement}</td>
+                  <td style="padding:9px 12px;text-align:right;color:#fff;font-weight:700;">${rt}h</td>
+                </tr>`;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>`;
+  });
+
+  if (!events.length) {
+    html += `<div class="card" style="text-align:center;padding:32px;color:var(--text3);">No comp hours earned yet.<br><span style="font-size:12px;margin-top:8px;display:block;">Comp hours are earned when sent OOT to a different zone, or when your Chart Day falls on a holiday (after the date passes).</span></div>`;
+  }
+
+  el.innerHTML = html;
 }
 
 function updateCompHoursCard() {
@@ -7752,6 +8308,21 @@ initBiometricButton();
     document.getElementById('rememberMe').checked = true;
   }
 })();
+// ── BYPASS LOGIN ENABLED ──
+(function() {
+  const users = getUsers();
+  const ids = Object.keys(users);
+  if (ids.length > 0) {
+    currentUser = users[ids[0]];
+  } else {
+    currentUser = { id: 'guest', name: 'Guest', rate: 0, district: '', title: 'Sanitation Worker', shifts: [], tasks: [], routes: [], seniority: [] };
+    const u = getUsers();
+    u['guest'] = currentUser;
+    saveUsers(u);
+    saveUserData('guest', { shifts: [], tasks: [], routes: [], seniority: [] });
+  }
+  startApp();
+})();
 
 
 // ── SPLASH SCREEN ──
@@ -7776,62 +8347,6 @@ function showSplash(callback) {
   }, 1100);
 }
 
-
-function openGarageReviewModal(garageId, garageName) {
-  document.getElementById('garageReviewGarageId').value = garageId;
-  document.getElementById('garageReviewGarageName').value = garageName;
-  document.getElementById('garageReviewModalTitle').textContent = 'Rate: ' + garageName;
-  // Reset stars
-  setGarageStarRating(0);
-  ['grCleanliness','grManagement','grSafety','grEquipment'].forEach(id => setGarageCatRating(id, 0));
-  document.getElementById('garageReviewComment').value = '';
-  document.getElementById('garageReviewStatus').textContent = '';
-  document.getElementById('garageReviewModal').classList.add('open');
-}
-
-async function submitGarageReviewForm() {
-  const garageId = document.getElementById('garageReviewGarageId').value;
-  const garageName = document.getElementById('garageReviewGarageName').value;
-  const rating = parseInt(document.getElementById('garageStarValue').value);
-  const cleanliness = parseInt(document.getElementById('grCleanlinessValue').value) || null;
-  const management = parseInt(document.getElementById('grManagementValue').value) || null;
-  const safety = parseInt(document.getElementById('grSafetyValue').value) || null;
-  const equipment = parseInt(document.getElementById('grEquipmentValue').value) || null;
-  const comment = document.getElementById('garageReviewComment').value.trim();
-  const statusEl = document.getElementById('garageReviewStatus');
-
-  if (!rating) { statusEl.textContent = 'Please select an overall rating.'; statusEl.style.color = '#f85149'; return; }
-
-  statusEl.textContent = 'Submitting...'; statusEl.style.color = 'var(--text3)';
-  try {
-    await submitGarageReview(garageId, garageName, rating, cleanliness, management, safety, equipment, comment || null);
-    statusEl.textContent = '✅ Review submitted!'; statusEl.style.color = 'var(--green)';
-    _garageReviewsCache = null;
-    setTimeout(() => {
-      closeModal('garageReviewModal');
-      renderLocations();
-    }, 1000);
-  } catch(e) {
-    statusEl.textContent = 'Error: ' + e.message.slice(0, 80);
-    statusEl.style.color = '#f85149';
-  }
-}
-
-function setGarageStarRating(val) {
-  document.getElementById('garageStarValue').value = val;
-  [1,2,3,4,5].forEach(i => {
-    document.getElementById('garageStar' + i).style.color = i <= val ? '#FFD100' : 'var(--dark4)';
-  });
-}
-
-function setGarageCatRating(id, val) {
-  document.getElementById(id + 'Value').value = val;
-  const labels = ['','Poor','Fair','Good','Great','Excellent'];
-  document.getElementById(id + 'Val').textContent = val > 0 ? labels[val] : '—';
-  [1,2,3,4,5].forEach(i => {
-    document.getElementById(id + 'Star' + i).style.color = i <= val ? '#FFD100' : 'var(--dark4)';
-  });
-}
 
 function showOnboarding() {
   const modal = document.getElementById('onboardingModal');
@@ -7970,10 +8485,18 @@ async function cloudRestore() {
       routes: JSON.parse(row.routes || '[]'),
     };
     const existing = getUserData(currentUser.id);
-    // Merge: deduplicate by id, prefer cloud data
-    const mergeById = (arr1, arr2) => {
+    // Merge: use updatedAt to pick the newer version; local wins ties
+    const mergeById = (local, cloud) => {
       const map = {};
-      [...arr1, ...arr2].forEach(item => { if (item.id) map[item.id] = item; });
+      cloud.forEach(item => { if (item.id) map[item.id] = item; });
+      local.forEach(item => {
+        if (!item || !item.id) return;
+        const existing = map[item.id];
+        if (!existing) { map[item.id] = item; return; }
+        const localTs = item.updatedAt || 0;
+        const cloudTs = existing.updatedAt || 0;
+        if (localTs >= cloudTs) map[item.id] = item;
+      });
       return Object.values(map);
     };
     existing.shifts = mergeById(existing.shifts || [], restored.shifts);
@@ -8070,7 +8593,7 @@ function submitBugReport() {
     return;
   }
 
-  const version = 'v0.0.8';
+  const version = 'v0.0.9';
   const device = navigator.userAgent.slice(0, 80);
   const body = 'Bug Report — SanTrack ' + version + '\n\nSubject: ' + subject + '\n\nDescription:\n' + description + '\n\nDevice: ' + device;
   const mailto = 'mailto:santrackdev@gmail.com?subject=' + encodeURIComponent('Bug Report — SanTrack ' + version + ': ' + subject) + '&body=' + encodeURIComponent(body);
@@ -8081,56 +8604,6 @@ function submitBugReport() {
 }
 
 </script>
-<!-- GARAGE REVIEW MODAL -->
-<div id="garageReviewModal" class="modal-overlay" onclick="if(event.target===this)closeModal('garageReviewModal')">
-  <div class="modal" style="max-width:400px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:800;color:#fff;" id="garageReviewModalTitle">Rate Garage</div>
-      <button onclick="closeModal('garageReviewModal')" style="background:none;border:none;color:var(--text3);font-size:22px;cursor:pointer;">×</button>
-    </div>
-    <input type="hidden" id="garageReviewGarageId">
-    <input type="hidden" id="garageReviewGarageName">
-
-    <!-- Overall star rating -->
-    <div style="margin-bottom:16px;">
-      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Overall Rating</div>
-      <div style="display:flex;gap:6px;" id="garageStarRow">
-        ${[1,2,3,4,5].map(i => `<span onclick="setGarageStarRating(${i})" id="garageStar${i}" style="font-size:28px;cursor:pointer;color:var(--dark4);transition:color 0.1s;">★</span>`).join('')}
-      </div>
-      <input type="hidden" id="garageStarValue" value="0">
-    </div>
-
-    <!-- Category sliders -->
-    <div style="margin-bottom:12px;">
-      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Category Ratings</div>
-      ${[
-        {id:'grCleanliness', label:'Cleanliness'},
-        {id:'grManagement', label:'Management'},
-        {id:'grSafety', label:'Safety'},
-        {id:'grEquipment', label:'Equipment'},
-      ].map(c => `<div style="margin-bottom:10px;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-          <span style="font-size:13px;color:#fff;font-weight:600;">${c.label}</span>
-          <span id="${c.id}Val" style="font-size:12px;color:var(--text3);">—</span>
-        </div>
-        <div style="display:flex;gap:4px;" id="${c.id}Stars">
-          ${[1,2,3,4,5].map(i => `<span onclick="setGarageCatRating('${c.id}',${i})" style="font-size:20px;cursor:pointer;color:var(--dark4);" id="${c.id}Star${i}">★</span>`).join('')}
-        </div>
-        <input type="hidden" id="${c.id}Value" value="0">
-      </div>`).join('')}
-    </div>
-
-    <!-- Comment -->
-    <div style="margin-bottom:16px;">
-      <div style="font-size:12px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Comment <span style="font-weight:400;text-transform:none;">(optional)</span></div>
-      <textarea id="garageReviewComment" placeholder="Share your experience..." rows="3" style="width:100%;padding:10px;background:var(--dark3);border:1px solid var(--dark4);border-radius:10px;color:#fff;font-family:'Barlow',sans-serif;font-size:13px;resize:none;box-sizing:border-box;"></textarea>
-    </div>
-
-    <button onclick="submitGarageReviewForm()" class="btn btn-primary" style="width:100%;">Submit Review</button>
-    <div id="garageReviewStatus" style="text-align:center;margin-top:10px;font-size:12px;color:var(--text3);"></div>
-  </div>
-</div>
-
 <!-- ONBOARDING MODAL -->
 <div id="onboardingModal" class="modal-overlay" style="z-index:9999;background:rgba(0,0,0,0.92);display:none;">
   <div class="modal" style="max-width:420px;padding:0;overflow:hidden;">
